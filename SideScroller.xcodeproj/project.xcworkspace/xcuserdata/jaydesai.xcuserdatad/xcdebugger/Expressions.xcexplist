@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[GameMenu draw:]:GameMenu.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Game initWithCode:andConfig:forView:]:Game.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Sprite initWithRect:croppedTo:]:Sprite.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Sprite initWithImage:]:Sprite.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "image.imageOrientation">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[MainViewController drawGame]:MainViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Font renderString:ofSize:atX:andY:]:Font.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Level load]:Level.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Level initWithConfig:]:Level.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Sprite renderWithSize:atX:andY:]:Sprite.m">
+      </ContextState>
+      <ContextState
+         contextName = "+[TBXML(StaticFunctions) childElementNamed:parentElement:]:TBXML.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Controls handleTouchesEnded:withEvent:]:Controls.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.buttonA.enclosingRect">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[Level draw:]:Level.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
