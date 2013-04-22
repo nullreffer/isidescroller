@@ -25,35 +25,41 @@
                     <positiony>50</positiony>
                 </block>
                 <block>
-                    <type>STANDARD</type>
+                    <type>SPIKES</type>
                     <positionx>96</positionx>
                     <positiony>50</positiony>
                 </block>
-                <block>
-                    <type>STANDARD</type>
-                    <positionx>128</positionx>
-                    <positiony>50</positiony>
-                </block>
+                <!-- Spikes take up two blocks
+                 <block>
+                 <type>STANDARD</type>
+                 <positionx>128</positionx>
+                 <positiony>50</positiony>
+                 </block>
+                 -->
                 <block>
                     <type>STANDARD</type>
                     <positionx>160</positionx>
                     <positiony>50</positiony>
                 </block>
+                <!--
                 <block>
                     <type>STANDARD</type>
                     <positionx>192</positionx>
                     <positiony>50</positiony>
                 </block>
+                 -->
                 <block>
                     <type>STANDARD</type>
                     <positionx>224</positionx>
                     <positiony>50</positiony>
                 </block>
+                <!--
                 <block>
                     <type>STANDARD</type>
                     <positionx>256</positionx>
                     <positiony>50</positiony>
                 </block>
+                 -->
                 <block>
                     <type>STANDARD</type>
                     <positionx>288</positionx>
@@ -96,7 +102,7 @@
                 </block>
             </blocks>
             <protagonist>
-                <positionx>250</positionx>
+                <positionx>220</positionx>
                 <positiony>220</positiony>
             </protagonist>
             <characters>

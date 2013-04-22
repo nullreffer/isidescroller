@@ -46,6 +46,23 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "-[Character initiateJumpWithForce:]:Character.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Character update:withJoystickSpeed:andDirection:]:Character.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "rect2">
+            </PersistentString>
+            <PersistentString
+               value = "rect1">
+            </PersistentString>
+            <PersistentString
+               value = "intersect_y">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[Level draw:]:Level.m">
       </ContextState>
    </ContextStates>

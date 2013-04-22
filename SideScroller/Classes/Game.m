@@ -95,10 +95,6 @@
         // Depends on my pause dialog
     } else if (self.GAME_STATE == PLAYING){
         [self.controls handleTouchesBegan:touches withEvent:event];
-        
-        if ([self.controls isAPressed]){
-            [self.currentLevel.theman initiateJumpWithForce:100];
-        }
     }
 }
 
@@ -110,10 +106,6 @@
         // Depends on my pause dialog
     } else if (self.GAME_STATE == PLAYING){
         [self.controls handleTouchesEnded:touches withEvent:event];
-        
-        if ([self.controls isAPressed]){
-            [self.currentLevel.theman initiateJumpWithForce:100];
-        }
     }
 }
 
@@ -127,10 +119,6 @@
         [self.controls handleTouchesMoved:touches withEvent:event];
         
         // [self.currentLevel.theman handleJoystickWithSpeed:[self.controls getJoystickForce] andDirection:[self.controls getJoystickDirection]];
-        
-        if ([self.controls isAPressed]){
-            [self.currentLevel.theman initiateJumpWithForce:100];
-        }
     }
 }
 

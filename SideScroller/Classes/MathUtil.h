@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define M_PI_8 M_PI_4 / 2
+
 @interface MathUtil : NSObject
 
 + (float) calculateDistance:(CGPoint)a :(CGPoint)b;

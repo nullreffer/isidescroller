@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Jay Desai. All rights reserved.
 //
 
+#import "MathUtil.h"
 #import "CGUtil.h"
 #import "Character.h"
 #import "Level.h"
@@ -111,85 +112,41 @@
     }
     
     // check collision
-    bool intersect_x = false;
-    bool intersect_y = false;
-    // CGRect rect1 =  CGRectMake(new_x, new_y, self.characterImage.enclosingRect.size.width, self.characterImage.enclosingRect.size.height); // self.characterImage.enclosingRect;
-    CGRect rect1 = CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height);
-    CGLine rect1_top = CGLineMake(rect1.origin, CGPointMake(rect1.origin.x + rect1.size.width, rect1.origin.y));
-    CGLine rect1_bottom = CGLineMake(CGPointMake(rect1.origin.x, rect1.origin.y - rect1.size.height), CGPointMake(rect1.origin.x + rect1.size.width, rect1.origin.y - rect1.size.height));
-    CGLine rect1_left = CGLineMake(rect1.origin, CGPointMake(rect1.origin.x, rect1.origin.y - rect1.size.height));
-    CGLine rect1_right = CGLineMake(CGPointMake(rect1.origin.x + rect1.size.width, rect1.origin.y), CGPointMake(rect1.origin.x + rect1.size.width, rect1.origin.y - rect1.size.height));
-    CGPoint rect1_center = CGPointMake(rect1.origin.x + (rect1.size.width / 2), rect1.origin.y + (rect1.size.height / 2));
+    bool intersect_bottom = false;
+    bool intersect_top = false;
+    bool intersect_left = false;
+    bool intersect_right = false;
+    CGRect vertical_rect1 = CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height);
+    CGRect horizontal_rect1 = CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height);
 
     
     for (Block* block in self.level.blocks){
-        /* Attempt 101:
-        // if new position will collide
-        // Rectangle 1′s bottom edge is higher than Rectangle 2′s top edge.
-        // Rectangle 1′s top edge is lower than Rectangle 2′s bottom edge.
-        // Rectangle 1′s left edge is to the right of Rectangle 2′s right edge.
-        // Rectangle 1′s right edge is to the left of Rectangle 2′s left edge.
-        // if the else if happened, that means we were clear on y, but x intersected
-        bool y_did_intersect = false;
+ 
         CGRect rect2 = block.blockSprite.enclosingRect;
-        if (rect1.origin.y - rect1.size.height > rect2.origin.y ||
-            rect1.origin.y < rect2.origin.y - rect2.size.height) {
-            // no y intersection
-        } else if (!(y_did_intersect = true) || // makes sense
-                   rect1.origin.x > rect2.origin.x + rect2.size.width ||
-                   rect1.origin.x + rect1.size.width < rect2.origin.x ){
-            // no x intersection
-        } else {
-            
-            if (!y_did_intersect){
-                intersect_x = true;
-                new_x = self.position.x;
-            } else {
-                intersect_y = true;
-                new_y = self.position.y;
-            }
-            
-            break;
-        }
         
-        // also need to make sure the force in gravity didn't cause jumping through a block thus avoiding prior collision detection
-        // however, I can just make the rect1 from the previous collision detection enclose the starting point aka self.position
-        */
-        
-        // New attempt
-        CGRect intersectionRect = CGRectIntersection(rect1, block.blockSprite.enclosingRect);
-        if (!CGRectIsNull(intersectionRect)){
-            CGPoint rect2_center = CGPointMake(block.blockSprite.enclosingRect.origin.x + (block.blockSprite.enclosingRect.size.width / 2), block.blockSprite.enclosingRect.origin.y + (block.blockSprite.enclosingRect.size.height / 2));
-            CGLine center_to_center = CGLineMake(rect1_center, rect2_center);
-            CGPoint intersectionPoint = CGLineIntersection(center_to_center, rect1_top);
-            if (!CGPointIsNull(intersectionPoint)){
-                // top intersection
-                // if (atan2(self.character.direction) > 0)
-                //     intersection happened from top to bottom
-                // else it happened from bottom to top
-                intersect_y = true;
-                new_y = self.position.y;
-            } else if (!CGPointIsNull(intersectionPoint = CGLineIntersection(center_to_center, rect1_bottom))){
-                // bottom intersection
-                intersect_y = true;
-                new_y = self.position.y;
-            } else if (!CGPointIsNull(intersectionPoint = CGLineIntersection(center_to_center, rect1_left))){
-                // left intersection
-                intersect_x = true;
-                new_x = self.position.x;
-            } else if (!CGPointIsNull(intersectionPoint = CGLineIntersection(center_to_center, rect1_right))){
-                // right intersection
-                intersect_x = true;
-                new_x = self.position.x;
-            }
-        }
+//        if (rect1.origin.y - rect1.size.height > rect2.origin.y ||
+//            rect1.origin.y < rect2.origin.y - rect2.size.height) {
+//            // no y intersection
+//        } else if (rect1.origin.x > rect2.origin.x + rect2.size.width ||
+//                   rect1.origin.x + rect1.size.width < rect2.origin.x ){
+//            // no x intersection
+//        } else {
+//            
+//            // definitely intersects
+//            float top_intersection_height = new_y - (rect2.origin.y - rect2.size.height);
+//            float bottom_intersection_height = rect2.origin.y - (new_y - rect1.size.height);
+//            float left_intersection_height = (new_x + rect1.size.width) - rect2.origin.x;
+//            float right_intersection_height = (rect2.origin.x + rect2.size.width) - new_x;
+//            
+//            NSLog(@"%f, %f", top_intersection_height, bottom_intersection_height);
+//        }
     }
     
-    if (intersect_y){
+    if (intersect_bottom){
         self.isJumping = false;
     }
     
-    if (!intersect_x && !intersect_y) {
+    if (!CGPointEqualToPoint(self.position, CGPointMake(new_x, new_y))) {
         self.lastPosition = self.position;
     }
     self.level.horizontalOffset -= new_x - self.position.x;
