@@ -113,33 +113,39 @@
     
     // check collision
     bool intersect_bottom = false;
-    bool intersect_top = false;
-    bool intersect_left = false;
+    // bool intersect_top = false;
+    // bool intersect_left = false;
     bool intersect_right = false;
-    CGRect vertical_rect1 = CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height);
-    CGRect horizontal_rect1 = CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height);
+    CGRect vertical_rect1 = CGRectMake(self.position.x, self.position.y, self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height);
+    CGRect horizontal_rect1 = CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, self.characterImage.enclosingRect.size.height);
 
     
     for (Block* block in self.level.blocks){
  
         CGRect rect2 = block.blockSprite.enclosingRect;
         
-//        if (rect1.origin.y - rect1.size.height > rect2.origin.y ||
-//            rect1.origin.y < rect2.origin.y - rect2.size.height) {
-//            // no y intersection
-//        } else if (rect1.origin.x > rect2.origin.x + rect2.size.width ||
-//                   rect1.origin.x + rect1.size.width < rect2.origin.x ){
-//            // no x intersection
-//        } else {
-//            
-//            // definitely intersects
-//            float top_intersection_height = new_y - (rect2.origin.y - rect2.size.height);
-//            float bottom_intersection_height = rect2.origin.y - (new_y - rect1.size.height);
-//            float left_intersection_height = (new_x + rect1.size.width) - rect2.origin.x;
-//            float right_intersection_height = (rect2.origin.x + rect2.size.width) - new_x;
-//            
-//            NSLog(@"%f, %f", top_intersection_height, bottom_intersection_height);
-//        }
+        if (vertical_rect1.origin.y - vertical_rect1.size.height > rect2.origin.y ||
+            vertical_rect1.origin.y < rect2.origin.y - rect2.size.height) {
+            // no y intersection
+        } else if (vertical_rect1.origin.x > rect2.origin.x + rect2.size.width ||
+                   vertical_rect1.origin.x + vertical_rect1.size.width < rect2.origin.x ){
+            // no x intersection
+        } else {
+            new_y = self.position.y;
+            intersect_bottom = true;
+        }
+        
+        if (horizontal_rect1.origin.y - horizontal_rect1.size.height > rect2.origin.y ||
+            horizontal_rect1.origin.y < rect2.origin.y - rect2.size.height) {
+            // no y intersection
+        } else if (horizontal_rect1.origin.x > rect2.origin.x + rect2.size.width ||
+                   horizontal_rect1.origin.x + horizontal_rect1.size.width < rect2.origin.x ){
+            // no x intersection
+        } else {
+            new_x = self.position.x;
+            intersect_right = true;
+        }
+        
     }
     
     if (intersect_bottom){

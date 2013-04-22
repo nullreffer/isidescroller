@@ -35,6 +35,9 @@
          contextName = "-[Sprite renderWithSize:atX:andY:]:Sprite.m">
       </ContextState>
       <ContextState
+         contextName = "-[Character initiateJumpWithForce:]:Character.m">
+      </ContextState>
+      <ContextState
          contextName = "+[TBXML(StaticFunctions) childElementNamed:parentElement:]:TBXML.m">
       </ContextState>
       <ContextState
@@ -46,19 +49,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[Character initiateJumpWithForce:]:Character.m">
-      </ContextState>
-      <ContextState
          contextName = "-[Character update:withJoystickSpeed:andDirection:]:Character.m">
          <PersistentStrings>
             <PersistentString
                value = "rect2">
-            </PersistentString>
-            <PersistentString
-               value = "rect1">
-            </PersistentString>
-            <PersistentString
-               value = "intersect_y">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
