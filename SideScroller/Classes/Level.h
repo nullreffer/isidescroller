@@ -13,6 +13,25 @@
 
 @interface Level : NSObject
 
+typedef enum {
+    GRAVITY_LEFT ,
+    GRAVITY_RIGHT,
+    GRAVITY_TOP,
+    GRAVITY_BOTTOM
+} _GRAVITY_POSITION;
+
+@property int width;
+@property int height;
+
+@property float horizontalOffset;
+
+@property _GRAVITY_POSITION gravityPosition;
+
+@property(nonatomic, retain) NSMutableArray *blocks;
+
+@property Character* theman;
+@property(nonatomic, retain) NSMutableArray *characters;
+
 - (id)initWithConfig:(TBXMLElement*) config;
 
 - (void)load;
@@ -24,20 +43,5 @@
 -(void) doAPressed;
 
 - (void)draw:(long)ms;
-
-@property int width;
-@property int height;
-
-@property float gravity;
-@property bool verticalGravity;
-
-@property CGPoint gravityLocation;
-
-@property float horizontalOffset;
-
-@property(nonatomic, retain) NSMutableArray *blocks;
-
-@property Character* theman;
-@property(nonatomic, retain) NSMutableArray *characters;
 
 @end

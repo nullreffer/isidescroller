@@ -97,13 +97,13 @@
     float new_y = self.position.y + velocity_y;
     
     // apply gravity
-    if (self.level.verticalGravity){
+    if (self.level.gravityPosition == GRAVITY_BOTTOM){
         new_y += self.jumpForce;
         if (self.jumpForce > 0) {
             self.jumpForce = self.jumpForce / 2;
         }
-        float verticalDistance = (self.position.y / (4 * GRAVITY_CONSTANT)) - self.level.gravityLocation.y;
-        float gravityForce = (self.level.gravity * 4 * GRAVITY_CONSTANT) / (verticalDistance * verticalDistance);
+        float verticalDistance = (self.position.y / (4 * GRAVITY_CONSTANT));
+        float gravityForce = (4 * GRAVITY_CONSTANT) / (verticalDistance * verticalDistance);
         new_y -= gravityForce;
         self.isJumping = true;
     } else {
@@ -113,17 +113,20 @@
     
     // check collision
     bool intersect_bottom = false;
-    // bool intersect_top = false;
-    // bool intersect_left = false;
+    bool intersect_top = false;
+    bool intersect_left = false;
     bool intersect_right = false;
-    CGRect vertical_rect1 = CGRectMake(self.position.x, self.position.y, self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height);
-    CGRect horizontal_rect1 = CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, self.characterImage.enclosingRect.size.height);
+    CGRect vertical_rect1 = new_y < self.position.y ? CGRectMake(self.position.x, self.position.y, self.characterImage.enclosingRect.size.width, (self.position.y - new_y) + self.characterImage.enclosingRect.size.height) : CGRectMake(self.position.x, new_y, self.characterImage.enclosingRect.size.width, (new_y - self.position.y) + self.characterImage.enclosingRect.size.height);
+    CGRect horizontal_rect1 = new_x > self.position.x ? CGRectMake(self.position.x, self.position.y, (new_x - self.position.x) + self.characterImage.enclosingRect.size.width, self.characterImage.enclosingRect.size.height) : CGRectMake(new_x, self.position.y, (self.position.x - new_x) + self.characterImage.enclosingRect.size.width, self.characterImage.enclosingRect.size.height);
 
+    float new_new_y = new_y;
+    float new_new_x = new_x;
     
     for (Block* block in self.level.blocks){
  
         CGRect rect2 = block.blockSprite.enclosingRect;
         
+        // vertical rect intersection
         if (vertical_rect1.origin.y - vertical_rect1.size.height > rect2.origin.y ||
             vertical_rect1.origin.y < rect2.origin.y - rect2.size.height) {
             // no y intersection
@@ -131,10 +134,16 @@
                    vertical_rect1.origin.x + vertical_rect1.size.width < rect2.origin.x ){
             // no x intersection
         } else {
-            new_y = self.position.y;
-            intersect_bottom = true;
+            if (new_y < self.position.y){
+                new_new_y = rect2.origin.y + self.characterImage.enclosingRect.size.height + 0.01;
+                intersect_bottom = true;
+            } else if (new_y > self.position.y) {
+                new_new_y = rect2.origin.y - rect2.size.height - 0.01;
+                intersect_top = true;
+            } // ignore when they're equal
         }
         
+        // horizontal rect intersection
         if (horizontal_rect1.origin.y - horizontal_rect1.size.height > rect2.origin.y ||
             horizontal_rect1.origin.y < rect2.origin.y - rect2.size.height) {
             // no y intersection
@@ -142,21 +151,26 @@
                    horizontal_rect1.origin.x + horizontal_rect1.size.width < rect2.origin.x ){
             // no x intersection
         } else {
-            new_x = self.position.x;
-            intersect_right = true;
+            if (new_x < self.position.x){
+                new_new_x = rect2.origin.x + rect2.size.width + 0.01;
+                intersect_left = true;
+            } else if (new_x > self.position.x) {
+                new_new_x = rect2.origin.x - self.characterImage.enclosingRect.size.width - 0.01;
+                intersect_right = true;
+            } // ignore when they're equal
         }
         
     }
-    
+
     if (intersect_bottom){
         self.isJumping = false;
     }
-    
-    if (!CGPointEqualToPoint(self.position, CGPointMake(new_x, new_y))) {
+
+    if (!CGPointEqualToPoint(self.position, CGPointMake(new_new_x, new_new_y))) {
         self.lastPosition = self.position;
     }
-    self.level.horizontalOffset -= new_x - self.position.x;
-    self.position = CGPointMake(new_x, new_y);
+    self.level.horizontalOffset -= new_new_x - self.position.x;
+    self.position = CGPointMake(new_new_x, new_new_y);
     
 }
 

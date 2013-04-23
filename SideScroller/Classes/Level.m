@@ -25,9 +25,6 @@
 
 @synthesize width = _width;
 @synthesize height = _height;
-@synthesize gravity = _gravity;
-@synthesize verticalGravity = _verticalGravity;
-@synthesize gravityLocation = _gravityLocation;
 @synthesize blocks = _blocks;
 @synthesize theman = _theman;
 @synthesize characters = _characters;
@@ -40,13 +37,9 @@
     if ([self init]){
         self.config = config;
         
-        // temp
-        self.verticalGravity = YES;
-        
-        self.gravity = 1;
-        self.gravityLocation = CGPointMake(100, 0);
-        
         self.horizontalOffset = 0;
+        
+        self.gravityPosition = GRAVITY_BOTTOM;
         
         return self;
     }
@@ -122,9 +115,7 @@
 -(void)update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction {
     // big function
     // check collision and update blocks and characters accordingly
-    if (self.verticalGravity){
-        direction = abs(direction) > M_PI_2 ? M_PI : 0;
-    }
+    direction = abs(direction) > M_PI_2 ? M_PI : 0;
     [self.theman update:ms withJoystickSpeed:speed andDirection:direction];
 }
 

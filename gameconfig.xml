@@ -163,6 +163,11 @@
                 <block>
                     <type>STANDARD</type>
                     <positionx>224</positionx>
+                    <positiony>130</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>224</positionx>
                     <positiony>50</positiony>
                 </block>
                 <block>
