@@ -123,9 +123,9 @@
         if (touch == self.joystickTouch){
             self.joystickPressed = false;
             self.joystickMovedLocation = self.joystickInitialLocation;
-        } else if (CGRectContainsPoint(self.buttonA.enclosingRect, touchPosition)){
+        } else if (!CGRectContainsPoint(self.buttonB.enclosingRect, touchPosition)){
             self.aPressed = false;
-        } else if (CGRectContainsPoint(self.buttonB.enclosingRect, touchPosition)){
+        } else if (!CGRectContainsPoint(self.buttonA.enclosingRect, touchPosition)){
             self.bPressed = false;
         }
     }

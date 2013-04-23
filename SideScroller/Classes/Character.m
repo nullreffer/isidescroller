@@ -13,8 +13,7 @@
 #import "Sprite.h"
 
 #define SPEED_SCALE 2.0
-#define JUMP_SCALE 40.0
-#define GRAVITY_CONSTANT 10.0
+#define JUMP_SCALE 50.0
 
 @interface Character()
 
@@ -75,12 +74,7 @@
         return;
     
     self.jumpForce = force * JUMP_SCALE;
-    
-    // if (self.jumpForce <= 0) {
-        // self.jumpForce = force;
-    // } else {
-        // self.jumpForce -= self.level.gravity;
-    // }
+    self.isJumping = true;
 }
 
 // This will be used by ortho-graphic view 2D games which require no gravity
@@ -98,14 +92,20 @@
     
     // apply gravity
     if (self.level.gravityPosition == GRAVITY_BOTTOM){
-        new_y += self.jumpForce;
-        if (self.jumpForce > 0) {
+        if (self.jumpForce > 1) {
+            new_y += self.jumpForce;
             self.jumpForce = self.jumpForce / 2;
+        } else if (self.jumpForce <= 1 && self.jumpForce > -1){
+            self.jumpForce = -1;
         }
-        float verticalDistance = (self.position.y / (4 * GRAVITY_CONSTANT));
-        float gravityForce = (4 * GRAVITY_CONSTANT) / (verticalDistance * verticalDistance);
-        new_y -= gravityForce;
-        self.isJumping = true;
+        else {
+            new_y += self.jumpForce;
+            self.jumpForce = self.jumpForce * 2;
+        }
+        // float verticalDistance = (self.position.y / (4 * GRAVITY_CONSTANT));
+        // float gravityForce = (4 * GRAVITY_CONSTANT) / (verticalDistance * verticalDistance);
+        // new_y -= gravityForce;
+        // self.isJumping = true;
     } else {
         // else jump would be directed against the gravity point
         // and gravity pull would be towards the gravity point
@@ -164,6 +164,7 @@
 
     if (intersect_bottom){
         self.isJumping = false;
+        self.jumpForce = 0;
     }
 
     if (!CGPointEqualToPoint(self.position, CGPointMake(new_new_x, new_new_y))) {
