@@ -83,7 +83,7 @@
     if (self.MENU_STATE == MENU_MAIN){
         [self.mainMenuSprite renderWithSize:1.0 atX:0 andY:0];
         
-        self.playTextRect = [self.skiaFont_white renderString:@"play" ofSize:40 atX:40 andY:40];
+        self.playTextRect = [self.skiaFont_white renderString:@"play play" ofSize:40 atX:40 andY:40];
         
     } else if (self.MENU_STATE == MENU_SELECT_LEVEL){
         [self.mainMenuSprite renderWithSize:1.0 atX:0 andY:0];

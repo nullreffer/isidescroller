@@ -120,7 +120,11 @@
     [self renderWithSize:size atX:x andXOffset:0 andY:y andYOffset:0];
 }
 
-- (void)renderWithSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset{
+- (void)renderWithSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset {
+    [self renderWithSize:size atX:x andXOffset:xoffset andY:y andYOffset:yoffset flippedHorizontally:NO flippedVertically:NO];
+}
+
+- (void)renderWithSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert {
     
     self.enclosingRect = CGRectMake(x, y, self.enclosingRect.size.width, self.enclosingRect.size.height);
     x = x + xoffset;
@@ -138,6 +142,23 @@
     newQuad.br.geometryVertex = CGPointMake(x + qw, y);
     newQuad.tl.geometryVertex = CGPointMake(x, y + qh);
     newQuad.tr.geometryVertex = CGPointMake(x + qw, y + qh);
+    
+    // if horz, flip bl and br, and tl and tr
+    if (horz){
+        newQuad.bl.geometryVertex = CGPointMake(x + qw, y);
+        newQuad.br.geometryVertex = CGPointMake(x, y);
+        newQuad.tl.geometryVertex = CGPointMake(x + qw, y + qh);
+        newQuad.tr.geometryVertex = CGPointMake(x, y + qh);
+    }
+    
+    // if vert, flip tl and bl, and tr and br
+    if (vert){
+        newQuad.bl.geometryVertex = CGPointMake(x + qw, y + qh);
+        newQuad.br.geometryVertex = CGPointMake(x, y + qh);
+        newQuad.tl.geometryVertex = CGPointMake(x + qw, y);
+        newQuad.tr.geometryVertex = CGPointMake(x, y);
+    }
+    
     self.quad = newQuad;
     
     [self render];

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Sprite.h"
+#import "AnimatedSprite.h"
 
 @class Level;
 
@@ -17,7 +17,7 @@
 
 @property CGPoint position;
 
-@property Sprite* characterImage;
+@property AnimatedSprite* characterImage;
 
 @property Level* level;
 

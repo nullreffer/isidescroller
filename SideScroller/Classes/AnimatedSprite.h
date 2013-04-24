@@ -10,8 +10,13 @@
 
 @interface AnimatedSprite : NSObject
 
-- (id) initAnimatedSpriteWithFile:(NSString*)file andSpriteWidth:(int)width andInterval:(int)interval;
+@property int currentFrame;
+@property CGRect enclosingRect;
 
-- (void) draw:(long)ms;
+- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width andInterval:(int)interval;
+- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width andInterval:(int)interval andManualFlip:(bool)manualFlip;
+- (void)render:(long)ms frame:(int)frame withSize:(float)size atX:(int)x andY:(int)y;
+- (void)render:(long)ms frame:(int)frame withSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset;
+- (void)render:(long)ms frame:(int)frame withSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
 
 @end

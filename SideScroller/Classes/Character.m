@@ -10,7 +10,6 @@
 #import "CGUtil.h"
 #import "Character.h"
 #import "Level.h"
-#import "Sprite.h"
 
 #define SPEED_SCALE 2.0
 #define JUMP_SCALE 50.0
@@ -18,11 +17,15 @@
 @interface Character()
 
 @property float direction;
+@property float lastDirection;
 
 @property CGPoint lastPosition;
 
 @property bool isJumping;
 @property float jumpForce;
+
+@property bool isWalking;
+@property int frameCounter;
 
 @property NSMutableArray* collidedBlocks;
 
@@ -31,12 +34,16 @@
 @implementation Character
 
 @synthesize direction = _direction;
+@synthesize lastDirection = _lastDirection;
 
 @synthesize position = _position;
 @synthesize lastPosition = _lastPosition;
 
 @synthesize isJumping = _isJumping;
 @synthesize jumpForce = _jumpForce;
+
+@synthesize isWalking = _isWalking;
+@synthesize frameCounter = _frameCounter;
 
 @synthesize level = _level;
 
@@ -50,9 +57,12 @@
     
     if ([self init]){
         
-        self.characterImage = [[Sprite alloc] initWithImage:image andManualFlip:YES];
+        int characterWidth = (image.size.width) / 5;
+        
+        self.characterImage = [[AnimatedSprite alloc] initWithImage:image ofFrameWidth:characterWidth andInterval:200 andManualFlip:YES];
         
         self.direction = 0;
+        self.lastDirection = 0;
         self.position = CGPointMake(x, y);
         self.lastPosition = CGPointMake(x, y);
         
@@ -60,6 +70,9 @@
         
         self.isJumping = false;
         self.jumpForce = 0;
+        self.isWalking = false;
+        self.frameCounter = 0;
+        
         self.level = level;
         
         self.collidedBlocks = [[NSMutableArray alloc] init];
@@ -83,6 +96,12 @@
 }
 
 - (void) update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction {
+    
+    if (self.direction != direction){
+        self.lastDirection = self.direction;
+        self.direction = direction;
+    }
+    
     float scale_x = cosf(direction); // right or left movement only
     float scale_y = sinf(direction);
     
@@ -90,6 +109,12 @@
     
     float velocity_x = speed * scale_x;
     float velocity_y = speed * scale_y;
+    
+    if (((abs(velocity_x) > 0) && (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP)) || ((abs(velocity_y) > 0) && (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT))){
+        self.isWalking = true;
+    } else {
+        self.isWalking = false;
+    }
     
     float new_x = self.level.gravityPosition == GRAVITY_NONE || self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP ? self.position.x + velocity_x  : self.position.x;
     float new_y = self.level.gravityPosition == GRAVITY_NONE || self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT ? self.position.y + velocity_y  : self.position.y;
@@ -210,7 +235,19 @@
 }
 
 -(void) draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
-    [self.characterImage renderWithSize:1.0 atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
+    int frame = 0;
+    if (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP){
+        
+        frame = !self.isWalking ? 0 : (self.characterImage.currentFrame == 1 && self.frameCounter++ % 2 == 0 ? 2 : 1); // 0 standing, 1 walk step 1, 2 = walk step 2
+        
+        frame = self.isJumping ? 3 : frame;
+        
+        [self.characterImage render:ms frame:frame withSize:1.0 atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:abs(self.lastDirection) > M_PI_2 flippedVertically:NO];
+    } else if (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT) {
+        // TODO
+    }
+    
+
 
 }
 
