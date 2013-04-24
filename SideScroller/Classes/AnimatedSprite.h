@@ -13,10 +13,15 @@
 @property int currentFrame;
 @property CGRect enclosingRect;
 
-- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width andInterval:(int)interval;
-- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width andInterval:(int)interval andManualFlip:(bool)manualFlip;
-- (void)render:(long)ms frame:(int)frame withSize:(float)size atX:(int)x andY:(int)y;
-- (void)render:(long)ms frame:(int)frame withSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset;
-- (void)render:(long)ms frame:(int)frame withSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
+- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width;
+
+- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width andManualFlip:(bool)manualFlip;
+
+
+- (void)render:(long)ms frame:(int)frame withSize:(CGSize)size atX:(int)x andY:(int)y;
+
+- (void)render:(long)ms frame:(int)frame withSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset;
+
+- (void)render:(long)ms frame:(int)frame withSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
 
 @end

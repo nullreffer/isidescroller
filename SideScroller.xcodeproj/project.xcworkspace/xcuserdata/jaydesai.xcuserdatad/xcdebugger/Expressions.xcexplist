@@ -3,39 +3,36 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[GameMenu draw:]:GameMenu.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Game initWithCode:andConfig:forView:]:Game.m">
-      </ContextState>
-      <ContextState
          contextName = "-[Sprite initWithRect:croppedTo:]:Sprite.m">
       </ContextState>
       <ContextState
-         contextName = "-[Sprite initWithImage:]:Sprite.m">
+         contextName = "-[Level draw:]:Level.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Character initiateJumpWithForce:]:Character.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Block onCollideFromLeft:withMovement:retX:retY:]:Block.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Character update:withJoystickSpeed:andDirection:]:Character.m">
          <PersistentStrings>
             <PersistentString
-               value = "image.imageOrientation">
+               value = "rect2">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[MainViewController drawGame]:MainViewController.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Font renderString:ofSize:atX:andY:]:Font.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Level load]:Level.m">
+         contextName = "-[GameMenu draw:]:GameMenu.m">
       </ContextState>
       <ContextState
          contextName = "-[Level initWithConfig:]:Level.m">
       </ContextState>
       <ContextState
-         contextName = "-[Sprite renderWithSize:atX:andY:]:Sprite.m">
+         contextName = "-[Game initWithCode:andConfig:forView:]:Game.m">
       </ContextState>
       <ContextState
-         contextName = "-[Character initiateJumpWithForce:]:Character.m">
+         contextName = "-[MainViewController drawGame]:MainViewController.m">
       </ContextState>
       <ContextState
          contextName = "+[TBXML(StaticFunctions) childElementNamed:parentElement:]:TBXML.m">
@@ -49,15 +46,30 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[Character update:withJoystickSpeed:andDirection:]:Character.m">
+         contextName = "-[Block onCollideFromTop:withMovement:andGravityOffset:retX:retY:]:Block.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[AnimatedSprite render:frame:withSize:atX:andXOffset:andY:andYOffset:flippedHorizontally:flippedVertically:]:AnimatedSprite.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Level load]:Level.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Sprite initWithImage:]:Sprite.m">
          <PersistentStrings>
             <PersistentString
-               value = "rect2">
+               value = "image.imageOrientation">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[Level draw:]:Level.m">
+         contextName = "-[Sprite renderWithSize:atX:andY:]:Sprite.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Block onCollideFromTop:withMovement:retX:retY:]:Block.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Sprite renderWithSize:atX:andXOffset:andY:andYOffset:flippedHorizontally:flippedVertically:]:Sprite.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

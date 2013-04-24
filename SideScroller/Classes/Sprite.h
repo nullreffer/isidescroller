@@ -15,17 +15,21 @@ typedef struct {
     TexturedVertex tr;
 } TexturedQuad;
 
-@property CGRect enclosingRect;
-
-- (id)initWithImage:(UIImage *)image ;
-- (id)initWithImage:(UIImage *)image andManualFlip:(bool)manualFlip;
-- (id)initWithRect:(CGImageRef)img croppedTo:(CGRect)char_rect andManualFlip:(bool)manualFlip;
-- (id)initWithRect:(CGImageRef)img croppedTo:(CGRect)char_rect andOriginalSz:(CGSize)sz andManualFlip:(bool)manualFlip;
-- (void)renderWithSize:(float)size atX:(int)x andY:(int)y;
-- (void)renderWithSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset;
-- (void)renderWithSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
-
+@property CGPoint position;
+@property CGSize size;
 @property (assign) TexturedQuad originalQuad;
 @property (assign) TexturedQuad quad;
+
+- (id)initWithImage:(UIImage *)image ;
+
+- (id)initWithImage:(UIImage *)image andManualFlip:(bool)manualFlip;
+
+- (void)renderWithSize:(CGSize)size atX:(int)x andY:(int)y;
+
+- (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset;
+
+- (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
+
+- (CGRect) enclosingRect;
 
 @end

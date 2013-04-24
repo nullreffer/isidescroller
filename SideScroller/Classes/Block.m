@@ -81,7 +81,7 @@
 }
 
 - (void)draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
-    [self.blockSprite renderWithSize:1.0 atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
+    [self.blockSprite renderWithSize:self.blockSprite.size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
 }
 
 - (void) onCollisionComplete:(Character*)character {

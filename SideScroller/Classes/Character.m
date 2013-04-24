@@ -59,7 +59,8 @@
         
         int characterWidth = (image.size.width) / 5;
         
-        self.characterImage = [[AnimatedSprite alloc] initWithImage:image ofFrameWidth:characterWidth andInterval:200 andManualFlip:YES];
+        self.characterImage = [[Sprite alloc] initWithImage:image andManualFlip:YES];
+        // self.characterImage = [[Sprite alloc] initWithRect:[image CGImage] croppedTo:CGRectMake(0, 0, characterWidth, image.size.height) andManualFlip:NO];
         
         self.direction = 0;
         self.lastDirection = 0;
@@ -238,11 +239,12 @@
     int frame = 0;
     if (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP){
         
-        frame = !self.isWalking ? 0 : (self.characterImage.currentFrame == 1 && self.frameCounter++ % 2 == 0 ? 2 : 1); // 0 standing, 1 walk step 1, 2 = walk step 2
+        // frame = !self.isWalking ? 0 : (self.characterImage.currentFrame == 1 && self.frameCounter++ % 2 == 0 ? 2 : 1); // 0 standing, 1 walk step 1, 2 = walk step 2
         
-        frame = self.isJumping ? 3 : frame;
+        // frame = self.isJumping ? 3 : frame;
         
-        [self.characterImage render:ms frame:frame withSize:1.0 atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:abs(self.lastDirection) > M_PI_2 flippedVertically:NO];
+        // [self.characterImage render:ms frame:frame withSize:1.0 atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:abs(self.lastDirection) > M_PI_2 flippedVertically:NO];
+        [self.characterImage renderWithSize:self.characterImage.size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
     } else if (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT) {
         // TODO
     }
