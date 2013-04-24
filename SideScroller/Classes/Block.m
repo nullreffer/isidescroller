@@ -35,6 +35,12 @@
         if ([type isEqualToString:@"SPIKES"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = SPIKES;
+        } else if ([type isEqualToString:@"STAIRS"]){
+            blockImage = [UIImage imageNamed:@"block_stairs.png" ];
+            self.BLOCK_TYPE = STAIRS;
+        }  else if ([type isEqualToString:@"LADDER"]){
+            blockImage = [UIImage imageNamed:@"block_ladder.png" ];
+            self.BLOCK_TYPE = LADDER;
         } else if ([type isEqualToString:@"COIN"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = COIN;
@@ -78,12 +84,72 @@
     [self.blockSprite renderWithSize:1.0 atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
 }
 
--(void) onCollideWithChar:(Character*)character inLevel:(Level*)level {
+- (void) onCollisionComplete:(Character*)character {
+    // nothing here yet
+}
+
+- (void) onCollideFromTop:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
+    if (self.isBroken){
+        return;
+    }
+
+    if (self.BLOCK_TYPE == LADDER){
+        *new_new_x = movement.x + gravityOffset.x;
+        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else {
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
+        }
+    }
+}
+
+- (void) onCollideFromBottom:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
     if (self.isBroken){
         return;
     }
     
+    if (self.BLOCK_TYPE == LADDER){
+        *new_new_x = movement.x + gravityOffset.x;
+        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else {
+        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - self.blockSprite.enclosingRect.size.height - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - self.blockSprite.enclosingRect.size.height - 0.01;
+        }
+    }
     
+}
+
+- (void) onCollideFromLeft:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
+    if (self.isBroken){
+        return;
+    }
+    
+    if (self.BLOCK_TYPE == STAIRS){
+        *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
+    } else if (self.BLOCK_TYPE == LADDER) {
+        *new_new_x = movement.x + gravityOffset.x + velocity.x;
+        *new_new_y = movement.y + gravityOffset.y ;
+    } else {
+        *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+    }
+    
+}
+
+- (void) onCollideFromRight:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
+    if (self.isBroken){
+        return;
+    }
+    
+    if (self.BLOCK_TYPE == STAIRS){
+        *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+        // *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
+    } else if (self.BLOCK_TYPE == LADDER) {
+        *new_new_x = movement.x + gravityOffset.x + velocity.x;
+        *new_new_y = movement.y + gravityOffset.y;
+    } else {
+        *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+    }
+
 }
 
 @end

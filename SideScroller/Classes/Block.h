@@ -26,6 +26,8 @@ typedef enum {
     COIN,
     POTION,
     SPIKES,
+    STAIRS,
+    LADDER,
     PORTAL
     
 } _BLOCK_TYPE_ENUM;
@@ -36,6 +38,14 @@ typedef enum {
 
 - (void)draw:(long)ms withHorizontalOffset:(float)horizontalOffset;
 
--(void) onCollideWithChar:(Character*)character inLevel:(Level*)level;
+- (void) onCollideFromTop:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y;
+
+- (void) onCollideFromBottom:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y;
+
+- (void) onCollideFromLeft:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y;
+
+- (void) onCollideFromRight:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y;
+
+- (void) onCollisionComplete:(Character*)character;
 
 @end

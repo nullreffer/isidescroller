@@ -186,9 +186,24 @@
                     <positiony>50</positiony>
                 </block>
                 <block>
+                    <type>STAIRS</type>
+                    <positionx>320</positionx>
+                    <positiony>82</positiony>
+                </block>
+                <block>
+                    <type>STAIRS</type>
+                    <positionx>352</positionx>
+                    <positiony>114</positiony>
+                </block>
+                <block>
                     <type>STANDARD</type>
                     <positionx>352</positionx>
                     <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>352</positionx>
+                    <positiony>82</positiony>
                 </block>
                 <block>
                     <type>STANDARD</type>
@@ -199,6 +214,21 @@
                     <type>STANDARD</type>
                     <positionx>416</positionx>
                     <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>LADDER</type>
+                    <positionx>512</positionx>
+                    <positiony>82</positiony>
+                </block>
+                <block>
+                    <type>LADDER</type>
+                    <positionx>512</positionx>
+                    <positiony>114</positiony>
+                </block>
+                <block>
+                    <type>LADDER</type>
+                    <positionx>512</positionx>
+                    <positiony>146</positiony>
                 </block>
                 <block>
                     <type>STANDARD</type>

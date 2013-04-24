@@ -14,10 +14,11 @@
 @interface Level : NSObject
 
 typedef enum {
-    GRAVITY_LEFT ,
+    GRAVITY_LEFT,
     GRAVITY_RIGHT,
     GRAVITY_TOP,
-    GRAVITY_BOTTOM
+    GRAVITY_BOTTOM,
+    GRAVITY_NONE
 } _GRAVITY_POSITION;
 
 @property int width;

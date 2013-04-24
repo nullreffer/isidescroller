@@ -33,14 +33,15 @@
 
 @synthesize horizontalOffset = _horizontalOffset;
 
+@synthesize gravityPosition = _gravityPosition;
+
 -(id) initWithConfig:(TBXMLElement *)config {
     if ([self init]){
         self.config = config;
         
         self.horizontalOffset = 0;
         
-        self.gravityPosition = GRAVITY_BOTTOM;
-        
+        self.gravityPosition = GRAVITY_BOTTOM;        
         return self;
     }
     
@@ -115,8 +116,13 @@
 -(void)update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction {
     // big function
     // check collision and update blocks and characters accordingly
-    direction = abs(direction) > M_PI_2 ? M_PI : 0;
+    // direction = abs(direction) > M_PI_2 ? M_PI : 0;
     [self.theman update:ms withJoystickSpeed:speed andDirection:direction];
+    
+    // draw enemies and friends
+    for (Character* character in self.characters){
+        [character update:ms];
+    }
 }
 
 -(void)draw:(long)ms {

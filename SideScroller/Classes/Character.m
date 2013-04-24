@@ -17,17 +17,14 @@
 
 @interface Character()
 
-@property Sprite* characterImage;
-
 @property float direction;
 
-@property CGPoint position;
 @property CGPoint lastPosition;
 
 @property bool isJumping;
 @property float jumpForce;
 
-@property Level* level;
+@property NSMutableArray* collidedBlocks;
 
 @end
 
@@ -46,6 +43,8 @@
 @synthesize isDead = _isDead;
 @synthesize addons = _addons;
 
+@synthesize collidedBlocks = _collidedBlocks;
+
 - (id) initCharacterWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level
 {
     
@@ -63,6 +62,8 @@
         self.jumpForce = 0;
         self.level = level;
         
+        self.collidedBlocks = [[NSMutableArray alloc] init];
+        
         return self;
     }
     
@@ -77,9 +78,12 @@
     self.isJumping = true;
 }
 
-// This will be used by ortho-graphic view 2D games which require no gravity
+-(void) update:(long)ms {
+    [self update:ms withJoystickSpeed:0 andDirection:0];
+}
+
 - (void) update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction {
-    float scale_x = cosf(direction);
+    float scale_x = cosf(direction); // right or left movement only
     float scale_y = sinf(direction);
     
     speed = SPEED_SCALE * speed;
@@ -87,11 +91,14 @@
     float velocity_x = speed * scale_x;
     float velocity_y = speed * scale_y;
     
-    float new_x = self.position.x + velocity_x;
-    float new_y = self.position.y + velocity_y;
+    float new_x = self.level.gravityPosition == GRAVITY_NONE || self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP ? self.position.x + velocity_x  : self.position.x;
+    float new_y = self.level.gravityPosition == GRAVITY_NONE || self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT ? self.position.y + velocity_y  : self.position.y;
+    
+    CGPoint gravityOffset = CGPointMake(0, 0);
     
     // apply gravity
     if (self.level.gravityPosition == GRAVITY_BOTTOM){
+        gravityOffset = CGPointMake(0, -self.jumpForce);
         if (self.jumpForce > 1) {
             new_y += self.jumpForce;
             self.jumpForce = self.jumpForce / 2;
@@ -102,13 +109,18 @@
             new_y += self.jumpForce;
             self.jumpForce = self.jumpForce * 2;
         }
-        // float verticalDistance = (self.position.y / (4 * GRAVITY_CONSTANT));
-        // float gravityForce = (4 * GRAVITY_CONSTANT) / (verticalDistance * verticalDistance);
-        // new_y -= gravityForce;
-        // self.isJumping = true;
-    } else {
-        // else jump would be directed against the gravity point
-        // and gravity pull would be towards the gravity point
+    } else if (self.level.gravityPosition == GRAVITY_TOP) {
+        gravityOffset = CGPointMake(0, self.jumpForce);
+        if (self.jumpForce < -1) {
+            new_y += self.jumpForce;
+            self.jumpForce = self.jumpForce / 2;
+        } else if (self.jumpForce >= -1 && self.jumpForce < 1){
+            self.jumpForce = 1;
+        }
+        else {
+            new_y += self.jumpForce;
+            self.jumpForce = self.jumpForce * 2;
+        }
     }
     
     // check collision
@@ -135,34 +147,56 @@
             // no x intersection
         } else {
             if (new_y < self.position.y){
-                new_new_y = rect2.origin.y + self.characterImage.enclosingRect.size.height + 0.01;
+                [block onCollideFromTop:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
                 intersect_bottom = true;
             } else if (new_y > self.position.y) {
-                new_new_y = rect2.origin.y - rect2.size.height - 0.01;
+                [block onCollideFromBottom:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
                 intersect_top = true;
             } // ignore when they're equal
         }
         
-        // horizontal rect intersection
-        if (horizontal_rect1.origin.y - horizontal_rect1.size.height > rect2.origin.y ||
-            horizontal_rect1.origin.y < rect2.origin.y - rect2.size.height) {
-            // no y intersection
-        } else if (horizontal_rect1.origin.x > rect2.origin.x + rect2.size.width ||
-                   horizontal_rect1.origin.x + horizontal_rect1.size.width < rect2.origin.x ){
-            // no x intersection
-        } else {
-            if (new_x < self.position.x){
-                new_new_x = rect2.origin.x + rect2.size.width + 0.01;
-                intersect_left = true;
-            } else if (new_x > self.position.x) {
-                new_new_x = rect2.origin.x - self.characterImage.enclosingRect.size.width - 0.01;
-                intersect_right = true;
-            } // ignore when they're equal
+        if (!intersect_top && !intersect_bottom) {
+            // horizontal rect intersection
+            if (horizontal_rect1.origin.y - horizontal_rect1.size.height > rect2.origin.y ||
+                horizontal_rect1.origin.y < rect2.origin.y - rect2.size.height) {
+                // no y intersection
+            } else if (horizontal_rect1.origin.x > rect2.origin.x + rect2.size.width ||
+                       horizontal_rect1.origin.x + horizontal_rect1.size.width < rect2.origin.x ){
+                // no x intersection
+            } else {
+                if (new_x < self.position.x){
+                    [block onCollideFromRight:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
+                    intersect_left = true;
+                } else if (new_x > self.position.x) {
+                    [block onCollideFromLeft:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
+                    intersect_right = true;
+                } // ignore when they're equal
+            }
         }
         
+        if (intersect_bottom || intersect_left || intersect_right || intersect_top){
+            // some side of the block collided
+            [self.collidedBlocks addObject:block];
+        } else {
+            // no collision between character and block
+            if ([self.collidedBlocks containsObject:block]){
+                [self.collidedBlocks removeObject:block];
+                [block onCollisionComplete:self];
+            }
+        }
+    
     }
 
-    if (intersect_bottom){
+    if (intersect_bottom && self.level.gravityPosition == GRAVITY_BOTTOM){
+        self.isJumping = false;
+        self.jumpForce = 0;
+    } else if (intersect_top && self.level.gravityPosition == GRAVITY_TOP){
+        self.isJumping = false;
+        self.jumpForce = 0;
+    } else if (intersect_right && self.level.gravityPosition == GRAVITY_RIGHT){
+        self.isJumping = false;
+        self.jumpForce = 0;
+    } else if (intersect_left && self.level.gravityPosition == GRAVITY_LEFT){
         self.isJumping = false;
         self.jumpForce = 0;
     }

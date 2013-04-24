@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Sprite.h"
 
 @class Level;
 
@@ -14,11 +15,19 @@
 
 @property bool isDead;
 
+@property CGPoint position;
+
+@property Sprite* characterImage;
+
+@property Level* level;
+
 @property NSMutableDictionary *addons;
 
 - (id) initCharacterWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level;
 
 - (void) initiateJumpWithForce:(float)force;
+
+- (void) update:(long)ms ;
 
 - (void) update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction;
 
