@@ -11,11 +11,9 @@
 @interface AnimatedSprite : NSObject
 
 @property int currentFrame;
-@property CGRect enclosingRect;
+@property int previousFrame;
 
-- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width;
-
-- (id)initWithImage:(UIImage *)image ofFrameWidth:(float)width andManualFlip:(bool)manualFlip;
+- (id)initWithImage:(UIImage *)image andManualFlip:(bool)manualFlip;
 
 
 - (void)render:(long)ms frame:(int)frame withSize:(CGSize)size atX:(int)x andY:(int)y;
@@ -23,5 +21,7 @@
 - (void)render:(long)ms frame:(int)frame withSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset;
 
 - (void)render:(long)ms frame:(int)frame withSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
+
+- (CGRect) enclosingRect;
 
 @end

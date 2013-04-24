@@ -7,7 +7,6 @@
 @property (strong, nonatomic) EAGLContext *context;
 
 @property Game* game;
-@property NSDate *time;
 
 @property(nonatomic, strong) TBXML *tbxml;
 
@@ -17,9 +16,7 @@
 
 @synthesize context = _context;
 
-@synthesize game = _game;
-@synthesize time = _time;
-@synthesize tbxml = _tbxml;
+@synthesize game = _game;@synthesize tbxml = _tbxml;
 
 -(void) loadGame
 {
@@ -33,8 +30,6 @@
     
     self.game = [[Game alloc] initWithCode:code andConfig:rootXMLElement forView:self.view];
     
-    self.time = [NSDate date];
-    
     // UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
     // [self.view addGestureRecognizer:tapRecognizer];
 
@@ -42,7 +37,7 @@
 
 -(void) drawGame
 {
-    long ms = (double) ([self.time timeIntervalSinceNow] * -1000);
+    long ms = self.timeSinceLastResume;
     
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -84,7 +79,7 @@
 }
 
 - (void)update {
-    long ms = (double) ([self.time timeIntervalSinceNow] * -1000);
+    long ms = self.timeSinceLastResume;
     [self.game update:ms];
 }
 

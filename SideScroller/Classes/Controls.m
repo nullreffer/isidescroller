@@ -90,7 +90,7 @@
 
 - (float) getJoystickForce {
     // keeping it between 0 and 1, so it can be used with a speed scalar
-    return ([MathUtil calculateDistance:self.joystickInitialLocation :self.joystickMovedLocation] / 30);
+    return ([MathUtil calculateDistance:self.joystickInitialLocation :self.joystickMovedLocation] / 20);
 }
 
 - (bool) isAPressed {

@@ -5,6 +5,8 @@
 @property (strong) GLKBaseEffect * effect;
 @property (strong) GLKTextureInfo * textureInfo;
 
+@property bool manualFlip;
+
 @end
 
 @implementation Sprite
@@ -14,6 +16,7 @@
 @synthesize quad = _quad;
 @synthesize originalQuad = _originalQuad;
 @synthesize textureInfo = _textureInfo;
+@synthesize manualFlip = _manualFlip;
 
 - (id)initWithImage:(UIImage *)image {
     
@@ -29,13 +32,13 @@
         GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, 480, 0, 320, -1024, 1024);
         self.effect.transform.projectionMatrix = projectionMatrix;
         
-    
         // 2
         NSDictionary * options = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [NSNumber numberWithBool:!manualFlip],
                                   GLKTextureLoaderOriginBottomLeft,
                                   nil];
-    
+        self.manualFlip = manualFlip;
+        
         // 3
         NSError * error;
         // NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
@@ -118,6 +121,7 @@
 
 - (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert {
     
+    self.position = CGPointMake(x, y);
     self.size = size;
     
     x = x + xoffset;
@@ -127,10 +131,17 @@
     TexturedQuad newQuad = self.originalQuad;
     
     // restore texture before modifying geometry
-    newQuad.bl.textureVertex = self.quad.bl.textureVertex;
-    newQuad.br.textureVertex = self.quad.br.textureVertex;
-    newQuad.tl.textureVertex = self.quad.tl.textureVertex;
-    newQuad.tr.textureVertex = self.quad.tr.textureVertex;
+    if (self.manualFlip) {
+        newQuad.tl.textureVertex = self.quad.bl.textureVertex;
+        newQuad.tr.textureVertex = self.quad.br.textureVertex;
+        newQuad.bl.textureVertex = self.quad.tl.textureVertex;
+        newQuad.br.textureVertex = self.quad.tr.textureVertex;
+    } else {
+        newQuad.bl.textureVertex = self.quad.bl.textureVertex;
+        newQuad.br.textureVertex = self.quad.br.textureVertex;
+        newQuad.tl.textureVertex = self.quad.tl.textureVertex;
+        newQuad.tr.textureVertex = self.quad.tr.textureVertex;
+    }
     
     float qw = newQuad.br.geometryVertex.x - newQuad.bl.geometryVertex.x;
     float qh = newQuad.tl.geometryVertex.y - newQuad.bl.geometryVertex.y;

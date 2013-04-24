@@ -81,6 +81,15 @@
 }
 
 - (void)draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
+    
+    TexturedQuad quad = self.blockSprite.quad;
+    quad.bl.textureVertex = CGPointMake(0, 0);
+    quad.br.textureVertex = CGPointMake(1, 0);
+    quad.tl.textureVertex = CGPointMake(0, 1);
+    quad.tr.textureVertex = CGPointMake(1, 1);
+    
+    self.blockSprite.quad = quad;
+    
     [self.blockSprite renderWithSize:self.blockSprite.size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
 }
 

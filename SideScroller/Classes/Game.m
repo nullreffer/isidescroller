@@ -107,6 +107,12 @@
     } else if (self.GAME_STATE == PLAYING){
         [self.controls handleTouchesEnded:touches withEvent:event];
     }
+    
+    UITouch* touch = [touches anyObject];
+    CGPoint touchPoint = [touch locationInView:self.view];
+#ifdef DEBUG
+    NSLog(@"Touched at %f, %f", touchPoint.x, touchPoint.y);
+#endif
 }
 
 - (void) handleTouchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
