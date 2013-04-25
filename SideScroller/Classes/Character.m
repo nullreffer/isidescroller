@@ -29,6 +29,9 @@
 
 @property NSMutableArray* collidedBlocks;
 
+@property int lives;
+@property int lifeRemovedCounter;
+
 @end
 
 @implementation Character
@@ -51,6 +54,9 @@
 @synthesize level = _level;
 
 @synthesize isDead = _isDead;
+
+@synthesize lives = _lives;
+@synthesize lifeRemovedCounter = _lifeRemovedCounter;
 @synthesize addons = _addons;
 
 @synthesize collidedBlocks = _collidedBlocks;
@@ -78,6 +84,9 @@
         self.frameCounter = 0;
         
         self.level = level;
+        
+        self.lives = 3;
+        self.lifeRemovedCounter = 90;
         
         self.collidedBlocks = [[NSMutableArray alloc] init];
         
@@ -257,6 +266,7 @@
     self.level.horizontalOffset -= new_new_x - self.position.x;
     self.position = CGPointMake(new_new_x, new_new_y);
     
+    self.lifeRemovedCounter--;
 }
 
 -(void) draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
@@ -278,6 +288,17 @@
         // TODO
     }
     
+}
+
+- (void) removeLife {
+    if (self.lifeRemovedCounter <= 0){
+        self.lives--;
+        // 3 second grace period
+        self.lifeRemovedCounter = 90;
+    }
+    if (self.lives <= 0){
+        self.isDead = YES;
+    }
 }
 
 -(int) nextFrameSequence:(int)frame previous:(int)previousFrame{

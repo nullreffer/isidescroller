@@ -149,6 +149,11 @@
                     <positiony>50</positiony>
                 </block>
                 <block>
+                    <type>FINISH</type>
+                    <positionx>32</positionx>
+                    <positiony>82</positiony>
+                </block>
+                <block>
                     <type>STANDARD</type>
                     <positionx>64</positionx>
                     <positiony>50</positiony>

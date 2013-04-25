@@ -34,4 +34,6 @@
 
 - (void) draw:(long)ms withHorizontalOffset:(float)horizontalOffset;
 
+- (void) removeLife;
+
 @end

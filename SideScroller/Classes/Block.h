@@ -24,6 +24,7 @@ typedef enum {
     GRAVITY_SHIFT_BOTTOM,
     BOUNCER,
     COIN,
+    FINISH,
     POTION,
     SPIKES,
     STAIRS,

@@ -31,7 +31,10 @@
         
         UIImage *blockImage;
         
-        if ([type isEqualToString:@"SPIKES"]){
+        if ([type isEqualToString:@"FINISH"]){
+            blockImage = [UIImage imageNamed:@"block_door.png" ];
+            self.BLOCK_TYPE = FINISH;
+        } else if ([type isEqualToString:@"SPIKES"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = SPIKES;
         } else if ([type isEqualToString:@"STAIRS"]){
@@ -101,13 +104,24 @@
         return;
     }
 
-    if (self.BLOCK_TYPE == LADDER){
+    if (self.BLOCK_TYPE == STAIRS){
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == LADDER){
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
         
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height){
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
@@ -120,13 +134,24 @@
         return;
     }
     
-    if (self.BLOCK_TYPE == LADDER){
+    if (self.BLOCK_TYPE == STAIRS){
+        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == LADDER){
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
         
         if (*new_new_y + character.characterSize.height < self.blockSprite.enclosingRect.origin.y ){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
@@ -145,6 +170,11 @@
     } else if (self.BLOCK_TYPE == LADDER) {
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
     }
@@ -162,6 +192,11 @@
     } else if (self.BLOCK_TYPE == LADDER) {
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
     }
