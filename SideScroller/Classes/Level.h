@@ -14,6 +14,17 @@
 @interface Level : NSObject
 
 typedef enum {
+    
+    LEVEL_PLAYING,
+    LEVEL_COMPLETE,
+    LEVEL_LOST,
+    LEVEL_PAUSED
+    
+} _LEVEL_STATE_ENUM;
+
+@property(atomic) _LEVEL_STATE_ENUM levelState;
+
+typedef enum {
     GRAVITY_LEFT,
     GRAVITY_RIGHT,
     GRAVITY_TOP,
@@ -33,15 +44,20 @@ typedef enum {
 @property Character* theman;
 @property(nonatomic, retain) NSMutableArray *characters;
 
+// bullets have levels, but they apply to the entire level
+@property NSMutableArray *addons;
+
 - (id)initWithConfig:(TBXMLElement*) config;
 
 - (void)load;
 
 - (void)unload;
 
--(void)update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction;
+- (void)update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction;
 
--(void) doAPressed;
+- (void) doAPressed;
+
+- (void) doBPressedWithJoystickDirection:(float)direction;
 
 - (void)draw:(long)ms;
 

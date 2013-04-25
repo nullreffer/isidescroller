@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Sprite.h"
 
 @interface AnimatedSprite : NSObject
+
+@property Sprite* framesSprite;
 
 @property int currentFrame;
 @property int previousFrame;

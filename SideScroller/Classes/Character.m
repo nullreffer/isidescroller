@@ -10,9 +10,12 @@
 #import "CGUtil.h"
 #import "Character.h"
 #import "Level.h"
+#import "Addon.h"
+#import "Bullet.h"
 
 #define SPEED_SCALE 2.0
 #define JUMP_SCALE 50.0
+#define SHOOT_DISTANCE 280.0
 
 @interface Character()
 
@@ -29,12 +32,21 @@
 
 @property NSMutableArray* collidedBlocks;
 
+@property Sprite* lifeSprite;
 @property int lives;
 @property int lifeRemovedCounter;
+
+@property float bulletForce;
+@property int bulletFiredCounter;
+@property int bulletFiredCounterReset;
+
+@property NSMutableArray* bullets;
 
 @end
 
 @implementation Character
+
+@synthesize isProtagonist = _isProtagonist;
 
 @synthesize characterImage = _characterImage;
 @synthesize characterSize = _characterSize;
@@ -55,21 +67,41 @@
 
 @synthesize isDead = _isDead;
 
+@synthesize lifeSprite = _lifeSprite;
 @synthesize lives = _lives;
 @synthesize lifeRemovedCounter = _lifeRemovedCounter;
+
 @synthesize addons = _addons;
 
+@synthesize bullets = _bullets;
+@synthesize bulletForce = _bulletForce;
+@synthesize bulletFiredCounter = _bulletFiredCounter;
+@synthesize bulletFiredCounterReset = _bulletFiredCounterReset;
+
 @synthesize collidedBlocks = _collidedBlocks;
+
+- (id) initProtagonistWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level {
+    if ([self initCharacterWithPositionX:x andPositionY:y andImage:image andLevel:level]){
+    
+        self.isProtagonist = YES;
+        
+        return self;
+    }
+    
+    return nil;
+}
 
 - (id) initCharacterWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level
 {
     
     if ([self init]){
         
+        self.isProtagonist = NO;
+        self.isDead = NO;
+        
         self.characterSize = CGSizeMake((image.size.width) / 5, image.size.height);
         
         self.characterImage = [[AnimatedSprite alloc] initWithImage:image andManualFlip:YES];
-        // self.characterImage = [[Sprite alloc] initWithRect:[image CGImage] croppedTo:CGRectMake(0, 0, characterWidth, image.size.height) andManualFlip:NO];
         
         self.direction = 0;
         self.lastDirection = 0;
@@ -78,15 +110,22 @@
         
         self.addons = [[NSMutableDictionary alloc] init];
         
-        self.isJumping = false;
+        self.isJumping = NO;
         self.jumpForce = 0;
-        self.isWalking = false;
+        self.isWalking = NO;
         self.frameCounter = 0;
         
         self.level = level;
         
+        self.lifeSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"stats_life.png"]];
         self.lives = 3;
-        self.lifeRemovedCounter = 90;
+        self.lifeRemovedCounter = 0;
+        
+        // one second
+        self.bulletFiredCounterReset = 30;
+        self.bulletFiredCounter = 0;
+        self.bulletForce = 10.0;
+        self.bullets = [[NSMutableArray alloc] init];
         
         self.collidedBlocks = [[NSMutableArray alloc] init];
         
@@ -104,11 +143,85 @@
     self.isJumping = true;
 }
 
+- (void) doBActionWithJoystickDirection:(float)direction {
+    // shoot!!!
+    for (NSNumber *addon_key in self.addons){
+        Addon *addon = [self.addons objectForKey:addon_key];
+        [addon execute];
+        if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN)){
+            
+            // fire a linear colliding bullet
+            Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:COLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x andY:self.position.y withDirection:self.lastDirection andForce:self.bulletForce];
+            
+            [self.bullets addObject:bullet];
+            
+            self.bulletFiredCounter = self.bulletFiredCounterReset;
+        } else if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_QUADRATIC_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_QUADRATIC_GUN)) {
+            
+            self.bulletFiredCounter = self.bulletFiredCounterReset;
+        }
+    }
+
+}
+
+- (void) updateAI:(long)ms againstCharacter:(Character*)theman {
+    
+    if (self.level.levelState != LEVEL_PLAYING){
+        return;
+    }
+    
+    if ([MathUtil calculateDistance:self.position :theman.position] > SHOOT_DISTANCE){
+    
+        float direction = atan2f(theman.position.y - self.position.y, theman.position.x - self.position.x);
+        
+        // shoot!!!
+        for (NSNumber *addon_key in self.addons){
+            Addon *addon = [self.addons objectForKey:addon_key];
+            [addon execute];
+            if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN)){
+            
+                // fire a linear colliding bullet
+                Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@""] ofType:COLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x andY:self.position.y withDirection:direction andForce:self.bulletForce];
+            
+                [self.bullets addObject:bullet];
+                
+                self.bulletFiredCounter = self.bulletFiredCounterReset;
+            } else if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_QUADRATIC_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_QUADRATIC_GUN)) {
+            
+                self.bulletFiredCounter = self.bulletFiredCounterReset;
+            }
+        }
+        
+        if (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP){
+            [self update:ms withJoystickSpeed:0 andDirection:theman.position.x < self.position.x ? M_PI : 0];
+        } else {
+            [self update:ms withJoystickSpeed:0 andDirection:theman.position.y < self.position.y ? M_PI : 0];
+        }
+    } else {
+        [self update:ms];
+    }
+}
+
 -(void) update:(long)ms {
     [self update:ms withJoystickSpeed:0 andDirection:0];
 }
 
 - (void) update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction {
+    
+    if (self.level.levelState != LEVEL_PLAYING){
+        return;
+    }
+    
+    // update bullets even if the character itself is dead
+    // draw bullets
+    NSMutableArray* to_be_kept_bullets = [[NSMutableArray alloc] init];
+    for (Bullet* bullet in self.bullets){
+        if (![bullet update]){
+            [to_be_kept_bullets addObject:bullet];
+        }
+    }
+    
+    self.bullets = to_be_kept_bullets;
     
     if (self.isDead){
         return;
@@ -259,6 +372,40 @@
         self.isJumping = false;
         self.jumpForce = 0;
     }
+    
+    // now that we have a final position of the character
+    // check if the character acquired some addons
+    // only protagonist should be able to get level addons
+    if (self.isProtagonist) {
+        // reuse verical_rect, BUT it actuall contians final movement
+        vertical_rect1 = CGRectMake(self.position.x < new_new_x ? self.position.x : new_new_x, self.position.y < new_new_y ? self.position.y : new_new_y, charRect.size.width + fabs(self.position.x - new_new_x), charRect.size.height + fabs(new_new_y - self.position.y));
+        
+        NSMutableArray* to_be_removed_addons = [[NSMutableArray alloc] init];
+        for (Addon* addon in self.level.addons){
+     
+            rect2 = addon.addonSprite.enclosingRect;
+            
+            // vertical rect intersection
+            // if the bottom of the char is greater than block's top
+            // or the top of the char is less than the block's bottom
+            if (vertical_rect1.origin.y > rect2.origin.y + rect2.size.height ||
+                vertical_rect1.origin.y + vertical_rect1.size.height < rect2.origin.y){
+                // no y intersection
+            }
+            // if the left of the char is greater than the block's right
+            // or the right of the char is less than the block's left
+            else if (vertical_rect1.origin.x > rect2.origin.x + rect2.size.width ||
+                     vertical_rect1.origin.x + vertical_rect1.size.width < rect2.origin.x){
+                // no x intersection
+            } else {
+                [self.addons setObject:addon forKey:[NSNumber numberWithInt:addon.type]];
+                [to_be_removed_addons addObject:addon];
+            }
+        }
+        
+        [self.level.addons removeObjectsInArray:to_be_removed_addons];
+    }
+    
 
     if (!CGPointEqualToPoint(self.position, CGPointMake(new_new_x, new_new_y))) {
         self.lastPosition = self.position;
@@ -267,6 +414,8 @@
     self.position = CGPointMake(new_new_x, new_new_y);
     
     self.lifeRemovedCounter--;
+    
+    self.bulletFiredCounter--;
 }
 
 -(void) draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
@@ -282,12 +431,34 @@
         
         frame = self.isJumping ? 3 : frame;
         
+        if (self.lifeRemovedCounter > 0 && (self.lifeRemovedCounter % 3 != 0 && self.lifeRemovedCounter % 5 != 0)){
+            self.characterImage.framesSprite.alpha = 0.5;
+        } else {
+            self.characterImage.framesSprite.alpha = 1.0;
+        }
+        
         [self.characterImage render:ms frame:frame withSize:self.characterSize atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:fabs(self.lastDirection) > M_PI_2 flippedVertically:NO];
-        // [self.characterImage renderWithSize:self.characterSize atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
+        
     } else if (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT) {
         // TODO
     }
     
+    if (self.isProtagonist) {
+        
+        // draw lives
+        float posy = 320.0 - 10.0 - self.lifeSprite.enclosingRect.size.height;
+        for (int x = 0; x < self.lives; x++){
+            float posx = 450 - x * (self.lifeSprite.enclosingRect.size.width + 10);
+            [self.lifeSprite renderWithSize:self.lifeSprite.enclosingRect.size atX:posx andXOffset:0 andY:posy andYOffset:0];
+        }
+        
+        // draw addons maybe
+    }
+    
+    // draw character's bullets
+    for (Bullet* bullet in self.bullets){
+        [bullet draw:ms withHorizontalOffset:horizontalOffset];
+    }
 }
 
 - (void) removeLife {

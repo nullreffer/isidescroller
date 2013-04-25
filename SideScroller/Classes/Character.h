@@ -13,6 +13,8 @@
 
 @interface Character : NSObject
 
+@property bool isProtagonist;
+
 @property bool isDead;
 
 @property CGPoint position;
@@ -24,9 +26,13 @@
 
 @property NSMutableDictionary *addons;
 
+- (id) initProtagonistWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level;
+
 - (id) initCharacterWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level;
 
 - (void) initiateJumpWithForce:(float)force;
+
+- (void) doBActionWithJoystickDirection:(float)direction;
 
 - (void) update:(long)ms ;
 

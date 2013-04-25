@@ -23,6 +23,16 @@
 		CC4A594316D04FBB00487F69 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4A594216D04FBB00487F69 /* MainViewController.m */; };
 		CC4A594816D130CE00487F69 /* Sprite.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4A594416D130CE00487F69 /* Sprite.m */; };
 		CC4A594916D130CE00487F69 /* Font.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4A594616D130CE00487F69 /* Font.m */; };
+		CC4DB6D317296C59006734AD /* bullet_1.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6D217296C59006734AD /* bullet_1.png */; };
+		CC4DB6D517296D66006734AD /* stats_life.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6D417296D66006734AD /* stats_life.png */; };
+		CC4DB6D817296E37006734AD /* Bullet.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4DB6D717296E36006734AD /* Bullet.m */; };
+		CC4DB6E01729AFA7006734AD /* addon_quadratic_gun.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6D91729AFA7006734AD /* addon_quadratic_gun.png */; };
+		CC4DB6E11729AFA7006734AD /* addon_linear_gun.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DA1729AFA7006734AD /* addon_linear_gun.png */; };
+		CC4DB6E21729AFA7006734AD /* addon_jumping_shoes.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DB1729AFA7006734AD /* addon_jumping_shoes.png */; };
+		CC4DB6E31729AFA7006734AD /* addon_jetpack.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DC1729AFA7006734AD /* addon_jetpack.png */; };
+		CC4DB6E41729AFA7006734AD /* addon_red_key.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DD1729AFA7006734AD /* addon_red_key.png */; };
+		CC4DB6E51729AFA7006734AD /* addon_blue_key.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DE1729AFA7006734AD /* addon_blue_key.png */; };
+		CC4DB6E61729AFA7006734AD /* addon_star.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DF1729AFA7006734AD /* addon_star.png */; };
 		CC7E68D01723431C00B319D0 /* CGUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7E68CF1723431C00B319D0 /* CGUtil.m */; };
 		CC9242CF172322BB000CB392 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CC9242CE172322BB000CB392 /* Default-568h@2x.png */; };
 		CCB90FB31708BD81007173EF /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB90FB21708BD81007173EF /* Game.m */; };
@@ -83,6 +93,17 @@
 		CC4A594516D130CE00487F69 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sprite.h; path = Classes/Sprite.h; sourceTree = "<group>"; };
 		CC4A594616D130CE00487F69 /* Font.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Font.m; path = Classes/Font.m; sourceTree = "<group>"; };
 		CC4A594716D130CE00487F69 /* Font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Font.h; path = Classes/Font.h; sourceTree = "<group>"; };
+		CC4DB6D217296C59006734AD /* bullet_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bullet_1.png; path = SideScroller/Resources/Images/bullet_1.png; sourceTree = "<group>"; };
+		CC4DB6D417296D66006734AD /* stats_life.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stats_life.png; path = SideScroller/Resources/Images/stats_life.png; sourceTree = "<group>"; };
+		CC4DB6D617296E36006734AD /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bullet.h; path = Classes/Bullet.h; sourceTree = "<group>"; };
+		CC4DB6D717296E36006734AD /* Bullet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Bullet.m; path = Classes/Bullet.m; sourceTree = "<group>"; };
+		CC4DB6D91729AFA7006734AD /* addon_quadratic_gun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_quadratic_gun.png; path = SideScroller/Resources/Images/addon_quadratic_gun.png; sourceTree = "<group>"; };
+		CC4DB6DA1729AFA7006734AD /* addon_linear_gun.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_linear_gun.png; path = SideScroller/Resources/Images/addon_linear_gun.png; sourceTree = "<group>"; };
+		CC4DB6DB1729AFA7006734AD /* addon_jumping_shoes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_jumping_shoes.png; path = SideScroller/Resources/Images/addon_jumping_shoes.png; sourceTree = "<group>"; };
+		CC4DB6DC1729AFA7006734AD /* addon_jetpack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_jetpack.png; path = SideScroller/Resources/Images/addon_jetpack.png; sourceTree = "<group>"; };
+		CC4DB6DD1729AFA7006734AD /* addon_red_key.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_red_key.png; path = SideScroller/Resources/Images/addon_red_key.png; sourceTree = "<group>"; };
+		CC4DB6DE1729AFA7006734AD /* addon_blue_key.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_blue_key.png; path = SideScroller/Resources/Images/addon_blue_key.png; sourceTree = "<group>"; };
+		CC4DB6DF1729AFA7006734AD /* addon_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_star.png; path = SideScroller/Resources/Images/addon_star.png; sourceTree = "<group>"; };
 		CC7E68CE1723431C00B319D0 /* CGUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGUtil.h; path = Classes/CGUtil.h; sourceTree = "<group>"; };
 		CC7E68CF1723431C00B319D0 /* CGUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CGUtil.m; path = Classes/CGUtil.m; sourceTree = "<group>"; };
 		CC9242CE172322BB000CB392 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -194,6 +215,8 @@
 				CCB90FFE171A4A41007173EF /* Controls.m */,
 				CCB90FBD170D1CF7007173EF /* Block.h */,
 				CCB90FBE170D1CF7007173EF /* Block.m */,
+				CC4DB6D617296E36006734AD /* Bullet.h */,
+				CC4DB6D717296E36006734AD /* Bullet.m */,
 				CCB90FC0170D1D15007173EF /* Character.h */,
 				CCB90FC1170D1D15007173EF /* Character.m */,
 				CCB90FC3170D1D37007173EF /* Level.h */,
@@ -242,6 +265,15 @@
 		CC4A593416CFF29600487F69 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CC4DB6D91729AFA7006734AD /* addon_quadratic_gun.png */,
+				CC4DB6DA1729AFA7006734AD /* addon_linear_gun.png */,
+				CC4DB6DB1729AFA7006734AD /* addon_jumping_shoes.png */,
+				CC4DB6DC1729AFA7006734AD /* addon_jetpack.png */,
+				CC4DB6DD1729AFA7006734AD /* addon_red_key.png */,
+				CC4DB6DE1729AFA7006734AD /* addon_blue_key.png */,
+				CC4DB6DF1729AFA7006734AD /* addon_star.png */,
+				CC4DB6D417296D66006734AD /* stats_life.png */,
+				CC4DB6D217296C59006734AD /* bullet_1.png */,
 				CC04212C172744DF0063600B /* block_stairs.png */,
 				CC04212D172744DF0063600B /* block_ladder.png */,
 				CC04212E172744DF0063600B /* block_door.png */,
@@ -356,6 +388,15 @@
 				CC04212F172744DF0063600B /* block_stairs.png in Resources */,
 				CC042130172744DF0063600B /* block_ladder.png in Resources */,
 				CC042131172744DF0063600B /* block_door.png in Resources */,
+				CC4DB6D317296C59006734AD /* bullet_1.png in Resources */,
+				CC4DB6D517296D66006734AD /* stats_life.png in Resources */,
+				CC4DB6E01729AFA7006734AD /* addon_quadratic_gun.png in Resources */,
+				CC4DB6E11729AFA7006734AD /* addon_linear_gun.png in Resources */,
+				CC4DB6E21729AFA7006734AD /* addon_jumping_shoes.png in Resources */,
+				CC4DB6E31729AFA7006734AD /* addon_jetpack.png in Resources */,
+				CC4DB6E41729AFA7006734AD /* addon_red_key.png in Resources */,
+				CC4DB6E51729AFA7006734AD /* addon_blue_key.png in Resources */,
+				CC4DB6E61729AFA7006734AD /* addon_star.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +423,7 @@
 				CCB90FFF171A4A41007173EF /* Controls.m in Sources */,
 				CCB91002171B0103007173EF /* MathUtil.m in Sources */,
 				CC7E68D01723431C00B319D0 /* CGUtil.m in Sources */,
+				CC4DB6D817296E37006734AD /* Bullet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

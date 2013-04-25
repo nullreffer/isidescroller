@@ -17,6 +17,7 @@ typedef struct {
 
 @property CGPoint position;
 @property CGSize size;
+@property float alpha;
 @property (assign) TexturedQuad originalQuad;
 @property (assign) TexturedQuad quad;
 
@@ -29,6 +30,8 @@ typedef struct {
 - (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset;
 
 - (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
+
+- (void)renderWithSize:(CGSize)size andRotation:(float)rotation atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert;
 
 - (CGRect) enclosingRect;
 

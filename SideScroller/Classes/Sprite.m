@@ -12,6 +12,7 @@
 @implementation Sprite
 @synthesize position = _position;
 @synthesize size = _size;
+@synthesize  alpha = _alpha;
 @synthesize effect = _effect;
 @synthesize quad = _quad;
 @synthesize originalQuad = _originalQuad;
@@ -73,6 +74,8 @@
         // initial size is the full size
         self.size = image.size;
         
+        self.alpha = 1.0;
+        
         self.quad = newQuad;
         self.originalQuad = newQuad;
     }
@@ -80,15 +83,21 @@
     return self;
 }
 
-- (void) draw {
-    [self render];
-}
-
-- (void)render {
+- (void)renderWithModelViewMatrix:(GLKMatrix4)matrix {
     
     // 1
     self.effect.texture2d0.name = self.textureInfo.name;
     self.effect.texture2d0.enabled = YES;
+    self.effect.texture2d0.envMode = GLKTextureEnvModeModulate;
+    self.effect.texture2d0.target = GLKTextureTarget2D;
+    
+    self.effect.useConstantColor = YES;
+    float alphaValue = self.alpha;
+    GLKVector4  colour = GLKVector4Make( 1* alphaValue, 1* alphaValue, 1* alphaValue, alphaValue );
+    self.effect.constantColor = colour;
+
+    // 1.5 transform
+    self.effect.transform.modelviewMatrix = matrix;
     
     // 2
     [self.effect prepareToDraw];
@@ -120,6 +129,10 @@
 }
 
 - (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert {
+    [self renderWithSize:size andRotation:0 atX:x andXOffset:xoffset andY:y andYOffset:yoffset flippedHorizontally:horz flippedVertically:vert];
+}
+
+- (void)renderWithSize:(CGSize)size andRotation:(float)rotation atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert {
     
     self.position = CGPointMake(x, y);
     self.size = size;
@@ -143,36 +156,52 @@
         newQuad.tr.textureVertex = self.quad.tr.textureVertex;
     }
     
-    float qw = newQuad.br.geometryVertex.x - newQuad.bl.geometryVertex.x;
-    float qh = newQuad.tl.geometryVertex.y - newQuad.bl.geometryVertex.y;
+    // float qw = newQuad.br.geometryVertex.x - newQuad.bl.geometryVertex.x;
+    // float qh = newQuad.tl.geometryVertex.y - newQuad.bl.geometryVertex.y;
     
-    qw = size.width;
-    qh = size.height;
+    float qw = size.width;
+    float qh = size.height;
     
-    newQuad.bl.geometryVertex = CGPointMake(x, y);
-    newQuad.br.geometryVertex = CGPointMake(x + qw, y);
-    newQuad.tl.geometryVertex = CGPointMake(x, y + qh);
-    newQuad.tr.geometryVertex = CGPointMake(x + qw, y + qh);
+//    newQuad.bl.geometryVertex = CGPointMake(x, y);
+//    newQuad.br.geometryVertex = CGPointMake(x + qw, y);
+//    newQuad.tl.geometryVertex = CGPointMake(x, y + qh);
+//    newQuad.tr.geometryVertex = CGPointMake(x + qw, y + qh);
     
+    newQuad.bl.geometryVertex = CGPointMake(0, 0);
+    newQuad.br.geometryVertex = CGPointMake(qw, 0);
+    newQuad.tl.geometryVertex = CGPointMake(0, qh);
+    newQuad.tr.geometryVertex = CGPointMake(qw, qh);
+    
+    CGPoint temp;
     // if horz, flip bl and br, and tl and tr
     if (horz){
-        newQuad.bl.geometryVertex = CGPointMake(x + qw, y);
-        newQuad.br.geometryVertex = CGPointMake(x, y);
-        newQuad.tl.geometryVertex = CGPointMake(x + qw, y + qh);
-        newQuad.tr.geometryVertex = CGPointMake(x, y + qh);
+        temp = newQuad.bl.textureVertex;
+        newQuad.bl.textureVertex = newQuad.br.textureVertex;
+        newQuad.br.textureVertex = temp;
+        temp = newQuad.tl.textureVertex;
+        newQuad.tl.textureVertex = newQuad.tr.textureVertex;
+        newQuad.tr.textureVertex = temp;
     }
     
     // if vert, flip tl and bl, and tr and br
     if (vert){
-        newQuad.bl.geometryVertex = CGPointMake(x + qw, y + qh);
-        newQuad.br.geometryVertex = CGPointMake(x, y + qh);
-        newQuad.tl.geometryVertex = CGPointMake(x + qw, y);
-        newQuad.tr.geometryVertex = CGPointMake(x, y);
+        temp = newQuad.bl.textureVertex;
+        newQuad.bl.textureVertex = newQuad.tl.textureVertex;
+        newQuad.tl.textureVertex = temp;
+        temp = newQuad.br.textureVertex;
+        newQuad.br.textureVertex = newQuad.tr.textureVertex;
+        newQuad.tr.textureVertex = temp;
     }
     
     self.quad = newQuad;
     
-    [self render];
+    GLKMatrix4 modelMatrix = GLKMatrix4Identity;
+    
+    float scale = 1.0;
+    modelMatrix = GLKMatrix4Rotate(modelMatrix, 0, 0, 0, 1);
+    modelMatrix = GLKMatrix4Scale(modelMatrix, scale, scale, 0);
+    modelMatrix = GLKMatrix4Translate(modelMatrix, x, y, 0);
+    [self renderWithModelViewMatrix:modelMatrix];
 }
 
 

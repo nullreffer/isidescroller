@@ -12,12 +12,11 @@
 @interface GameMenu : NSObject
 
 typedef enum {
-
-    MENU_MAIN = 3,
-    MENU_SELECT_LEVEL = 4,
-    MENU_SETTINGS = 5,
-    MENU_SCORES = 6,
-    MENU_ABOUT = 7
+    MENU_MAIN,
+    MENU_SELECT_LEVEL,
+    MENU_SETTINGS,
+    MENU_SCORES,
+    MENU_ABOUT
 
 } _MENU_STATE_ENUM;
 

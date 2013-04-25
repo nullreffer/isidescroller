@@ -7,15 +7,33 @@
 //
 
 #import <Foundation/Foundation.h>
-
-static const NSString *ADDON_STAR = @"STAR";
-static const NSString *ADDON_RED_KEY = @"RED_KEY";
-static const NSString *ADDON_BLUE_KEY = @"BLUE_KEY";
-static const NSString *ADDON_JETPACK = @"JETPACK";
-static const NSString *ADDON_BUBBLE = @"BUBBLE";
+#import "Sprite.h"
 
 @interface Addon : NSObject
 
--(id) initAddonOfType:(NSString*)type andPositionX:(int)x andPositionY:(int)y;
+typedef enum {
+    ADDON_STAR,
+    ADDON_COLLIDING_LINEAR_GUN,
+    ADDON_COLLIDING_QUADRATIC_GUN,
+    ADDON_NONCOLLIDING_LINEAR_GUN,
+    ADDON_NONCOLLIDING_QUADRATIC_GUN,
+    ADDON_RED_KEY,
+    ADDON_BLUE_KEY,
+    ADDON_JETPACK,
+    ADDON_JUMPING_SHOES,
+    ADDON_NOTHING
+} _ADDON_TYPE;
+
+@property _ADDON_TYPE type;
+@property CGPoint position;
+@property Sprite* addonSprite;
+
+- (id) initAddonOfType:(NSString *)type andPositionX:(int)x andPositionY:(int)y;
+
+- (id) initAddon:(_ADDON_TYPE)type andPositionX:(int)x andPositionY:(int)y;
+
+- (void) execute;
+
+- (void) draw:(long)ms withHorizontalOffset:(float)horizontalOffset ;
 
 @end

@@ -18,10 +18,7 @@ typedef enum {
     LOADING_APP = 1,
     MENU = 2,
     LOADING_GAME = 8,
-    PLAYING = 9,
-    LEVEL_COMPLETE = 10,
-    LEVEL_LOST = 11,
-    PAUSED = 12
+    PLAYING = 9
     
 } _GAME_STATE_ENUM;
 

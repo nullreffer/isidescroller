@@ -8,6 +8,8 @@
 
 #import "Level.h"
 #import "Sprite.h"
+#import "Addon.h"
+#import "Bullet.h"
 
 @interface Level()
 
@@ -28,6 +30,7 @@
 @synthesize blocks = _blocks;
 @synthesize theman = _theman;
 @synthesize characters = _characters;
+@synthesize addons = _addons;
 
 @synthesize config = _config;
 
@@ -84,7 +87,7 @@
     positionX = [[TBXML textForElement:[TBXML childElementNamed:@"positionx" parentElement:protagonistElement]] intValue];
     positionY = [[TBXML textForElement:[TBXML childElementNamed:@"positiony" parentElement:protagonistElement]] intValue];
         
-    self.theman = [[Character alloc] initCharacterWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"character_main"] andLevel:self];
+    self.theman = [[Character alloc] initProtagonistWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"character_main.png"] andLevel:self];
         
     TBXMLElement *charactersElement = [TBXML childElementNamed:@"characters" parentElement:self.config];
     TBXMLElement *characterElement = charactersElement->firstChild;
@@ -93,10 +96,24 @@
     do {
         positionX = [[TBXML textForElement:[TBXML childElementNamed:@"positionx" parentElement:characterElement]] intValue];
         positionY = [[TBXML textForElement:[TBXML childElementNamed:@"positiony" parentElement:characterElement]] intValue];
-        Character *character = [[Character alloc] initCharacterWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"enemy_1"] andLevel:self];
+        Character *character = [[Character alloc] initCharacterWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"enemy_1.png"] andLevel:self];
             
         [self.characters addObject:character];
     } while ((characterElement = characterElement->nextSibling));
+    
+    TBXMLElement *addonsElement = [TBXML childElementNamed:@"addons" parentElement:self.config];
+    TBXMLElement *addonElement = addonsElement->firstChild;
+    
+    self.addons = [[NSMutableArray alloc] init];
+    do {
+        NSString *addonType = [TBXML textForElement:[TBXML childElementNamed:@"type" parentElement:addonElement]];
+        positionX = [[TBXML textForElement:[TBXML childElementNamed:@"positionx" parentElement:addonElement]] intValue];
+        positionY = [[TBXML textForElement:[TBXML childElementNamed:@"positiony" parentElement:addonElement]] intValue];
+        Addon *addon = [[Addon alloc] initAddonOfType:addonType andPositionX:positionX andPositionY:positionY];
+        
+        [self.addons addObject:addon];
+    } while ((addonElement = addonElement->nextSibling));
+    // need to write code to parse addon information from xml
 
 }
 
@@ -107,10 +124,16 @@
     self.theman = nil;
     [self.characters removeAllObjects];
     self.characters = nil;
+    [self.addons removeAllObjects];
+    self.addons = nil;
 }
 
 -(void)doAPressed{
     [self.theman initiateJumpWithForce:1.0];
+}
+
+-(void)doBPressedWithJoystickDirection:(float)direction{
+    [self.theman doBActionWithJoystickDirection:direction];
 }
 
 -(void)update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction {
@@ -121,8 +144,16 @@
     
     // draw enemies and friends
     for (Character* character in self.characters){
-        // [character update:ms];
+        [character update:ms];
     }
+    
+    // draw addons
+    for (Addon* addon in self.addons){
+        // addons don't ever actually get updated
+        // unless there is an addon which...?
+        // [addon update:ms];
+    }
+
 }
 
 -(void)draw:(long)ms {
@@ -131,18 +162,21 @@
     
     // draw blocks
     for (Block* block in self.blocks){
-        [block draw:ms withHorizontalOffset:(float)self.horizontalOffset];
+        [block draw:ms withHorizontalOffset:self.horizontalOffset];
     }
     
     // draw enemies and friends
     for (Character* character in self.characters){
-        [character draw:ms withHorizontalOffset:(float)self.horizontalOffset];
+        [character draw:ms withHorizontalOffset:self.horizontalOffset];
     }
 
     // draw main character
-    [self.theman draw:ms withHorizontalOffset:(float)self.horizontalOffset];
+    [self.theman draw:ms withHorizontalOffset:self.horizontalOffset];
     
-    // draw specials (teleportes, etc... stuff that goes in the foreground)
+    // draw addons
+    for (Addon* addon in self.addons){
+        [addon draw:ms withHorizontalOffset:self.horizontalOffset];
+    }
     
 }
 

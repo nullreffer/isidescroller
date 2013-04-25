@@ -68,6 +68,10 @@
         [self.currentLevel doAPressed];
     }
     
+    if ([self.controls isBPressed]){
+        [self.currentLevel doBPressedWithJoystickDirection:direction];
+    }
+    
     [self.currentLevel update:ms withJoystickSpeed:[self.controls getJoystickForce] andDirection:direction];
 }
 
@@ -91,8 +95,6 @@
 {
     if (self.GAME_STATE == MENU){
         [self.menu handleTouchesBegan:touches withEvent:event];
-    } else if (self.GAME_STATE == PAUSED){
-        // Depends on my pause dialog
     } else if (self.GAME_STATE == PLAYING){
         [self.controls handleTouchesBegan:touches withEvent:event];
     }
@@ -102,15 +104,13 @@
 {
     if (self.GAME_STATE == MENU){
         [self.menu handleTouchesEnded:touches withEvent:event];
-    } else if (self.GAME_STATE == PAUSED){
-        // Depends on my pause dialog
     } else if (self.GAME_STATE == PLAYING){
         [self.controls handleTouchesEnded:touches withEvent:event];
     }
     
     UITouch* touch = [touches anyObject];
-    CGPoint touchPoint = [touch locationInView:self.view];
 #ifdef DEBUG
+    CGPoint touchPoint = [touch locationInView:self.view];
     NSLog(@"Touched at %f, %f", touchPoint.x, touchPoint.y);
 #endif
 }
@@ -119,8 +119,6 @@
 {
     if (self.GAME_STATE == MENU){
         [self.menu handleTouchesMoved:touches withEvent:event];
-    } else if (self.GAME_STATE == PAUSED){
-        // Depends on my pause dialog
     } else if (self.GAME_STATE == PLAYING){
         [self.controls handleTouchesMoved:touches withEvent:event];
         
@@ -131,7 +129,7 @@
 - (void) handleTouchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
     if (self.GAME_STATE == PLAYING){
-        self.GAME_STATE = PAUSED;
+        self.currentLevel.levelState = LEVEL_PAUSED;
     }
     [self handleTouchesEnded:touches withEvent:event];
 }

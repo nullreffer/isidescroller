@@ -101,6 +101,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>220</positionx>
                 <positiony>220</positiony>
@@ -296,6 +303,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>NONCOLLIDING_LINEAR_GUN</type>
+                    <positionx>352</positionx>
+                    <positiony>146</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>220</positiony>
@@ -404,6 +418,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -512,6 +533,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -620,6 +648,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -728,6 +763,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -836,6 +878,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -944,6 +993,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -1052,6 +1108,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -1160,6 +1223,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -1268,6 +1338,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -1376,6 +1453,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -1484,6 +1568,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>
@@ -1592,6 +1683,13 @@
                     <positiony>50</positiony>
                 </block>
             </blocks>
+            <addons>
+                <addon>
+                    <type>COLLIDING_LINEAR_GUN</type>
+                    <positionx>200</positionx>
+                    <positiony>100</positiony>
+                </addon>
+            </addons>
             <protagonist>
                 <positionx>250</positionx>
                 <positiony>150</positiony>

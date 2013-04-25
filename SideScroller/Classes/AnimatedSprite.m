@@ -7,11 +7,8 @@
 //
 
 #import "AnimatedSprite.h"
-#import "Sprite.h"
 
 @interface AnimatedSprite()
-
-@property Sprite* framesSprite;
 
 @property CGSize fullSize;
 
