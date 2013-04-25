@@ -10,6 +10,8 @@
 #import "Sprite.h"
 #import "MathUtil.h"
 
+#define JOYSTICK_THRESHOLD 0.4
+
 @interface Controls()
 
 @property UIView* view;
@@ -74,11 +76,11 @@
 }
 
 - (void) draw:(long)ms {
-    [self.joystickBg renderWithSize:1.0 atX:40 andY:40];
-    [self.joystick renderWithSize:1.0 atX:self.joystickMovedLocation.x-30 andY:self.joystickMovedLocation.y-30];
+    [self.joystickBg renderWithSize:self.joystickBg.size atX:40 andY:40];
+    [self.joystick renderWithSize:self.joystick.size atX:self.joystickMovedLocation.x-30 andY:self.joystickMovedLocation.y-30];
     
-    [self.buttonA renderWithSize:1.0 atX:320 andY:70];
-    [self.buttonB renderWithSize:1.0 atX:400 andY:70];
+    [self.buttonA renderWithSize:self.buttonA.size atX:320 andY:70];
+    [self.buttonB renderWithSize:self.buttonB.size atX:400 andY:70];
 }
 
 - (float) getJoystickDirection {
@@ -90,7 +92,8 @@
 
 - (float) getJoystickForce {
     // keeping it between 0 and 1, so it can be used with a speed scalar
-    return ([MathUtil calculateDistance:self.joystickInitialLocation :self.joystickMovedLocation] / 30);
+    float dist = [MathUtil calculateDistance:self.joystickInitialLocation :self.joystickMovedLocation] / 30;
+    return dist > JOYSTICK_THRESHOLD ? dist : 0;
 }
 
 - (bool) isAPressed {
@@ -105,12 +108,12 @@
     for (UITouch* touch in touches){
         CGPoint touchPosition = [touch locationInView:self.view];
         touchPosition = CGPointMake(touchPosition.x, 320 - touchPosition.y);
-        if (CGRectContainsPoint(self.joystick.enclosingRect, touchPosition)){
+        if (CGRectContainsPoint([self.joystick enclosingRect], touchPosition)){
             self.joystickTouch = touch;
             self.joystickPressed = true;
-        } else if (CGRectContainsPoint(self.buttonA.enclosingRect, touchPosition)){
+        } else if (CGRectContainsPoint([self.buttonA enclosingRect], touchPosition)){
             self.aPressed = true;
-        } else if (CGRectContainsPoint(self.buttonB.enclosingRect, touchPosition)){
+        } else if (CGRectContainsPoint([self.buttonB enclosingRect], touchPosition)){
             self.bPressed = true;
         }
     }
@@ -123,9 +126,9 @@
         if (touch == self.joystickTouch){
             self.joystickPressed = false;
             self.joystickMovedLocation = self.joystickInitialLocation;
-        } else if (!CGRectContainsPoint(self.buttonB.enclosingRect, touchPosition)){
+        } else if (!CGRectContainsPoint([self.buttonB enclosingRect], touchPosition)){
             self.aPressed = false;
-        } else if (!CGRectContainsPoint(self.buttonA.enclosingRect, touchPosition)){
+        } else if (!CGRectContainsPoint([self.buttonA enclosingRect], touchPosition)){
             self.bPressed = false;
         }
     }

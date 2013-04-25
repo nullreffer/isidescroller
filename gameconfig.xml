@@ -124,6 +124,21 @@
             <height>480</height>
             <blocks>
                 <block>
+                    <type>LADDER</type>
+                    <positionx>512</positionx>
+                    <positiony>82</positiony>
+                </block>
+                <block>
+                    <type>LADDER</type>
+                    <positionx>512</positionx>
+                    <positiony>114</positiony>
+                </block>
+                <block>
+                    <type>LADDER</type>
+                    <positionx>512</positionx>
+                    <positiony>146</positiony>
+                </block>
+                <block>
                     <type>STANDARD</type>
                     <positionx>0</positionx>
                     <positiony>50</positiony>
@@ -132,6 +147,11 @@
                     <type>STANDARD</type>
                     <positionx>32</positionx>
                     <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>FINISH</type>
+                    <positionx>32</positionx>
+                    <positiony>82</positiony>
                 </block>
                 <block>
                     <type>STANDARD</type>
@@ -186,16 +206,6 @@
                     <positiony>50</positiony>
                 </block>
                 <block>
-                    <type>STAIRS</type>
-                    <positionx>320</positionx>
-                    <positiony>82</positiony>
-                </block>
-                <block>
-                    <type>STAIRS</type>
-                    <positionx>352</positionx>
-                    <positiony>114</positiony>
-                </block>
-                <block>
                     <type>STANDARD</type>
                     <positionx>352</positionx>
                     <positiony>50</positiony>
@@ -216,21 +226,6 @@
                     <positiony>50</positiony>
                 </block>
                 <block>
-                    <type>LADDER</type>
-                    <positionx>512</positionx>
-                    <positiony>82</positiony>
-                </block>
-                <block>
-                    <type>LADDER</type>
-                    <positionx>512</positionx>
-                    <positiony>114</positiony>
-                </block>
-                <block>
-                    <type>LADDER</type>
-                    <positionx>512</positionx>
-                    <positiony>146</positiony>
-                </block>
-                <block>
                     <type>STANDARD</type>
                     <positionx>448</positionx>
                     <positiony>50</positiony>
@@ -244,6 +239,16 @@
                     <type>STANDARD</type>
                     <positionx>512</positionx>
                     <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STAIRS</type>
+                    <positionx>320</positionx>
+                    <positiony>82</positiony>
+                </block>
+                <block>
+                    <type>STAIRS</type>
+                    <positionx>352</positionx>
+                    <positiony>114</positiony>
                 </block>
                 <block>
                     <type>SPIKES</type>

@@ -24,6 +24,7 @@ typedef enum {
     GRAVITY_SHIFT_BOTTOM,
     BOUNCER,
     COIN,
+    FINISH,
     POTION,
     SPIKES,
     STAIRS,
@@ -31,6 +32,8 @@ typedef enum {
     PORTAL
     
 } _BLOCK_TYPE_ENUM;
+
+@property _BLOCK_TYPE_ENUM BLOCK_TYPE;
 
 @property Sprite *blockSprite;
 

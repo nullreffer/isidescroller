@@ -81,12 +81,12 @@
 
 - (void)draw:(long)ms {
     if (self.MENU_STATE == MENU_MAIN){
-        [self.mainMenuSprite renderWithSize:1.0 atX:0 andY:0];
+        [self.mainMenuSprite renderWithSize:self.mainMenuSprite.size atX:0 andY:0];
         
         self.playTextRect = [self.skiaFont_white renderString:@"play play" ofSize:40 atX:40 andY:40];
         
     } else if (self.MENU_STATE == MENU_SELECT_LEVEL){
-        [self.mainMenuSprite renderWithSize:1.0 atX:0 andY:0];
+        [self.mainMenuSprite renderWithSize:self.mainMenuSprite.size atX:0 andY:0];
         
         if (!self.currentlyMoving){
             if (self.horizontalOffset > 0 ) self.horizontalOffset -= self.horizontalOffset/8;
@@ -104,7 +104,7 @@
                 int posx = 40 + col * (60 + 25) + self.horizontalOffset;
                 int posy = 320 - 40 - row * (60 + 25) - 60; // the minus 60 is because it draw upwards
                 
-                [self.levelSelectSprite renderWithSize:1 atX:posx andY:posy];
+                [self.levelSelectSprite renderWithSize:self.levelSelectSprite.size atX:posx andY:posy];
                 
                 [self.skiaFont_white renderString:[NSString stringWithFormat:@"%d",cc++] ofSize:48 atX:posx+6 andY:posy+6];
             }
@@ -142,7 +142,7 @@
     } else if (self.MENU_STATE == MENU_SELECT_LEVEL) {
         self.currentlyMoving = false;
         
-        if (abs([MathUtil calculateHorizontalDistance:self.initialTouchLocation :self.lastTouchMovedLocation]) < self.SLIDE_THRESHOLD) {
+        if (fabs([MathUtil calculateHorizontalDistance:self.initialTouchLocation :self.lastTouchMovedLocation]) < self.SLIDE_THRESHOLD) {
             // tapped
             int tappedCol = (self.lastTouchMovedLocation.x - 40 - self.horizontalOffset) / (60 + 25);
             int tappedRow = ((320 - self.lastTouchMovedLocation.y) - 40) / (60 + 25);
@@ -182,7 +182,7 @@
         self.lastTouchMovedLocation = [touch locationInView:self.game.view];
         float horizontalDistance = [MathUtil calculateHorizontalDistance:self.initialTouchLocation :self.lastTouchMovedLocation];
         
-        if (abs(horizontalDistance) > self.SLIDE_THRESHOLD) {
+        if (fabs(horizontalDistance) > self.SLIDE_THRESHOLD) {
             self.horizontalOffset = horizontalDistance;
         }
     }

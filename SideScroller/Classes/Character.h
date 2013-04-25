@@ -18,6 +18,7 @@
 @property CGPoint position;
 
 @property AnimatedSprite* characterImage;
+@property CGSize characterSize;
 
 @property Level* level;
 
@@ -32,5 +33,7 @@
 - (void) update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction;
 
 - (void) draw:(long)ms withHorizontalOffset:(float)horizontalOffset;
+
+- (void) removeLife;
 
 @end

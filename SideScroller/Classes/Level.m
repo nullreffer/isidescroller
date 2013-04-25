@@ -121,13 +121,13 @@
     
     // draw enemies and friends
     for (Character* character in self.characters){
-        [character update:ms];
+        // [character update:ms];
     }
 }
 
 -(void)draw:(long)ms {
     
-    [self.levelBg renderWithSize:1 atX:0 andY:0];
+    [self.levelBg renderWithSize:self.levelBg.size atX:0 andY:0];
     
     // draw blocks
     for (Block* block in self.blocks){

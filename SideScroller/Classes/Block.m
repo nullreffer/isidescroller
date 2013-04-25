@@ -10,7 +10,6 @@
 
 @interface Block()
 
-@property _BLOCK_TYPE_ENUM BLOCK_TYPE;
 @property CGPoint position;
 
 @property bool isBroken;
@@ -32,7 +31,10 @@
         
         UIImage *blockImage;
         
-        if ([type isEqualToString:@"SPIKES"]){
+        if ([type isEqualToString:@"FINISH"]){
+            blockImage = [UIImage imageNamed:@"block_door.png" ];
+            self.BLOCK_TYPE = FINISH;
+        } else if ([type isEqualToString:@"SPIKES"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = SPIKES;
         } else if ([type isEqualToString:@"STAIRS"]){
@@ -81,7 +83,16 @@
 }
 
 - (void)draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
-    [self.blockSprite renderWithSize:1.0 atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
+    
+    TexturedQuad quad = self.blockSprite.quad;
+    quad.bl.textureVertex = CGPointMake(0, 0);
+    quad.br.textureVertex = CGPointMake(1, 0);
+    quad.tl.textureVertex = CGPointMake(0, 1);
+    quad.tr.textureVertex = CGPointMake(1, 1);
+    
+    self.blockSprite.quad = quad;
+    
+    [self.blockSprite renderWithSize:self.blockSprite.size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
 }
 
 - (void) onCollisionComplete:(Character*)character {
@@ -93,12 +104,27 @@
         return;
     }
 
-    if (self.BLOCK_TYPE == LADDER){
-        *new_new_x = movement.x + gravityOffset.x;
+    if (self.BLOCK_TYPE == STAIRS){
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == LADDER){
+        *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
+        
+        if (*new_new_y > self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
-        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01) {
-            *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
     }
 }
@@ -108,12 +134,27 @@
         return;
     }
     
-    if (self.BLOCK_TYPE == LADDER){
-        *new_new_x = movement.x + gravityOffset.x;
+    if (self.BLOCK_TYPE == STAIRS){
+        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == LADDER){
+        *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
+        
+        if (*new_new_y + character.characterSize.height < self.blockSprite.enclosingRect.origin.y ){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
-        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - self.blockSprite.enclosingRect.size.height - 0.01){
-            *new_new_y = self.blockSprite.enclosingRect.origin.y - self.blockSprite.enclosingRect.size.height - 0.01;
+        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
         }
     }
     
@@ -125,10 +166,15 @@
     }
     
     if (self.BLOCK_TYPE == STAIRS){
-        *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
+        *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
     } else if (self.BLOCK_TYPE == LADDER) {
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
-        *new_new_y = movement.y + gravityOffset.y ;
+        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
     }
@@ -145,7 +191,12 @@
         // *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
     } else if (self.BLOCK_TYPE == LADDER) {
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
-        *new_new_y = movement.y + gravityOffset.y;
+        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == SPIKES){
+        [character removeLife];
+        *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+    } else if (self.BLOCK_TYPE == FINISH){
+        // set game state to something
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
     }

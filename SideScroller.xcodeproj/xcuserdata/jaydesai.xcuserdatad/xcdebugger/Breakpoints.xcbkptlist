@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Character.m"
-         timestampString = "388527024.108622"
+         timestampString = "388552216.328882"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "90"
-         endingLineNumber = "90"
+         startingLineNumber = "103"
+         endingLineNumber = "103"
          landmarkName = "-initiateJumpWithForce:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,11 +21,24 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Character.m"
-         timestampString = "388527024.108622"
+         timestampString = "388552216.328882"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "125"
-         endingLineNumber = "125"
+         startingLineNumber = "201"
+         endingLineNumber = "201"
+         landmarkName = "-update:withJoystickSpeed:andDirection:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SideScroller/Classes/Character.m"
+         timestampString = "388552216.328882"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "204"
+         endingLineNumber = "204"
          landmarkName = "-update:withJoystickSpeed:andDirection:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,12 +47,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Block.m"
-         timestampString = "388518127.94221"
+         timestampString = "388552216.328882"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "112"
-         endingLineNumber = "112"
-         landmarkName = "-onCollideFromBottom:withMovement:andVelocity:andGravityOffset:retX:retY:"
+         startingLineNumber = "157"
+         endingLineNumber = "157"
+         landmarkName = "-onCollideFromLeft:withMovement:andVelocity:andGravityOffset:retX:retY:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -47,37 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Block.m"
-         timestampString = "388518127.94221"
+         timestampString = "388552216.328882"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "97"
-         endingLineNumber = "97"
-         landmarkName = "-onCollideFromTop:withMovement:andVelocity:andGravityOffset:retX:retY:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "SideScroller/Classes/AnimatedSprite.m"
-         timestampString = "388526497.198608"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "61"
-         endingLineNumber = "61"
-         landmarkName = "-render:frame:withSize:atX:andXOffset:andY:andYOffset:flippedHorizontally:flippedVertically:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "SideScroller/Classes/Block.m"
-         timestampString = "388527469.49426"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "100"
-         endingLineNumber = "100"
+         startingLineNumber = "108"
+         endingLineNumber = "108"
          landmarkName = "-onCollideFromTop:withMovement:andVelocity:andGravityOffset:retX:retY:"
          landmarkType = "5">
       </FileBreakpoint>

@@ -5,50 +5,40 @@
 @property (strong) GLKBaseEffect * effect;
 @property (strong) GLKTextureInfo * textureInfo;
 
+@property bool manualFlip;
+
 @end
 
 @implementation Sprite
-@synthesize enclosingRect = _enclosingRect;
+@synthesize position = _position;
+@synthesize size = _size;
 @synthesize effect = _effect;
 @synthesize quad = _quad;
 @synthesize originalQuad = _originalQuad;
 @synthesize textureInfo = _textureInfo;
+@synthesize manualFlip = _manualFlip;
 
 - (id)initWithImage:(UIImage *)image {
     
-    CGImageRef spriteImage = [image CGImage];
-    
-    CGRect fullRect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
-    
-    return [self initWithRect:spriteImage croppedTo:fullRect andManualFlip:NO];
+    return [self initWithImage:image andManualFlip:NO];
 }
 
 - (id)initWithImage:(UIImage *)image andManualFlip:(bool)manualFlip {
-    CGImageRef spriteImage = [image CGImage];
+    CGImageRef img = [image CGImage];
     
-    CGRect fullRect = CGRectMake(0.0f, 0.0f, image.size.width, (manualFlip ? -1 : 1) * image.size.height);
-    
-    return [self initWithRect:spriteImage croppedTo:fullRect andManualFlip:manualFlip];
-}
-
-- (id)initWithRect:(CGImageRef)img croppedTo:(CGRect)char_rect andManualFlip:(bool)manualFlip {
-    return [self initWithRect:img croppedTo:char_rect andOriginalSz:CGSizeMake(char_rect.size.width, char_rect.size.height) andManualFlip:manualFlip];
-}
-
-- (id)initWithRect:(CGImageRef)img croppedTo:(CGRect)char_rect andOriginalSz:(CGSize)sz andManualFlip:(bool)manualFlip {
     if ((self = [super init])) {
 
         self.effect = [[GLKBaseEffect alloc] init];
         GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, 480, 0, 320, -1024, 1024);
         self.effect.transform.projectionMatrix = projectionMatrix;
         
-    
         // 2
         NSDictionary * options = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [NSNumber numberWithBool:!manualFlip],
                                   GLKTextureLoaderOriginBottomLeft,
                                   nil];
-    
+        self.manualFlip = manualFlip;
+        
         // 3
         NSError * error;
         // NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
@@ -59,28 +49,29 @@
             NSLog(@"Error loading file: %@", [error localizedDescription]);
             return nil;
         }
-
-        self.enclosingRect = manualFlip ? CGRectMake(char_rect.origin.x, char_rect.origin.y, char_rect.size.width, -char_rect.size.height) : char_rect;
         
-        float sh = sz.height; // 512 // hard-coded for font files;
-        float sw = sz.width; // 512 // hard-coded for font files;
+        float sh = image.size.height; // 512 // hard-coded for font files;
+        float sw = image.size.width; // 512 // hard-coded for font files;
         
         // TODO: Set up Textured Quad
         TexturedQuad newQuad;
         newQuad.bl.geometryVertex = CGPointMake(0, 0);
-        newQuad.br.geometryVertex = CGPointMake(char_rect.size.width, 0);
-        newQuad.tl.geometryVertex = CGPointMake(0, char_rect.size.height);
-        newQuad.tr.geometryVertex = CGPointMake(char_rect.size.width, char_rect.size.height);
+        newQuad.br.geometryVertex = CGPointMake(image.size.width, 0);
+        newQuad.tl.geometryVertex = CGPointMake(0, image.size.height);
+        newQuad.tr.geometryVertex = CGPointMake(image.size.width, image.size.height);
     
-        float ix = char_rect.origin.x;
-        float ox = ix + char_rect.size.width;
-        float iy = sh - (char_rect.origin.y + char_rect.size.height);
-        float oy = iy + char_rect.size.height;
+        float ix = 0;
+        float ox = ix + image.size.width;
+        float iy = 0;
+        float oy = iy + image.size.height;
     
         newQuad.bl.textureVertex = CGPointMake(ix/sw, iy/sh);
         newQuad.br.textureVertex = CGPointMake(ox/sw, iy/sh);
         newQuad.tl.textureVertex = CGPointMake(ix/sw, oy/sh);
         newQuad.tr.textureVertex = CGPointMake(ox/sw, oy/sh);
+        
+        // initial size is the full size
+        self.size = image.size;
         
         self.quad = newQuad;
         self.originalQuad = newQuad;
@@ -116,27 +107,47 @@
     
 }
 
-- (void)renderWithSize:(float)size atX:(int)x andY:(int)y {
+- (CGRect) enclosingRect{
+    return CGRectMake(self.position.x, self.position.y, self.size.width, self.size.height);
+}
+
+- (void)renderWithSize:(CGSize)size atX:(int)x andY:(int)y {
     [self renderWithSize:size atX:x andXOffset:0 andY:y andYOffset:0];
 }
 
-- (void)renderWithSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset {
+- (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset {
     [self renderWithSize:size atX:x andXOffset:xoffset andY:y andYOffset:yoffset flippedHorizontally:NO flippedVertically:NO];
 }
 
-- (void)renderWithSize:(float)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert {
+- (void)renderWithSize:(CGSize)size atX:(int)x andXOffset:(int)xoffset andY:(int)y andYOffset:(int)yoffset flippedHorizontally:(bool)horz flippedVertically:(bool)vert {
     
-    self.enclosingRect = CGRectMake(x, y, self.enclosingRect.size.width, self.enclosingRect.size.height);
+    self.position = CGPointMake(x, y);
+    self.size = size;
+    
     x = x + xoffset;
     y = y + yoffset;
     
     // 1.5
     TexturedQuad newQuad = self.originalQuad;
+    
+    // restore texture before modifying geometry
+    if (self.manualFlip) {
+        newQuad.tl.textureVertex = self.quad.bl.textureVertex;
+        newQuad.tr.textureVertex = self.quad.br.textureVertex;
+        newQuad.bl.textureVertex = self.quad.tl.textureVertex;
+        newQuad.br.textureVertex = self.quad.tr.textureVertex;
+    } else {
+        newQuad.bl.textureVertex = self.quad.bl.textureVertex;
+        newQuad.br.textureVertex = self.quad.br.textureVertex;
+        newQuad.tl.textureVertex = self.quad.tl.textureVertex;
+        newQuad.tr.textureVertex = self.quad.tr.textureVertex;
+    }
+    
     float qw = newQuad.br.geometryVertex.x - newQuad.bl.geometryVertex.x;
     float qh = newQuad.tl.geometryVertex.y - newQuad.bl.geometryVertex.y;
     
-    qw *= size;
-    qh *= size;
+    qw = size.width;
+    qh = size.height;
     
     newQuad.bl.geometryVertex = CGPointMake(x, y);
     newQuad.br.geometryVertex = CGPointMake(x + qw, y);
