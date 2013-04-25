@@ -45,7 +45,7 @@
     glEnable(GL_BLEND);
     
     [self.game draw:ms];
-    
+
 }
 
 - (void)viewDidLoad

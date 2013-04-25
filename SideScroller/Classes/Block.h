@@ -32,6 +32,8 @@ typedef enum {
     
 } _BLOCK_TYPE_ENUM;
 
+@property _BLOCK_TYPE_ENUM BLOCK_TYPE;
+
 @property Sprite *blockSprite;
 
 - (id) initBlockOfType:(NSString*) type andPositionX:(int)x andPositionY:(int)y;

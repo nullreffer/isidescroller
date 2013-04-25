@@ -108,7 +108,7 @@
 }
 
 - (CGRect) enclosingRect{
-    return CGRectMake(self.position.x, self.position.y, self.size.width, self.size.width);
+    return CGRectMake(self.position.x, self.position.y, self.size.width, self.size.height);
 }
 
 - (void)renderWithSize:(CGSize)size atX:(int)x andY:(int)y {

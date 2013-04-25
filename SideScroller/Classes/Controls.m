@@ -10,6 +10,8 @@
 #import "Sprite.h"
 #import "MathUtil.h"
 
+#define JOYSTICK_THRESHOLD 0.4
+
 @interface Controls()
 
 @property UIView* view;
@@ -90,7 +92,8 @@
 
 - (float) getJoystickForce {
     // keeping it between 0 and 1, so it can be used with a speed scalar
-    return ([MathUtil calculateDistance:self.joystickInitialLocation :self.joystickMovedLocation] / 20);
+    float dist = [MathUtil calculateDistance:self.joystickInitialLocation :self.joystickMovedLocation] / 30;
+    return dist > JOYSTICK_THRESHOLD ? dist : 0;
 }
 
 - (bool) isAPressed {

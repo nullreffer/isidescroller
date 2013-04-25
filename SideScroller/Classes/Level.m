@@ -121,7 +121,7 @@
     
     // draw enemies and friends
     for (Character* character in self.characters){
-        [character update:ms];
+        // [character update:ms];
     }
 }
 

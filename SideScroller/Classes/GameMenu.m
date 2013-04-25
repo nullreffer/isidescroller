@@ -142,7 +142,7 @@
     } else if (self.MENU_STATE == MENU_SELECT_LEVEL) {
         self.currentlyMoving = false;
         
-        if (abs([MathUtil calculateHorizontalDistance:self.initialTouchLocation :self.lastTouchMovedLocation]) < self.SLIDE_THRESHOLD) {
+        if (fabs([MathUtil calculateHorizontalDistance:self.initialTouchLocation :self.lastTouchMovedLocation]) < self.SLIDE_THRESHOLD) {
             // tapped
             int tappedCol = (self.lastTouchMovedLocation.x - 40 - self.horizontalOffset) / (60 + 25);
             int tappedRow = ((320 - self.lastTouchMovedLocation.y) - 40) / (60 + 25);
@@ -182,7 +182,7 @@
         self.lastTouchMovedLocation = [touch locationInView:self.game.view];
         float horizontalDistance = [MathUtil calculateHorizontalDistance:self.initialTouchLocation :self.lastTouchMovedLocation];
         
-        if (abs(horizontalDistance) > self.SLIDE_THRESHOLD) {
+        if (fabs(horizontalDistance) > self.SLIDE_THRESHOLD) {
             self.horizontalOffset = horizontalDistance;
         }
     }
