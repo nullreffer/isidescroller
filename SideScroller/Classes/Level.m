@@ -144,7 +144,7 @@
     
     // draw enemies and friends
     for (Character* character in self.characters){
-        [character update:ms];
+        [character updateAI:ms againstCharacter:self.theman];
     }
     
     // draw addons

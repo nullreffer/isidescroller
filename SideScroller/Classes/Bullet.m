@@ -11,7 +11,7 @@
 #import "Sprite.h"
 
 #define SPEED_SCALE 0.5
-#define DISTANCE_THRESHOLD 200
+#define DISTANCE_THRESHOLD 400
 
 @interface Bullet()
 
@@ -142,7 +142,7 @@
         
         for (Character* character in self.owner.level.characters){
             // can a man kill himself with his own bullets?
-            if (character == self.owner) continue;
+            if (character == self.owner || character.isDead) continue;
             
             CGRect rect2 = [character.characterImage enclosingRect];
             

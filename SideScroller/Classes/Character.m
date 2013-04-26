@@ -16,6 +16,7 @@
 #define SPEED_SCALE 2.0
 #define JUMP_SCALE 50.0
 #define SHOOT_DISTANCE 280.0
+#define INITIAL_JUMP_FACTOR 2
 
 @interface Character()
 
@@ -26,6 +27,8 @@
 
 @property bool isJumping;
 @property float jumpForce;
+@property int jumpUpgradationConstant;
+@property int jumpDegradationConstant;
 
 @property bool isWalking;
 @property int frameCounter;
@@ -112,6 +115,8 @@
         
         self.isJumping = NO;
         self.jumpForce = 0;
+        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
+        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
         self.isWalking = NO;
         self.frameCounter = 0;
         
@@ -136,14 +141,32 @@
 }
 
 - (void) initiateJumpWithForce:(float)force {
-    if (self.isJumping)
+    if (self.isDead || self.level.levelState != LEVEL_PLAYING) {
         return;
+    }
+    
+    if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_JETPACK]]){
+        self.jumpUpgradationConstant = 1;
+    } else {
+        if (self.isJumping)
+            return;
+        
+        // JETPACK takes precedece against jumping shoes
+        if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_JUMPING_SHOES]]){
+            force *= force;
+        }
+        
+    }
     
     self.jumpForce = force * JUMP_SCALE;
     self.isJumping = true;
 }
 
 - (void) doBActionWithJoystickDirection:(float)direction {
+    if (self.isDead || self.level.levelState != LEVEL_PLAYING) {
+        return;
+    }
+    
     // shoot!!!
     for (NSNumber *addon_key in self.addons){
         Addon *addon = [self.addons objectForKey:addon_key];
@@ -151,7 +174,7 @@
         if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN)){
             
             // fire a linear colliding bullet
-            Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:COLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x andY:self.position.y withDirection:self.lastDirection andForce:self.bulletForce];
+            Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:[addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN ? COLLIDING_LINEAR_BULLET : NONCOLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x + (self.characterSize.width / 2) andY:self.position.y + (self.characterSize.height / 2) withDirection:self.lastDirection andForce:self.bulletForce];
             
             [self.bullets addObject:bullet];
             
@@ -166,7 +189,7 @@
 
 - (void) updateAI:(long)ms againstCharacter:(Character*)theman {
     
-    if (self.level.levelState != LEVEL_PLAYING){
+    if (self.isDead || self.level.levelState != LEVEL_PLAYING){
         return;
     }
     
@@ -255,26 +278,27 @@
     if (self.level.gravityPosition == GRAVITY_BOTTOM){
         if (self.jumpForce > 1) {
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce / 2;
+            self.jumpForce = self.jumpForce / self.jumpUpgradationConstant;
         } else if (self.jumpForce <= 1 && self.jumpForce > -1){
             self.jumpForce = -1;
         }
         else {
+            // jump Force is negative here
             gravityOffset = CGPointMake(0, -self.jumpForce);
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce * 2;
+            self.jumpForce = self.jumpForce * self.jumpDegradationConstant;
         }
     } else if (self.level.gravityPosition == GRAVITY_TOP) {
         if (self.jumpForce < -1) {
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce / 2;
+            self.jumpForce = self.jumpForce / self.jumpUpgradationConstant;
         } else if (self.jumpForce >= -1 && self.jumpForce < 1){
             self.jumpForce = 1;
         }
         else {
             gravityOffset = CGPointMake(0, self.jumpForce);
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce * 2;
+            self.jumpForce = self.jumpForce * self.jumpDegradationConstant;
         }
     }
     
@@ -360,15 +384,23 @@
     }
 
     if (intersect_bottom && self.level.gravityPosition == GRAVITY_BOTTOM){
+        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
+        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     } else if (intersect_top && self.level.gravityPosition == GRAVITY_TOP){
+        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
+        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     } else if (intersect_right && self.level.gravityPosition == GRAVITY_RIGHT){
+        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
+        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     } else if (intersect_left && self.level.gravityPosition == GRAVITY_LEFT){
+        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
+        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     }
@@ -431,7 +463,7 @@
         
         frame = self.isJumping ? 3 : frame;
         
-        if (self.lifeRemovedCounter > 0 && (self.lifeRemovedCounter % 3 != 0 && self.lifeRemovedCounter % 5 != 0)){
+        if (self.lives <= 0 || (self.lifeRemovedCounter > 0 && self.lifeRemovedCounter % 3 != 0 && self.lifeRemovedCounter % 5 != 0)){
             self.characterImage.framesSprite.alpha = 0.5;
         } else {
             self.characterImage.framesSprite.alpha = 1.0;

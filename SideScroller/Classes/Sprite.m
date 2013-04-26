@@ -198,9 +198,11 @@
     GLKMatrix4 modelMatrix = GLKMatrix4Identity;
     
     float scale = 1.0;
-    modelMatrix = GLKMatrix4Rotate(modelMatrix, 0, 0, 0, 1);
-    modelMatrix = GLKMatrix4Scale(modelMatrix, scale, scale, 0);
+    // modelMatrix = GLKMatrix4Scale(modelMatrix, scale, scale, 0);
     modelMatrix = GLKMatrix4Translate(modelMatrix, x, y, 0);
+    modelMatrix = GLKMatrix4Rotate(modelMatrix, rotation, 0, 0, 1);
+    modelMatrix = GLKMatrix4Scale(modelMatrix, scale, scale, 0);
+    //modelMatrix = GLKMatrix4Translate(modelMatrix, x, y, 0);
     [self renderWithModelViewMatrix:modelMatrix];
 }
 

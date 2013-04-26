@@ -34,6 +34,8 @@
 
 - (void) doBActionWithJoystickDirection:(float)direction;
 
+- (void) updateAI:(long)ms againstCharacter:(Character*)theman;
+
 - (void) update:(long)ms ;
 
 - (void) update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction;
