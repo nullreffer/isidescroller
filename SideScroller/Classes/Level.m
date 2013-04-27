@@ -6,24 +6,39 @@
 //  Copyright (c) 2013 Jay Desai. All rights reserved.
 //
 
+#import "Game.h"
 #import "Level.h"
 #import "Sprite.h"
+#import "FontLibrary.h"
 #import "Addon.h"
 #import "Bullet.h"
 
+#define MESSAGE_VIEW_TIME 90
+
 @interface Level()
 
-// -- Game specials
-
 @property TBXMLElement* config;
+@property Game* game;
 @property Sprite* levelBg;
+
+@property Sprite* finishMessageBg;
+@property CGRect messageRect;
+@property int messageCounter;
 
 @end
 
 
 @implementation Level
 
+@synthesize game = _game;
+@synthesize config = _config;
+
+@synthesize levelState =_levelState;
+
 @synthesize levelBg = _levelBg;
+@synthesize finishMessageBg = _finishMessageBg;
+@synthesize messageRect = _messageRect;
+@synthesize messageCounter = _messageCounter;
 
 @synthesize width = _width;
 @synthesize height = _height;
@@ -32,19 +47,25 @@
 @synthesize characters = _characters;
 @synthesize addons = _addons;
 
-@synthesize config = _config;
-
 @synthesize horizontalOffset = _horizontalOffset;
 
 @synthesize gravityPosition = _gravityPosition;
 
--(id) initWithConfig:(TBXMLElement *)config {
+-(id) initWithConfig:(TBXMLElement *)config forGame:(Game *)game {
     if ([self init]){
         self.config = config;
+        self.game = game;
         
         self.horizontalOffset = 0;
         
-        self.gravityPosition = GRAVITY_BOTTOM;        
+        self.gravityPosition = GRAVITY_BOTTOM;
+        
+        self.finishMessageBg = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"game_message.png"]];
+        self.messageRect = CGRectMake(-1, -1, 1, 1); // off screen so touches aren't invoked
+        self.messageCounter = 0;
+        
+        self.levelState = LEVEL_PLAYING;
+        
         return self;
     }
     
@@ -119,6 +140,12 @@
 
 -(void)unload {
     
+    self.horizontalOffset = 0;
+    self.messageCounter = 0;
+    self.messageRect = CGRectMake(-1, -1, 1, 1); // off screen so touches aren't invoked
+    self.game.GAME_STATE = MENU;
+    self.levelState = LEVEL_PLAYING;
+    
     [self.blocks removeAllObjects];
     self.blocks = nil;
     self.theman = nil;
@@ -178,6 +205,35 @@
         [addon draw:ms withHorizontalOffset:self.horizontalOffset];
     }
     
+    if (self.levelState == LEVEL_COMPLETE){
+        // draw the level finished dialog in the center
+        float posx = 480.0 / 2 - self.finishMessageBg.enclosingRect.size.width / 2;
+        float posy = 320.0 / 2 - self.finishMessageBg.enclosingRect.size.height / 2;
+        [self.finishMessageBg renderWithSize:self.finishMessageBg.size atX:posx andY:posy];
+        
+        self.messageRect = [[FontLibrary seguoWhite] renderString:@"You Win" ofSize:36 centeredAtX:480.0 / 2 andY:320 / 2.0];
+        
+        if (self.messageCounter++ > MESSAGE_VIEW_TIME){
+            
+            [self unload];
+        }
+        
+    } else if (self.levelState == LEVEL_LOST){
+        // draw the level finished dialog in the center
+        float posx = 480.0 / 2 - self.finishMessageBg.enclosingRect.size.width / 2;
+        float posy = 320.0 / 2 - self.finishMessageBg.enclosingRect.size.height / 2;
+        [self.finishMessageBg renderWithSize:self.finishMessageBg.size atX:posx andY:posy];
+        
+        self.messageRect = [[FontLibrary seguoWhite] renderString:@"You Lose" ofSize:36 centeredAtX:480.0 / 2 andY:320 / 2.0];
+        
+        if (self.messageCounter++ > MESSAGE_VIEW_TIME){
+            
+            [self unload];
+        }
+        
+    } else if (self.levelState == LEVEL_PAUSED){
+        // handled by Controls
+    }
 }
 
 @end

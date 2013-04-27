@@ -8,7 +8,7 @@
 
 #import "GameMenu.h"
 #import "Sprite.h"
-#import "Font.h"
+#import "FontLibrary.h"
 #import "MathUtil.h"
 
 @interface GameMenu()
@@ -18,9 +18,6 @@
 
 @property(nonatomic, retain) Sprite* mainMenuSprite;
 @property(nonatomic, retain) Sprite* levelSelectSprite;
-@property(nonatomic, retain) Font* seguoFont_white;
-@property(nonatomic, retain) Font* skiaFont_white;
-@property(nonatomic, retain) Font* skiaFont_white_bold;
 
 @property CGPoint initialTouchLocation;
 @property CGPoint lastTouchMovedLocation;
@@ -37,9 +34,6 @@
 @synthesize MENU_STATE = _MENU_STATE;
 @synthesize mainMenuSprite = _mainMenuSprite;
 @synthesize levelSelectSprite = _levelSelectSprite;
-@synthesize seguoFont_white = _seguoFont_white;
-@synthesize skiaFont_white = _skiaFont_white;
-@synthesize skiaFont_white_bold = _skiaFont_white_bold;
 
 @synthesize initialTouchLocation = _initialTouchLocation;
 @synthesize lastTouchMovedLocation = _lastTouchMovedLocation;
@@ -55,12 +49,6 @@
         self.mainMenuSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"menu_main.png"]];
 
         self.levelSelectSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"menu_select_level.png"]];
-        
-        self.seguoFont_white = [[Font alloc] initWithFontFile:@"seguo_normal.fnt" andFontImage:@"seguo_normal_0.png"];
-
-        self.skiaFont_white = [[Font alloc] initWithFontFile:@"skia_normal.fnt" andFontImage:@"skia_normal_0.png"];
-        
-        self.skiaFont_white_bold = [[Font alloc] initWithFontFile:@"skia_bold.fnt" andFontImage:@"skia_bold_0.png"];
         
         self.game = game;
         
@@ -83,7 +71,7 @@
     if (self.MENU_STATE == MENU_MAIN){
         [self.mainMenuSprite renderWithSize:self.mainMenuSprite.size atX:0 andY:0];
         
-        self.playTextRect = [self.skiaFont_white renderString:@"play play" ofSize:40 atX:40 andY:40];
+        self.playTextRect = [[FontLibrary skiaWhite] renderString:@"play play" ofSize:40 atX:40 andY:40];
         
     } else if (self.MENU_STATE == MENU_SELECT_LEVEL){
         [self.mainMenuSprite renderWithSize:self.mainMenuSprite.size atX:0 andY:0];
@@ -106,7 +94,7 @@
                 
                 [self.levelSelectSprite renderWithSize:self.levelSelectSprite.size atX:posx andY:posy];
                 
-                [self.skiaFont_white renderString:[NSString stringWithFormat:@"%d",cc++] ofSize:48 atX:posx+6 andY:posy+6];
+                [[FontLibrary skiaWhite] renderString:[NSString stringWithFormat:@"%d",cc++] ofSize:48 atX:posx+6 andY:posy+6];
             }
         }
         
@@ -154,6 +142,7 @@
             }
             [self.game.currentLevel load];
             self.game.GAME_STATE = PLAYING;
+            self.MENU_STATE = MENU_MAIN;
         } else {
             // depending on distance change screen
         }

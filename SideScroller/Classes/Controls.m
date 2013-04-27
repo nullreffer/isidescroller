@@ -14,12 +14,15 @@
 
 @interface Controls()
 
+@property Game* game;
 @property UIView* view;
 
 @property Sprite* joystickBg;
 @property Sprite* joystick;
 @property Sprite* buttonA;
 @property Sprite* buttonB;
+@property Sprite* buttonPause;
+@property Sprite* pausedMessage;
 
 // used to track Joystick
 @property UITouch* joystickTouch;
@@ -34,12 +37,15 @@
 
 @implementation Controls
 
+@synthesize game = _game;
 @synthesize view = _view;
 
 @synthesize joystickBg = _joystickBg;
 @synthesize joystick = _joystick;
 @synthesize buttonA = _buttonA;
 @synthesize buttonB = _buttonB;
+@synthesize buttonPause = _buttonPause;
+@synthesize pausedMessage = _pausedMessage;
 
 @synthesize joystickTouch = _joystickTouch;
 @synthesize joystickPressed = _joystickPressed;
@@ -48,7 +54,7 @@
 @synthesize aPressed = _aPressed;
 @synthesize bPressed = _bPressed;
 
--(id)initControlsForView:(UIView*)view {
+-(id)initControlsForView:(UIView*)view inGame:(Game*)game {
     
     if ([self init]){
         
@@ -57,7 +63,10 @@
         
         self.buttonA = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"controls_buttons_A.png"]];
         self.buttonB = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"controls_buttons_B.png"]];
+        self.buttonPause = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"controls_buttons_pause.png"]];
+        self.pausedMessage = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"game_paused.png"]];
         
+        self.game = game;
         self.view = view;
         
         self.aPressed = false;
@@ -65,8 +74,8 @@
         
         self.joystickTouch = nil;
         self.joystickPressed = false;
-        self.joystickInitialLocation = CGPointMake(100, 100);
-        self.joystickMovedLocation = CGPointMake(100, 100);
+        self.joystickInitialLocation = CGPointMake(90, 90);
+        self.joystickMovedLocation = CGPointMake(90, 90);
         
         return self;
     }
@@ -76,11 +85,20 @@
 }
 
 - (void) draw:(long)ms {
-    [self.joystickBg renderWithSize:self.joystickBg.size atX:40 andY:40];
+    [self.joystickBg renderWithSize:self.joystickBg.size atX:30 andY:30];
     [self.joystick renderWithSize:self.joystick.size atX:self.joystickMovedLocation.x-30 andY:self.joystickMovedLocation.y-30];
     
-    [self.buttonA renderWithSize:self.buttonA.size atX:320 andY:70];
-    [self.buttonB renderWithSize:self.buttonB.size atX:400 andY:70];
+    [self.buttonA renderWithSize:self.buttonA.size atX:300 andY:30];
+    [self.buttonB renderWithSize:self.buttonB.size atX:380 andY:30];
+    
+    if (self.game.currentLevel.levelState == LEVEL_PAUSED) {
+        // draw the level paused dialog in the center
+        float posx = 480.0 / 2 - self.pausedMessage.enclosingRect.size.width / 2;
+        float posy = 320.0 / 2 - self.pausedMessage.enclosingRect.size.height / 2;
+        [self.pausedMessage renderWithSize:self.pausedMessage.size atX:posx andY:posy];
+    } else {
+        [self.buttonPause renderWithSize:self.buttonPause.size atX:10 andY:250];
+    }
 }
 
 - (float) getJoystickDirection {
@@ -105,6 +123,26 @@
 }
 
 - (void) handleTouchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
+    
+    if (self.game.currentLevel.levelState == LEVEL_PAUSED){
+        
+        UITouch *touch = [touches anyObject];
+        CGPoint touchPoint = [touch locationInView:self.view];
+        if (CGRectContainsPoint(self.pausedMessage.enclosingRect, touchPoint)){
+            if (touchPoint.y > self.pausedMessage.enclosingRect.origin.y + self.pausedMessage.enclosingRect.size.height / 2) {
+                if (touchPoint.x < self.pausedMessage.enclosingRect.origin.x + self.pausedMessage.enclosingRect.size.width / 2) {
+                    // resume tapped
+                    self.game.currentLevel.levelState = LEVEL_PLAYING;
+                } else {
+                    // quit tapped
+                    self.game.currentLevel.levelState = LEVEL_LOST;
+                }
+            }
+        }
+        
+        return;
+    }
+    
     for (UITouch* touch in touches){
         CGPoint touchPosition = [touch locationInView:self.view];
         touchPosition = CGPointMake(touchPosition.x, 320 - touchPosition.y);
@@ -115,6 +153,8 @@
             self.aPressed = true;
         } else if (CGRectContainsPoint([self.buttonB enclosingRect], touchPosition)){
             self.bPressed = true;
+        } else if (CGRectContainsPoint([self.buttonPause enclosingRect], touchPosition)){
+            self.game.currentLevel.levelState = LEVEL_PAUSED;
         }
     }
 }

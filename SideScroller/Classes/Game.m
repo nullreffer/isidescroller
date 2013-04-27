@@ -42,7 +42,7 @@
         do {
             NSString *levelId = [TBXML textForElement:[TBXML childElementNamed:@"id" parentElement:levelElement]];
             
-            Level *l = [[Level alloc] initWithConfig:levelElement];
+            Level *l = [[Level alloc] initWithConfig:levelElement forGame:self];
             
             [self.levels setObject:l forKey:levelId];
         } while ((levelElement = levelElement->nextSibling));
@@ -52,7 +52,7 @@
         
         self.view = view;
         
-        self.controls = [[Controls alloc] initControlsForView:view];
+        self.controls = [[Controls alloc] initControlsForView:view inGame:self];
         
         return self;
     }
@@ -73,6 +73,7 @@
     }
     
     [self.currentLevel update:ms withJoystickSpeed:[self.controls getJoystickForce] andDirection:direction];
+    
 }
 
 - (void)draw:(long)ms {

@@ -10,7 +10,6 @@
 #import "TBXML.h"
 #import "Level.h"
 
-
 @interface Game : NSObject
 
 typedef enum {

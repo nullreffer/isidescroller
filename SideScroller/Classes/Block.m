@@ -7,10 +7,12 @@
 //
 
 #import "Block.h"
+#import "Addon.h"
 
 @interface Block()
 
 @property CGPoint position;
+@property CGSize originalSize;
 
 @property bool isBroken;
 @property bool isHidden;
@@ -22,6 +24,7 @@
 
 @synthesize BLOCK_TYPE = _BLOCK_TYPE;
 @synthesize position = _position;
+@synthesize originalSize = _originalSize;
 @synthesize blockSprite = _blockSprite;
 
 @synthesize isBroken;
@@ -32,26 +35,26 @@
         UIImage *blockImage;
         
         if ([type isEqualToString:@"FINISH"]){
-            blockImage = [UIImage imageNamed:@"block_door.png" ];
-            self.BLOCK_TYPE = FINISH;
+            blockImage = [UIImage imageNamed:@"block_finish.png" ];
+            self.BLOCK_TYPE = BLOCK_FINISH;
+        } else if ([type isEqualToString:@"DOOR_RED"]){
+            blockImage = [UIImage imageNamed:@"block_red_door.png" ];
+            self.BLOCK_TYPE = BLOCK_DOOR_RED;
+        } else if ([type isEqualToString:@"DOOR_BLUE"]){
+            blockImage = [UIImage imageNamed:@"block_blue_door.png" ];
+            self.BLOCK_TYPE = BLOCK_DOOR_BLUE;
         } else if ([type isEqualToString:@"SPIKES"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = SPIKES;
+            self.BLOCK_TYPE = BLOCK_SPIKES;
         } else if ([type isEqualToString:@"STAIRS"]){
             blockImage = [UIImage imageNamed:@"block_stairs.png" ];
-            self.BLOCK_TYPE = STAIRS;
+            self.BLOCK_TYPE = BLOCK_STAIRS;
         }  else if ([type isEqualToString:@"LADDER"]){
             blockImage = [UIImage imageNamed:@"block_ladder.png" ];
-            self.BLOCK_TYPE = LADDER;
-        } else if ([type isEqualToString:@"COIN"]){
-            blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = COIN;
-        } else if ([type isEqualToString:@"POTION"]){
-            blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = POTION;
+            self.BLOCK_TYPE = BLOCK_LADDER;
         } else if ([type isEqualToString:@"BREAKABLE"]){
-            blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = BREAKABLE;
+            blockImage = [UIImage imageNamed:@"block_standard.png" ];
+            self.BLOCK_TYPE = BLOCK_BREAKABLE;
         } else if ([type isEqualToString:@"GRAVITY_LEFT"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = GRAVITY_LEFT;
@@ -66,12 +69,13 @@
             self.BLOCK_TYPE = GRAVITY_BOTTOM;
         } else {
             blockImage = [UIImage imageNamed:@"block_standard.png"];
-            self.BLOCK_TYPE = STANDARD;
+            self.BLOCK_TYPE = BLOCK_STANDARD;
         }
         
         self.blockSprite = [[Sprite alloc] initWithImage:blockImage andManualFlip:YES];
         
         self.position = CGPointMake(x, y);
+        self.originalSize = CGSizeMake(blockImage.size.width, blockImage.size.height);
         
         self.isBroken = false;
         self.isHidden = false;
@@ -85,14 +89,24 @@
 - (void)draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
     
     TexturedQuad quad = self.blockSprite.quad;
-    quad.bl.textureVertex = CGPointMake(0, 0);
-    quad.br.textureVertex = CGPointMake(1, 0);
-    quad.tl.textureVertex = CGPointMake(0, 1);
-    quad.tr.textureVertex = CGPointMake(1, 1);
     
+    if (!self.isBroken) {
+        quad.bl.textureVertex = CGPointMake(0, 0);
+        quad.br.textureVertex = CGPointMake(0.5, 0);
+        quad.tl.textureVertex = CGPointMake(0, 1);
+        quad.tr.textureVertex = CGPointMake(0.5, 1);
+    } else {
+        quad.bl.textureVertex = CGPointMake(0.5, 0);
+        quad.br.textureVertex = CGPointMake(1, 0);
+        quad.tl.textureVertex = CGPointMake(0.5, 1);
+        quad.tr.textureVertex = CGPointMake(1, 1);
+    }
+        
     self.blockSprite.quad = quad;
     
-    [self.blockSprite renderWithSize:self.blockSprite.size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
+    CGSize size = CGSizeMake(self.originalSize.width / 2, self.originalSize.height);
+    
+    [self.blockSprite renderWithSize:size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
 }
 
 - (void) onCollisionComplete:(Character*)character {
@@ -104,24 +118,42 @@
         return;
     }
 
-    if (self.BLOCK_TYPE == STAIRS){
+    if (self.BLOCK_TYPE == BLOCK_STAIRS){
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
-    } else if (self.BLOCK_TYPE == LADDER){
+    } else if (self.BLOCK_TYPE == BLOCK_LADDER){
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
         
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height){
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
-    } else if (self.BLOCK_TYPE == SPIKES){
+    } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
-    } else if (self.BLOCK_TYPE == FINISH){
-        // set game state to something
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_BLUE){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_BLUE_KEY]]){
+            self.isBroken = true;
+        } else {
+            if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+                *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+            }
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_RED){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_RED_KEY]]){
+            self.isBroken = true;
+        } else {
+            if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+                *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+            }
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_FINISH){
+        if (character.isProtagonist) {
+            character.level.levelState = LEVEL_COMPLETE;
+        }
     } else {
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
@@ -134,24 +166,42 @@
         return;
     }
     
-    if (self.BLOCK_TYPE == STAIRS){
+    if (self.BLOCK_TYPE == BLOCK_STAIRS){
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
         }
-    } else if (self.BLOCK_TYPE == LADDER){
+    } else if (self.BLOCK_TYPE == BLOCK_LADDER){
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
         
         if (*new_new_y + character.characterSize.height < self.blockSprite.enclosingRect.origin.y ){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
-    } else if (self.BLOCK_TYPE == SPIKES){
+    } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
         }
-    } else if (self.BLOCK_TYPE == FINISH){
-        // set game state to something
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_BLUE){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_BLUE_KEY]]){
+            self.isBroken = true;
+        } else {
+            if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+                *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+            }
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_RED){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_RED_KEY]]){
+            self.isBroken = true;
+        } else {
+            if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+                *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+            }
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_FINISH){
+        if (character.isProtagonist) {
+            character.level.levelState = LEVEL_COMPLETE;
+        }
     } else {
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
@@ -165,16 +215,30 @@
         return;
     }
     
-    if (self.BLOCK_TYPE == STAIRS){
+    if (self.BLOCK_TYPE == BLOCK_STAIRS){
         *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
-    } else if (self.BLOCK_TYPE == LADDER) {
+    } else if (self.BLOCK_TYPE == BLOCK_LADDER) {
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
-    } else if (self.BLOCK_TYPE == SPIKES){
+    } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
-    } else if (self.BLOCK_TYPE == FINISH){
-        // set game state to something
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_BLUE){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_BLUE_KEY]]){
+            self.isBroken = true;
+        } else {
+            *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_RED){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_RED_KEY]]){
+            self.isBroken = true;
+        } else {
+            *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_FINISH){
+        if (character.isProtagonist) {
+            character.level.levelState = LEVEL_COMPLETE;
+        }
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
     }
@@ -186,17 +250,31 @@
         return;
     }
     
-    if (self.BLOCK_TYPE == STAIRS){
+    if (self.BLOCK_TYPE == BLOCK_STAIRS){
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
         // *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
-    } else if (self.BLOCK_TYPE == LADDER) {
+    } else if (self.BLOCK_TYPE == BLOCK_LADDER) {
         *new_new_x = movement.x + gravityOffset.x + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
-    } else if (self.BLOCK_TYPE == SPIKES){
+    } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
-    } else if (self.BLOCK_TYPE == FINISH){
-        // set game state to something
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_BLUE){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_BLUE_KEY]]){
+            self.isBroken = true;
+        } else {
+            *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_RED){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_RED_KEY]]){
+            self.isBroken = true;
+        } else {
+            *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_FINISH){
+        if (character.isProtagonist) {
+            character.level.levelState = LEVEL_COMPLETE;
+        }
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
     }

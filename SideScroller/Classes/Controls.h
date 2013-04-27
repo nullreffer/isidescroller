@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Game.h"
 
 @interface Controls : NSObject
 
-- (id) initControlsForView:(UIView*)game;
+- (id) initControlsForView:(UIView*)view inGame:(Game*)game;
 
 - (float) getJoystickDirection;
 

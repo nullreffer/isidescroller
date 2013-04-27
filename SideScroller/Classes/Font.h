@@ -14,5 +14,9 @@
 }
 
 - (id)initWithFontFile:(NSString *)fileName andFontImage:(NSString *)fontImage ;
+
 - (CGRect)renderString:(NSString*)str ofSize:(int)sz atX:(int)x andY:(int)y;
+
+- (CGRect)renderString:(NSString*)str ofSize:(int)sz centeredAtX:(int)x andY:(int)y;
+
 @end

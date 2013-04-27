@@ -27,8 +27,8 @@
 
 @property bool isJumping;
 @property float jumpForce;
-@property int jumpUpgradationConstant;
-@property int jumpDegradationConstant;
+@property int jumpCounter;
+@property bool linearJump;
 
 @property bool isWalking;
 @property int frameCounter;
@@ -62,6 +62,8 @@
 
 @synthesize isJumping = _isJumping;
 @synthesize jumpForce = _jumpForce;
+@synthesize jumpCounter = _jumpCounter;
+@synthesize linearJump = _linearJump;
 
 @synthesize isWalking = _isWalking;
 @synthesize frameCounter = _frameCounter;
@@ -115,8 +117,8 @@
         
         self.isJumping = NO;
         self.jumpForce = 0;
-        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
-        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
+        self.jumpCounter = 0;
+        self.linearJump = false;
         self.isWalking = NO;
         self.frameCounter = 0;
         
@@ -146,19 +148,21 @@
     }
     
     if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_JETPACK]]){
-        self.jumpUpgradationConstant = 1;
+        self.linearJump = true;
+        
+        self.jumpForce = force * 4;
     } else {
         if (self.isJumping)
             return;
         
         // JETPACK takes precedece against jumping shoes
         if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_JUMPING_SHOES]]){
-            force *= force;
+            force *= 2 * force;
         }
-        
+        self.jumpForce = force * JUMP_SCALE;
     }
     
-    self.jumpForce = force * JUMP_SCALE;
+    self.jumpCounter = 0;
     self.isJumping = true;
 }
 
@@ -193,7 +197,7 @@
         return;
     }
     
-    if ([MathUtil calculateDistance:self.position :theman.position] > SHOOT_DISTANCE){
+    if ([MathUtil calculateDistance:self.position :theman.position] < SHOOT_DISTANCE){
     
         float direction = atan2f(theman.position.y - self.position.y, theman.position.x - self.position.x);
         
@@ -275,30 +279,43 @@
     CGPoint gravityOffset = CGPointMake(0, 0);
     
     // apply gravity
+    if (self.isJumping ){
+        self.jumpCounter++;
+    }
     if (self.level.gravityPosition == GRAVITY_BOTTOM){
         if (self.jumpForce > 1) {
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce / self.jumpUpgradationConstant;
+            if (!self.linearJump) {
+                self.jumpForce = self.jumpForce / 2.0;
+                // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
+            }
         } else if (self.jumpForce <= 1 && self.jumpForce > -1){
             self.jumpForce = -1;
+            self.jumpCounter = 0;
         }
         else {
             // jump Force is negative here
             gravityOffset = CGPointMake(0, -self.jumpForce);
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce * self.jumpDegradationConstant;
+            self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
+            // self.jumpCounter -= self.jumpCounter * self.jumpCounter;
         }
     } else if (self.level.gravityPosition == GRAVITY_TOP) {
         if (self.jumpForce < -1) {
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce / self.jumpUpgradationConstant;
+            if (!self.linearJump) {
+                self.jumpForce = self.jumpForce / 2.0;
+                // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
+            }
         } else if (self.jumpForce >= -1 && self.jumpForce < 1){
             self.jumpForce = 1;
+            self.jumpCounter = 0;
         }
         else {
             gravityOffset = CGPointMake(0, self.jumpForce);
             new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce * self.jumpDegradationConstant;
+            self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
+            // self.jumpCounter += self.jumpCounter * self.jumpCounter;
         }
     }
     
@@ -383,24 +400,20 @@
     
     }
 
+    if (self.linearJump && self.jumpForce > 0){
+        self.jumpForce = 0;
+    }
+    
     if (intersect_bottom && self.level.gravityPosition == GRAVITY_BOTTOM){
-        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
-        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     } else if (intersect_top && self.level.gravityPosition == GRAVITY_TOP){
-        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
-        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     } else if (intersect_right && self.level.gravityPosition == GRAVITY_RIGHT){
-        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
-        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     } else if (intersect_left && self.level.gravityPosition == GRAVITY_LEFT){
-        self.jumpDegradationConstant = INITIAL_JUMP_FACTOR;
-        self.jumpUpgradationConstant = INITIAL_JUMP_FACTOR;
         self.isJumping = false;
         self.jumpForce = 0;
     }
@@ -484,7 +497,7 @@
             [self.lifeSprite renderWithSize:self.lifeSprite.enclosingRect.size atX:posx andXOffset:0 andY:posy andYOffset:0];
         }
         
-        // draw addons maybe
+        // draw addons maybed
     }
     
     // draw character's bullets
@@ -501,6 +514,11 @@
     }
     if (self.lives <= 0){
         self.isDead = YES;
+        
+        if (self.isProtagonist){
+            // game over
+            self.level.levelState = LEVEL_LOST;
+        }
     }
 }
 

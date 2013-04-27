@@ -309,6 +309,16 @@
                     <positionx>352</positionx>
                     <positiony>146</positiony>
                 </addon>
+                <addon>
+                    <type>JETPACK</type>
+                    <positionx>480</positionx>
+                    <positiony>82</positiony>
+                </addon>
+                <addon>
+                    <type>JUMPING_SHOES</type>
+                    <positionx>448</positionx>
+                    <positiony>82</positiony>
+                </addon>
             </addons>
             <protagonist>
                 <positionx>250</positionx>

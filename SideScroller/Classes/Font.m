@@ -24,9 +24,9 @@
         self.alphalets = [[NSMutableDictionary alloc] initWithCapacity:255];
         
         NSString *path = [[NSBundle mainBundle] pathForResource:fontImage ofType:nil];
-        UIImage *fntImage = [[UIImage alloc] initWithContentsOfFile:path];
+        // UIImage *fntImage = [[UIImage alloc] initWithContentsOfFile:path];
+        UIImage *fntImage = [UIImage imageNamed:fontImage];
         self.fontSprite = [[Sprite alloc] initWithImage:fntImage andManualFlip:NO];
-        // UIImage *fntImage = [UIImage imageNamed:fileName];
         
         NSString *allowedChars  = @"abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ-1234567890 !@#$%^&*()=+:'\".,?";
         
@@ -93,9 +93,25 @@
     return nil;
 }
 
+- (CGRect)renderString:(NSString*)str ofSize:(int)sz centeredAtX:(int)x andY:(int)y {
+    
+    float max_height = 0;
+    float max_width = 0;
+    for (int i = 0; i < str.length; i++) {
+        NSString *char_key = [[NSString alloc] initWithFormat:@"%c",[str characterAtIndex:i]];
+        CGRect char_rect = [[self.alphalets valueForKey:char_key] CGRectValue];
+        
+        max_width += char_rect.size.width;
+        max_height = char_rect.size.height > max_height ? char_rect.size.height : max_height;
+    }
+    
+    return [self renderString:str ofSize:sz atX:x - (max_width / 2) andY:y - (max_height / 2)];
+}
+
 - (CGRect)renderString:(NSString*)str ofSize:(int)sz atX:(int)x andY:(int)y {
     // float sc = sz  / 512.0; // 72.0; // assuming sz = 72, a size of 72 = sc of 1, sz of 36 = sc = 0.5
     
+    float max_height = 0;
     int width = 0;
     int origX = x;
     for (int i = 0; i < str.length; i++) {
@@ -114,12 +130,14 @@
             
         // then update x
         x = x + char_rect.size.width;
+        max_height = char_rect.size.height > max_height ? char_rect.size.height : max_height;
+
         // x = x + (char_sprite.quad.tr.geometryVertex.x - char_sprite.quad.tl.geometryVertex.x);
         // width = x + char_sprite.enclosingRect.size.width;
     }
     
     width = x - origX;
-    return CGRectMake(origX, y, width, sz);
+    return CGRectMake(origX, y, width, max_height);
 }
 
 @end

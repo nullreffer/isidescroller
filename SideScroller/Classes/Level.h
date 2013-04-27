@@ -11,6 +11,8 @@
 #import "Block.h"
 #import "Character.h"
 
+@class Game;
+
 @interface Level : NSObject
 
 typedef enum {
@@ -47,7 +49,7 @@ typedef enum {
 // bullets have levels, but they apply to the entire level
 @property NSMutableArray *addons;
 
-- (id)initWithConfig:(TBXMLElement*) config;
+- (id)initWithConfig:(TBXMLElement*)config forGame:(Game*)game;
 
 - (void)load;
 

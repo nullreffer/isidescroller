@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		CC04212F172744DF0063600B /* block_stairs.png in Resources */ = {isa = PBXBuildFile; fileRef = CC04212C172744DF0063600B /* block_stairs.png */; };
 		CC042130172744DF0063600B /* block_ladder.png in Resources */ = {isa = PBXBuildFile; fileRef = CC04212D172744DF0063600B /* block_ladder.png */; };
-		CC042131172744DF0063600B /* block_door.png in Resources */ = {isa = PBXBuildFile; fileRef = CC04212E172744DF0063600B /* block_door.png */; };
 		CC4A591516CFEA9600487F69 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC4A591416CFEA9600487F69 /* UIKit.framework */; };
 		CC4A591716CFEA9600487F69 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC4A591616CFEA9600487F69 /* Foundation.framework */; };
 		CC4A591916CFEA9600487F69 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC4A591816CFEA9600487F69 /* CoreGraphics.framework */; };
@@ -33,6 +32,13 @@
 		CC4DB6E41729AFA7006734AD /* addon_red_key.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DD1729AFA7006734AD /* addon_red_key.png */; };
 		CC4DB6E51729AFA7006734AD /* addon_blue_key.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DE1729AFA7006734AD /* addon_blue_key.png */; };
 		CC4DB6E61729AFA7006734AD /* addon_star.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6DF1729AFA7006734AD /* addon_star.png */; };
+		CC4DB6EA172A12F1006734AD /* game_message.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6E7172A12F1006734AD /* game_message.png */; };
+		CC4DB6EB172A12F1006734AD /* controls_buttons_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6E8172A12F1006734AD /* controls_buttons_pause.png */; };
+		CC4DB6EC172A12F1006734AD /* game_paused.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6E9172A12F1006734AD /* game_paused.png */; };
+		CC4DB6EF172A1431006734AD /* block_red_door.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6ED172A1431006734AD /* block_red_door.png */; };
+		CC4DB6F0172A1431006734AD /* block_blue_door.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6EE172A1431006734AD /* block_blue_door.png */; };
+		CC4DB6F2172AC7DC006734AD /* block_finish.png in Resources */ = {isa = PBXBuildFile; fileRef = CC4DB6F1172AC7DC006734AD /* block_finish.png */; };
+		CC4DB6F5172B2975006734AD /* FontLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4DB6F4172B2974006734AD /* FontLibrary.m */; };
 		CC7E68D01723431C00B319D0 /* CGUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7E68CF1723431C00B319D0 /* CGUtil.m */; };
 		CC9242CF172322BB000CB392 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CC9242CE172322BB000CB392 /* Default-568h@2x.png */; };
 		CCB90FB31708BD81007173EF /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB90FB21708BD81007173EF /* Game.m */; };
@@ -72,7 +78,6 @@
 /* Begin PBXFileReference section */
 		CC04212C172744DF0063600B /* block_stairs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = block_stairs.png; path = SideScroller/Resources/Images/block_stairs.png; sourceTree = "<group>"; };
 		CC04212D172744DF0063600B /* block_ladder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = block_ladder.png; path = SideScroller/Resources/Images/block_ladder.png; sourceTree = "<group>"; };
-		CC04212E172744DF0063600B /* block_door.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = block_door.png; path = SideScroller/Resources/Images/block_door.png; sourceTree = "<group>"; };
 		CC4A591016CFEA9600487F69 /* SideScroller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SideScroller.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC4A591416CFEA9600487F69 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CC4A591616CFEA9600487F69 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -104,6 +109,14 @@
 		CC4DB6DD1729AFA7006734AD /* addon_red_key.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_red_key.png; path = SideScroller/Resources/Images/addon_red_key.png; sourceTree = "<group>"; };
 		CC4DB6DE1729AFA7006734AD /* addon_blue_key.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_blue_key.png; path = SideScroller/Resources/Images/addon_blue_key.png; sourceTree = "<group>"; };
 		CC4DB6DF1729AFA7006734AD /* addon_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = addon_star.png; path = SideScroller/Resources/Images/addon_star.png; sourceTree = "<group>"; };
+		CC4DB6E7172A12F1006734AD /* game_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = game_message.png; path = SideScroller/Resources/Images/game_message.png; sourceTree = "<group>"; };
+		CC4DB6E8172A12F1006734AD /* controls_buttons_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = controls_buttons_pause.png; path = SideScroller/Resources/Images/controls_buttons_pause.png; sourceTree = "<group>"; };
+		CC4DB6E9172A12F1006734AD /* game_paused.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = game_paused.png; path = SideScroller/Resources/Images/game_paused.png; sourceTree = "<group>"; };
+		CC4DB6ED172A1431006734AD /* block_red_door.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = block_red_door.png; path = SideScroller/Resources/Images/block_red_door.png; sourceTree = "<group>"; };
+		CC4DB6EE172A1431006734AD /* block_blue_door.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = block_blue_door.png; path = SideScroller/Resources/Images/block_blue_door.png; sourceTree = "<group>"; };
+		CC4DB6F1172AC7DC006734AD /* block_finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = block_finish.png; path = SideScroller/Resources/Images/block_finish.png; sourceTree = "<group>"; };
+		CC4DB6F3172B2974006734AD /* FontLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FontLibrary.h; path = Classes/FontLibrary.h; sourceTree = "<group>"; };
+		CC4DB6F4172B2974006734AD /* FontLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FontLibrary.m; path = Classes/FontLibrary.m; sourceTree = "<group>"; };
 		CC7E68CE1723431C00B319D0 /* CGUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGUtil.h; path = Classes/CGUtil.h; sourceTree = "<group>"; };
 		CC7E68CF1723431C00B319D0 /* CGUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CGUtil.m; path = Classes/CGUtil.m; sourceTree = "<group>"; };
 		CC9242CE172322BB000CB392 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -229,6 +242,8 @@
 				CC4A594516D130CE00487F69 /* Sprite.h */,
 				CC4A594616D130CE00487F69 /* Font.m */,
 				CC4A594716D130CE00487F69 /* Font.h */,
+				CC4DB6F3172B2974006734AD /* FontLibrary.h */,
+				CC4DB6F4172B2974006734AD /* FontLibrary.m */,
 				CC4A592316CFEA9600487F69 /* AppDelegate.h */,
 				CC4A592416CFEA9600487F69 /* AppDelegate.m */,
 				CC4A594116D04FBB00487F69 /* MainViewController.h */,
@@ -265,6 +280,12 @@
 		CC4A593416CFF29600487F69 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CC4DB6F1172AC7DC006734AD /* block_finish.png */,
+				CC4DB6ED172A1431006734AD /* block_red_door.png */,
+				CC4DB6EE172A1431006734AD /* block_blue_door.png */,
+				CC4DB6E7172A12F1006734AD /* game_message.png */,
+				CC4DB6E8172A12F1006734AD /* controls_buttons_pause.png */,
+				CC4DB6E9172A12F1006734AD /* game_paused.png */,
 				CC4DB6D91729AFA7006734AD /* addon_quadratic_gun.png */,
 				CC4DB6DA1729AFA7006734AD /* addon_linear_gun.png */,
 				CC4DB6DB1729AFA7006734AD /* addon_jumping_shoes.png */,
@@ -276,7 +297,6 @@
 				CC4DB6D217296C59006734AD /* bullet_1.png */,
 				CC04212C172744DF0063600B /* block_stairs.png */,
 				CC04212D172744DF0063600B /* block_ladder.png */,
-				CC04212E172744DF0063600B /* block_door.png */,
 				CCB90FF9171A4689007173EF /* menu_select_level.png */,
 				CCB90FFA171A4689007173EF /* menu_select_level_bg.png */,
 				CCB90FD61719EC21007173EF /* repeating_bg.png */,
@@ -387,7 +407,6 @@
 				CC9242CF172322BB000CB392 /* Default-568h@2x.png in Resources */,
 				CC04212F172744DF0063600B /* block_stairs.png in Resources */,
 				CC042130172744DF0063600B /* block_ladder.png in Resources */,
-				CC042131172744DF0063600B /* block_door.png in Resources */,
 				CC4DB6D317296C59006734AD /* bullet_1.png in Resources */,
 				CC4DB6D517296D66006734AD /* stats_life.png in Resources */,
 				CC4DB6E01729AFA7006734AD /* addon_quadratic_gun.png in Resources */,
@@ -397,6 +416,12 @@
 				CC4DB6E41729AFA7006734AD /* addon_red_key.png in Resources */,
 				CC4DB6E51729AFA7006734AD /* addon_blue_key.png in Resources */,
 				CC4DB6E61729AFA7006734AD /* addon_star.png in Resources */,
+				CC4DB6EA172A12F1006734AD /* game_message.png in Resources */,
+				CC4DB6EB172A12F1006734AD /* controls_buttons_pause.png in Resources */,
+				CC4DB6EC172A12F1006734AD /* game_paused.png in Resources */,
+				CC4DB6EF172A1431006734AD /* block_red_door.png in Resources */,
+				CC4DB6F0172A1431006734AD /* block_blue_door.png in Resources */,
+				CC4DB6F2172AC7DC006734AD /* block_finish.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +449,7 @@
 				CCB91002171B0103007173EF /* MathUtil.m in Sources */,
 				CC7E68D01723431C00B319D0 /* CGUtil.m in Sources */,
 				CC4DB6D817296E37006734AD /* Bullet.m in Sources */,
+				CC4DB6F5172B2975006734AD /* FontLibrary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
