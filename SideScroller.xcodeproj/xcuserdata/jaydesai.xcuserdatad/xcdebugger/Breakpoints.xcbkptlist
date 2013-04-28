@@ -7,32 +7,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "SideScroller/Classes/Character.m"
-         timestampString = "388860472.746034"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "380"
-         endingLineNumber = "380"
-         landmarkName = "-update:withJoystickSpeed:andDirection:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "SideScroller/Classes/Character.m"
-         timestampString = "388860472.746034"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "383"
-         endingLineNumber = "383"
-         landmarkName = "-update:withJoystickSpeed:andDirection:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Block.m"
          timestampString = "388861672.974168"
          startingColumnNumber = "9223372036854775807"
@@ -59,25 +33,12 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "SideScroller/Classes/Character.m"
-         timestampString = "388860472.746034"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "188"
-         endingLineNumber = "188"
-         landmarkName = "-doBActionWithJoystickDirection:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Bullet.m"
-         timestampString = "388861672.974168"
+         timestampString = "388876405.867145"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "191"
-         endingLineNumber = "191"
+         startingLineNumber = "215"
+         endingLineNumber = "215"
          landmarkName = "-draw:withHorizontalOffset:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Bullet.m"
-         timestampString = "388861672.974168"
+         timestampString = "388876405.867145"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "171"
-         endingLineNumber = "171"
+         startingLineNumber = "195"
+         endingLineNumber = "195"
          landmarkName = "-update"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,12 +73,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Character.m"
-         timestampString = "388860472.746034"
+         timestampString = "388870962.30606"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "326"
-         endingLineNumber = "326"
-         landmarkName = "-update:withJoystickSpeed:andDirection:"
+         startingLineNumber = "536"
+         endingLineNumber = "536"
+         landmarkName = "-draw:withHorizontalOffset:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "SideScroller/Classes/Character.m"
+         timestampString = "388872057.723067"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "205"
+         endingLineNumber = "205"
+         landmarkName = "-updateAI:againstCharacter:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

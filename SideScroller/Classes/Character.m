@@ -233,10 +233,21 @@
         for (NSNumber *addon_key in self.addons){
             Addon *addon = [self.addons objectForKey:addon_key];
             [addon execute];
-            if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN)){
+            if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_COLLIDING_STRAIGHT_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_STRAIGHT_GUN)){
             
+                _BULLET_TYPE bulletType = [addon_key intValue] == ADDON_NONCOLLIDING_STRAIGHT_GUN ?NONCOLLIDING_STRAIGHT_BULLET : COLLIDING_STRAIGHT_BULLET;
+                if ([addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN){
+                    bulletType = NONCOLLIDING_LINEAR_BULLET;
+                } else if ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN) {
+                    bulletType = COLLIDING_LINEAR_BULLET;
+                } else if ([addon_key intValue] == ADDON_NONCOLLIDING_QUADRATIC_GUN){
+                    bulletType = NONCOLLIDING_QUADRATIC_BULLET;
+                } else if ([addon_key intValue] == ADDON_COLLIDING_QUADRATIC_GUN){
+                    bulletType = COLLIDING_QUADRATIC_BULLET;
+                }
+                
                 // fire a linear colliding bullet
-                Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:COLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x andY:self.position.y withDirection:direction andForce:self.bulletForce];
+                Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:bulletType ownedBy:self atX:self.position.x + self.characterSize.width / 2 andY:self.position.y + self.characterSize.height / 2 withDirection:direction andForce:self.bulletForce];
             
                 [self.bullets addObject:bullet];
                 
@@ -259,7 +270,6 @@
 }
 
 - (void) update:(long)ms withJoystickSpeed:(float)speed andDirection:(float)direction {
-    
     if (self.level.levelState != LEVEL_PLAYING){
         return;
     }
@@ -581,7 +591,7 @@
     
     // 0 -> 1, 1 -> 2, 2 -> 1, 1 -> 0
     int ret = frame == 1 && previousFrame == 2 ? 0 : frame + 1;
-    if (ret == 3) ret = 1;
+    if (ret >= 3) ret = 1;
     
     return ret;
 }

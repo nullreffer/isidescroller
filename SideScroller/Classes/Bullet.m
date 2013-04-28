@@ -75,10 +75,10 @@
         return true;
     }
     
-    
+    float actualDirection = self.direction;
     float direction = self.direction;
     if (self.bulletType == COLLIDING_STRAIGHT_BULLET || self.bulletType == NONCOLLIDING_STRAIGHT_BULLET) {
-        direction = fabs(direction) > M_PI_2 ? 0 : M_PI;
+        direction = fabs(direction) < M_PI_2 ? 0 : M_PI;
     }
     
     float new_x = self.position.x;
@@ -107,7 +107,7 @@
     new_x += velocity_x;
     new_y += velocity_y;
     
-    self.lastDirection = self.direction;
+    self.lastDirection = actualDirection;
     self.direction = atan2f(new_y - self.position.y, new_x - self.position.x);
     
     CGRect charRect = [self.bulletSprite enclosingRect];
@@ -148,6 +148,30 @@
     }
     
     if (!collided){
+        
+        Character* theman = self.owner.level.theman;
+        if (theman != self.owner && !theman.isDead) {
+            // can a man kill himself with his own bullets?
+        
+            CGRect rect2 = [theman.characterImage enclosingRect];
+        
+            // vertical rect intersection
+            // if the bottom of the char is greater than block's top
+            // or the top of the char is less than the block's bottom
+            if (bulletRect.origin.y > rect2.origin.y + rect2.size.height ||
+                bulletRect.origin.y + bulletRect.size.height < rect2.origin.y){
+                // no y intersection
+            }
+            // if the left of the char is greater than the block's right
+            // or the right of the char is less than the block's left
+            else if (bulletRect.origin.x > rect2.origin.x + rect2.size.width ||
+                     bulletRect.origin.x + bulletRect.size.width < rect2.origin.x){
+                // no x intersection
+            } else {
+                collided = true;
+                [theman removeLife];
+            }
+        }
         
         for (Character* character in self.owner.level.characters){
             // can a man kill himself with his own bullets?

@@ -122,7 +122,7 @@
         Character *character = [[Character alloc] initCharacterWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"enemy_1.png"] andLevel:self];
         if ([autoMoving isEqualToString:@"PURSUE_CHARACTER"]){
             character.autoMovement = PURSUE_CHARACTER;
-        } else if ([autoMoving isEqualToString:@"PURSUE_CHARACTER"]){
+        } else if ([autoMoving isEqualToString:@"STRAIGHT_MOVEMENT"]){
             character.autoMovement = STRAIGHT_MOVEMENT;
         } else {
             character.autoMovement = NO_MOVEMENT;
