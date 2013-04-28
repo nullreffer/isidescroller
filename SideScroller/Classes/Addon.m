@@ -23,6 +23,10 @@
     _ADDON_TYPE addonType = ADDON_NOTHING;
     if ([type isEqualToString:@"STAR"]){
         addonType = ADDON_STAR;
+    } else if ([type isEqualToString:@"COLLIDING_STRAIGHT_GUN"]){
+        addonType = ADDON_COLLIDING_STRAIGHT_GUN;
+    } else if ([type isEqualToString:@"NONCOLLIDING_STRAIGHT_GUN"]){
+        addonType = ADDON_NONCOLLIDING_STRAIGHT_GUN;
     } else if ([type isEqualToString:@"COLLIDING_LINEAR_GUN"]){
         addonType = ADDON_COLLIDING_LINEAR_GUN;
     } else if ([type isEqualToString:@"COLLIDING_QUADRATIC_GUN"]){
@@ -52,6 +56,10 @@
         
         if (type == ADDON_STAR){
             self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_star.png"]];
+        } else if (type == ADDON_COLLIDING_STRAIGHT_GUN){
+            self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_linear_gun.png"]];
+        } else if (type == ADDON_NONCOLLIDING_STRAIGHT_GUN){
+            self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_linear_gun.png"]];
         } else if (type == ADDON_COLLIDING_LINEAR_GUN){
             self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_linear_gun.png"]];
         } else if (type == ADDON_COLLIDING_QUADRATIC_GUN){

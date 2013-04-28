@@ -117,9 +117,31 @@
     do {
         positionX = [[TBXML textForElement:[TBXML childElementNamed:@"positionx" parentElement:characterElement]] intValue];
         positionY = [[TBXML textForElement:[TBXML childElementNamed:@"positiony" parentElement:characterElement]] intValue];
+        NSString* autoMoving = [TBXML textForElement:[TBXML childElementNamed:@"autoMove" parentElement:characterElement]];
+
         Character *character = [[Character alloc] initCharacterWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"enemy_1.png"] andLevel:self];
-            
+        if ([autoMoving isEqualToString:@"PURSUE_CHARACTER"]){
+            character.autoMovement = PURSUE_CHARACTER;
+        } else if ([autoMoving isEqualToString:@"PURSUE_CHARACTER"]){
+            character.autoMovement = STRAIGHT_MOVEMENT;
+        } else {
+            character.autoMovement = NO_MOVEMENT;
+        }
+        
+        TBXMLElement *characterAddonsElement = [TBXML childElementNamed:@"addons" parentElement:characterElement];
+        if (characterAddonsElement != nil){
+            TBXMLElement *characterAddonElement = characterAddonsElement->firstChild;
+            do {
+                NSString* addonType = [TBXML textForElement:characterAddonElement];
+                Addon* addon = [[Addon alloc] initAddonOfType:addonType andPositionX:positionX andPositionY:positionY];
+                [character.addons setObject:addon forKey:[NSNumber numberWithInt: addon.type]];
+                
+            } while ((characterAddonElement = characterAddonElement->nextSibling));
+        }
+        
+        
         [self.characters addObject:character];
+        
     } while ((characterElement = characterElement->nextSibling));
     
     TBXMLElement *addonsElement = [TBXML childElementNamed:@"addons" parentElement:self.config];

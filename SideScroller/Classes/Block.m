@@ -14,7 +14,6 @@
 @property CGPoint position;
 @property CGSize originalSize;
 
-@property bool isBroken;
 @property bool isHidden;
 
 @end
@@ -123,7 +122,7 @@
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
     } else if (self.BLOCK_TYPE == BLOCK_LADDER){
-        *new_new_x = movement.x + gravityOffset.x + velocity.x;
+        *new_new_x = movement.x + gravityOffset.x; //  + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
         
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height){
@@ -171,7 +170,7 @@
             *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
         }
     } else if (self.BLOCK_TYPE == BLOCK_LADDER){
-        *new_new_x = movement.x + gravityOffset.x + velocity.x;
+        *new_new_x = movement.x + gravityOffset.x; //  + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
         
         if (*new_new_y + character.characterSize.height < self.blockSprite.enclosingRect.origin.y ){
@@ -218,7 +217,7 @@
     if (self.BLOCK_TYPE == BLOCK_STAIRS){
         *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
     } else if (self.BLOCK_TYPE == BLOCK_LADDER) {
-        *new_new_x = movement.x + gravityOffset.x + velocity.x;
+        *new_new_x = movement.x + gravityOffset.x; // + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
@@ -254,7 +253,7 @@
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
         // *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
     } else if (self.BLOCK_TYPE == BLOCK_LADDER) {
-        *new_new_x = movement.x + gravityOffset.x + velocity.x;
+        *new_new_x = movement.x + gravityOffset.x; // + velocity.x;
         *new_new_y = movement.y + gravityOffset.y + velocity.y;
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];

@@ -17,6 +17,7 @@
 #define JUMP_SCALE 50.0
 #define SHOOT_DISTANCE 280.0
 #define INITIAL_JUMP_FACTOR 2
+#define NUMBER_OF_LIVES 90000
 
 @interface Character()
 
@@ -85,6 +86,9 @@
 
 @synthesize collidedBlocks = _collidedBlocks;
 
+@synthesize autoMovement = _autoMovement;
+@synthesize autoDirection = _autoDirection;
+
 - (id) initProtagonistWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level {
     if ([self initCharacterWithPositionX:x andPositionY:y andImage:image andLevel:level]){
     
@@ -125,7 +129,7 @@
         self.level = level;
         
         self.lifeSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"stats_life.png"]];
-        self.lives = 3;
+        self.lives = NUMBER_OF_LIVES;
         self.lifeRemovedCounter = 0;
         
         // one second
@@ -135,6 +139,9 @@
         self.bullets = [[NSMutableArray alloc] init];
         
         self.collidedBlocks = [[NSMutableArray alloc] init];
+        
+        self.autoMovement = NO_MOVEMENT;
+        self.autoDirection = -1;
         
         return self;
     }
@@ -192,15 +199,36 @@
 }
 
 - (void) updateAI:(long)ms againstCharacter:(Character*)theman {
+
+    float direction = self.autoDirection;
+    if (self.autoMovement == PURSUE_CHARACTER){
+        direction = atan2f(theman.position.y - self.position.y, theman.position.x - self.position.x);
+    }
     
     if (self.isDead || self.level.levelState != LEVEL_PLAYING){
         return;
     }
     
-    if ([MathUtil calculateDistance:self.position :theman.position] < SHOOT_DISTANCE){
-    
-        float direction = atan2f(theman.position.y - self.position.y, theman.position.x - self.position.x);
+    // float mDirection = direction;
+    // if (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP){
+    //     mDirection = theman.position.x < self.position.x ? M_PI : 0;
+    // } else {
+    //     mDirection = theman.position.y < self.position.y ? M_PI : 0;
+    // }
+
+    float joystickSpeed = 0;
+    if (self.autoMovement != NO_MOVEMENT){
+        // try to move closer to the man
+        int rand = arc4random_uniform(900);
+        if (rand % 897 == 0){
+            [self initiateJumpWithForce:0.5];
+        }
         
+        joystickSpeed = 0.2;
+    }
+    
+    if ([MathUtil calculateDistance:self.position :theman.position] < SHOOT_DISTANCE){
+
         // shoot!!!
         for (NSNumber *addon_key in self.addons){
             Addon *addon = [self.addons objectForKey:addon_key];
@@ -208,7 +236,7 @@
             if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN)){
             
                 // fire a linear colliding bullet
-                Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@""] ofType:COLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x andY:self.position.y withDirection:direction andForce:self.bulletForce];
+                Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:COLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x andY:self.position.y withDirection:direction andForce:self.bulletForce];
             
                 [self.bullets addObject:bullet];
                 
@@ -219,11 +247,8 @@
             }
         }
         
-        if (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP){
-            [self update:ms withJoystickSpeed:0 andDirection:theman.position.x < self.position.x ? M_PI : 0];
-        } else {
-            [self update:ms withJoystickSpeed:0 andDirection:theman.position.y < self.position.y ? M_PI : 0];
-        }
+        [self update:ms withJoystickSpeed:joystickSpeed andDirection:direction];
+
     } else {
         [self update:ms];
     }
@@ -404,6 +429,10 @@
         self.jumpForce = 0;
     }
     
+    if (intersect_bottom || intersect_left || intersect_right || intersect_top){
+        self.autoDirection *= -1; // flip direction on collision
+    }
+    
     if (intersect_bottom && self.level.gravityPosition == GRAVITY_BOTTOM){
         self.isJumping = false;
         self.jumpForce = 0;
@@ -422,7 +451,7 @@
     // check if the character acquired some addons
     // only protagonist should be able to get level addons
     if (self.isProtagonist) {
-        // reuse verical_rect, BUT it actuall contians final movement
+        // reuse verical_rect, BUT it actually contians final movement
         vertical_rect1 = CGRectMake(self.position.x < new_new_x ? self.position.x : new_new_x, self.position.y < new_new_y ? self.position.y : new_new_y, charRect.size.width + fabs(self.position.x - new_new_x), charRect.size.height + fabs(new_new_y - self.position.y));
         
         NSMutableArray* to_be_removed_addons = [[NSMutableArray alloc] init];
@@ -449,13 +478,38 @@
         }
         
         [self.level.addons removeObjectsInArray:to_be_removed_addons];
+        
+        // now check collision with enemies
+        for (Character* enemy in self.level.characters){
+            
+            rect2 = enemy.characterImage.enclosingRect;
+            
+            // vertical rect intersection
+            // if the bottom of the char is greater than block's top
+            // or the top of the char is less than the block's bottom
+            if (vertical_rect1.origin.y > rect2.origin.y + rect2.size.height ||
+                vertical_rect1.origin.y + vertical_rect1.size.height < rect2.origin.y){
+                // no y intersection
+            }
+            // if the left of the char is greater than the block's right
+            // or the right of the char is less than the block's left
+            else if (vertical_rect1.origin.x > rect2.origin.x + rect2.size.width ||
+                     vertical_rect1.origin.x + vertical_rect1.size.width < rect2.origin.x){
+                // no x intersection
+            } else {
+                [self removeLife];
+            }
+        }
     }
     
 
     if (!CGPointEqualToPoint(self.position, CGPointMake(new_new_x, new_new_y))) {
         self.lastPosition = self.position;
     }
-    self.level.horizontalOffset -= new_new_x - self.position.x;
+    if (self.isProtagonist){
+        self.level.horizontalOffset -= new_new_x - self.position.x;
+    }
+    
     self.position = CGPointMake(new_new_x, new_new_y);
     
     self.lifeRemovedCounter--;
@@ -492,7 +546,8 @@
         
         // draw lives
         float posy = 320.0 - 10.0 - self.lifeSprite.enclosingRect.size.height;
-        for (int x = 0; x < self.lives; x++){
+        int lives = self.lives > 5 ? 5 : self.lives;
+        for (int x = 0; x < lives; x++){
             float posx = 450 - x * (self.lifeSprite.enclosingRect.size.width + 10);
             [self.lifeSprite renderWithSize:self.lifeSprite.enclosingRect.size atX:posx andXOffset:0 andY:posy andYOffset:0];
         }

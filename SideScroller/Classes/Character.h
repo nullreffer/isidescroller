@@ -13,6 +13,12 @@
 
 @interface Character : NSObject
 
+typedef enum {
+    STRAIGHT_MOVEMENT,
+    PURSUE_CHARACTER,
+    NO_MOVEMENT
+} _AUTO_MOVE;
+
 @property bool isProtagonist;
 
 @property bool isDead;
@@ -25,6 +31,9 @@
 @property Level* level;
 
 @property NSMutableDictionary *addons;
+
+@property _AUTO_MOVE autoMovement;
+@property int autoDirection;
 
 - (id) initProtagonistWithPositionX:(int)x andPositionY:(int)y andImage:(UIImage*)image andLevel:(Level*)level;
 

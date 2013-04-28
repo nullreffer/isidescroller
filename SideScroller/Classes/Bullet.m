@@ -76,11 +76,16 @@
     }
     
     
+    float direction = self.direction;
+    if (self.bulletType == COLLIDING_STRAIGHT_BULLET || self.bulletType == NONCOLLIDING_STRAIGHT_BULLET) {
+        direction = fabs(direction) > M_PI_2 ? 0 : M_PI;
+    }
+    
     float new_x = self.position.x;
     float new_y = self.position.y;
     
-    float scale_x = cosf(self.direction); // right or left movement only
-    float scale_y = sinf(self.direction);
+    float scale_x = cosf(direction); // right or left movement only
+    float scale_y = sinf(direction);
     
     float speed = SPEED_SCALE * self.force;
     
@@ -117,6 +122,10 @@
         // check collision in level with all blocks
         
         for (Block *block in self.owner.level.blocks){
+            if (block.BLOCK_TYPE == BLOCK_LADDER || block.isBroken){
+                continue;
+            }
+            
             CGRect rect2 = [block.blockSprite enclosingRect];
             
             // vertical rect intersection

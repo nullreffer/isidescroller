@@ -34,6 +34,8 @@ typedef enum {
 
 @property _BLOCK_TYPE_ENUM BLOCK_TYPE;
 
+@property bool isBroken;
+
 @property Sprite *blockSprite;
 
 - (id) initBlockOfType:(NSString*) type andPositionX:(int)x andPositionY:(int)y;
