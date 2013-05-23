@@ -367,7 +367,7 @@
             self.jumpCounter = 0;
         }
         else {
-            gravityOffset = CGPointMake(0, self.jumpForce);
+            gravityOffset = CGPointMake(0, -self.jumpForce);
             
             new_y += self.jumpForce * self.jumpForce;
             // new_y += self.jumpForce;
@@ -461,7 +461,8 @@
     
     }
 
-    if (self.linearJump && self.jumpForce > 0){
+    if (self.linearJump && ((self.jumpForce > 0 && self.level.gravityPosition == GRAVITY_BOTTOM)
+                         || (self.jumpForce < 0 && self.level.gravityPosition == GRAVITY_TOP))){
         self.jumpForce = 0;
     }
     

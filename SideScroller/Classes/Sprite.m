@@ -30,6 +30,7 @@
     if ((self = [super init])) {
 
         self.effect = [[GLKBaseEffect alloc] init];
+        // 568 for iphone 5
         GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, 480, 0, 320, -1024, 1024);
         self.effect.transform.projectionMatrix = projectionMatrix;
         

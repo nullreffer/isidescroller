@@ -171,7 +171,7 @@
     if (self.isBroken){
         return;
     }
-    
+
     if (self.BLOCK_TYPE == BLOCK_STAIRS){
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
