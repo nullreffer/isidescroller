@@ -55,17 +55,17 @@
             blockImage = [UIImage imageNamed:@"block_standard.png" ];
             self.BLOCK_TYPE = BLOCK_BREAKABLE;
         } else if ([type isEqualToString:@"GRAVITY_LEFT"]){
-            blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = GRAVITY_LEFT;
+            blockImage = [UIImage imageNamed:@"block_gravity_left.png" ];
+            self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_LEFT;
         } else if ([type isEqualToString:@"GRAVITY_RIGHT"]){
-            blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = GRAVITY_RIGHT;
-        } else if ([type isEqualToString:@"GRAVITY_TOM"]){
-            blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = GRAVITY_TOP;
+            blockImage = [UIImage imageNamed:@"block_gravity_right.png" ];
+            self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_RIGHT;
+        } else if ([type isEqualToString:@"GRAVITY_TOP"]){
+            blockImage = [UIImage imageNamed:@"block_gravity_up.png" ];
+            self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_TOP;
         } else if ([type isEqualToString:@"GRAVITY_BOTTOM"]){
-            blockImage = [UIImage imageNamed:@"block_spikes.png" ];
-            self.BLOCK_TYPE = GRAVITY_BOTTOM;
+            blockImage = [UIImage imageNamed:@"block_gravity_down.png" ];
+            self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_BOTTOM;
         } else {
             blockImage = [UIImage imageNamed:@"block_standard.png"];
             self.BLOCK_TYPE = BLOCK_STANDARD;
@@ -149,6 +149,13 @@
                 *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
             }
         }
+    } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_TOP){
+        character.level.gravityPosition = GRAVITY_TOP;
+        
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+        
     } else if (self.BLOCK_TYPE == BLOCK_FINISH){
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
@@ -197,13 +204,20 @@
                 *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
             }
         }
-    } else if (self.BLOCK_TYPE == BLOCK_FINISH){
+    } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_BOTTOM){
+        character.level.gravityPosition = GRAVITY_BOTTOM;
+        
+        if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
+        }
+        
+    }else if (self.BLOCK_TYPE == BLOCK_FINISH){
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
         }
     } else {
-        if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
-            *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+        if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
     }
     

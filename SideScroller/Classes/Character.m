@@ -133,7 +133,7 @@
         self.lifeRemovedCounter = 0;
         
         // one second
-        self.bulletFiredCounterReset = 30;
+        self.bulletFiredCounterReset = 90;
         self.bulletFiredCounter = 0;
         self.bulletForce = 10.0;
         self.bullets = [[NSMutableArray alloc] init];
@@ -157,20 +157,28 @@
     if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_JETPACK]]){
         self.linearJump = true;
         
-        self.jumpForce = force * 4;
+        self.jumpForce = force * 2;
     } else {
         if (self.isJumping)
             return;
         
         // JETPACK takes precedece against jumping shoes
         if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_JUMPING_SHOES]]){
-            force *= 2 * force;
+            // force *= 2 * force;
+            // self.jumpForce = force * JUMP_SCALE;
+            self.jumpForce = force * 8;
+        } else {
+            // self.jumpForce = force * JUMP_SCALE;
+            self.jumpForce = force * 6;
         }
-        self.jumpForce = force * JUMP_SCALE;
     }
     
     self.jumpCounter = 0;
     self.isJumping = true;
+    
+    if (self.level.gravityPosition == GRAVITY_TOP){
+        self.jumpForce = -self.jumpForce;
+    }
 }
 
 - (void) doBActionWithJoystickDirection:(float)direction {
@@ -319,9 +327,12 @@
     }
     if (self.level.gravityPosition == GRAVITY_BOTTOM){
         if (self.jumpForce > 1) {
-            new_y += self.jumpForce;
+            // new_y += self.jumpForce;
+            new_y += self.jumpForce * self.jumpForce;
             if (!self.linearJump) {
-                self.jumpForce = self.jumpForce / 2.0;
+                // self.jumpForce = self.jumpForce / 2.0;
+                self.jumpForce--;
+                // following was already commented out
                 // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
             }
         } else if (self.jumpForce <= 1 && self.jumpForce > -1){
@@ -331,15 +342,24 @@
         else {
             // jump Force is negative here
             gravityOffset = CGPointMake(0, -self.jumpForce);
-            new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
+            
+            new_y -= self.jumpForce * self.jumpForce;
+            // new_y += self.jumpForce;
+            // self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
+            
+            self.jumpForce--;
+            
+            // following was already commented out
             // self.jumpCounter -= self.jumpCounter * self.jumpCounter;
         }
     } else if (self.level.gravityPosition == GRAVITY_TOP) {
         if (self.jumpForce < -1) {
-            new_y += self.jumpForce;
+            // new_y += self.jumpForce;
+            new_y -= self.jumpForce * self.jumpForce;
             if (!self.linearJump) {
-                self.jumpForce = self.jumpForce / 2.0;
+                // self.jumpForce = self.jumpForce / 2.0;
+                self.jumpForce++;
+                // following was already commented out
                 // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
             }
         } else if (self.jumpForce >= -1 && self.jumpForce < 1){
@@ -348,9 +368,15 @@
         }
         else {
             gravityOffset = CGPointMake(0, self.jumpForce);
-            new_y += self.jumpForce;
-            self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
+            
+            new_y += self.jumpForce * self.jumpForce;
+            // new_y += self.jumpForce;
+            // self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
+            
+            // following was already commented out
             // self.jumpCounter += self.jumpCounter * self.jumpCounter;
+            
+            self.jumpForce++;
         }
     }
     
@@ -546,7 +572,7 @@
             self.characterImage.framesSprite.alpha = 1.0;
         }
         
-        [self.characterImage render:ms frame:frame withSize:self.characterSize atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:fabs(self.lastDirection) > M_PI_2 flippedVertically:NO];
+        [self.characterImage render:ms frame:frame withSize:self.characterSize atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:fabs(self.lastDirection) > M_PI_2 flippedVertically:self.level.gravityPosition == GRAVITY_TOP ? YES : NO];
         
     } else if (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT) {
         // TODO
