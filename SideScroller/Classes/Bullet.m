@@ -57,6 +57,10 @@
         
         self.firstUpdate = YES;
         
+        if (self.bulletType == COLLIDING_QUADRATIC_BULLET || self.bulletType == NONCOLLIDING_QUADRATIC_BULLET){
+            self.force *= 3;
+        }
+        
         return self;
     }
     
@@ -92,20 +96,61 @@
     float velocity_x = speed * scale_x;
     float velocity_y = speed * scale_y;
     
+    new_x += velocity_x + 2;
+    new_y += velocity_y;
+    
     if (self.bulletType == COLLIDING_QUADRATIC_BULLET || self.bulletType == NONCOLLIDING_QUADRATIC_BULLET){
         
         // quadratic reduces force
-        self.force /= 2.0;
+        // does it ? self.force /= 2.0;
+        // self.force *= 1.1;
         
         // and changes velocity towards gravity
+        /*
         if (self.owner.level.gravityPosition == GRAVITY_BOTTOM){
             velocity_y -= self.gravityForce;
-            self.gravityForce *= 2.0;
+            self.gravityForce *= 1.5;
         }
+         */
+        
+        if (self.owner.level.gravityPosition == GRAVITY_BOTTOM){
+            if (self.force > 1) {
+                // new_y += self.jumpForce;
+                new_y += velocity_x * velocity_x / 4;
+                self.force--;
+            } else if (self.force <= 1 && self.force > -1){
+                self.force = -1;
+            }
+            else {
+                
+                // new_y -= velocity_x * velocity_x / 4;
+                new_y -= self.force * self.force;
+                self.force--;
+                
+                if (self.force < -4){
+                    self.force = -4;
+                }
+            }
+        } else if (self.owner.level.gravityPosition == GRAVITY_TOP) {
+            if (self.force < -1) {
+                // new_y += self.jumpForce;
+                new_y -= velocity_x * velocity_x / 4;
+                self.force++;
+            } else if (self.force >= -1 && self.force < 1){
+                self.force = 1;
+            }
+            else {
+                
+                new_y += velocity_x * velocity_x / 4; // ^2 hence quadratic
+                self.force++;
+                
+                if (self.force > 4){
+                    self.force = 4;
+                }
+            }
+        }
+        
     }
-    
-    new_x += velocity_x;
-    new_y += velocity_y;
     
     self.lastDirection = actualDirection;
     self.direction = atan2f(new_y - self.position.y, new_x - self.position.x);

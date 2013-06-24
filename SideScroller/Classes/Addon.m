@@ -39,6 +39,8 @@
         addonType = ADDON_RED_KEY;
     } else if ([type isEqualToString:@"BLUE_KEY"]){
         addonType = ADDON_BLUE_KEY;
+    } else if ([type isEqualToString:@"GREEN_KEY"]){
+        addonType = ADDON_GREEN_KEY;
     } else if ([type isEqualToString:@"JETPACK"]){
         addonType = ADDON_JETPACK;
     } else if ([type isEqualToString:@"JUMPING_SHOES"]){
@@ -71,6 +73,8 @@
         } else if (type == ADDON_RED_KEY){
             self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_red_key.png"]];
         } else if (type == ADDON_BLUE_KEY){
+            self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_blue_key.png"]];
+        } else if (type == ADDON_GREEN_KEY){
             self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_blue_key.png"]];
         } else if (type == ADDON_JETPACK){
             self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_jetpack.png"]];

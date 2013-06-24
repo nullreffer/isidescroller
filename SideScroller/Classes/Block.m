@@ -42,6 +42,9 @@
         } else if ([type isEqualToString:@"DOOR_BLUE"]){
             blockImage = [UIImage imageNamed:@"block_blue_door.png" ];
             self.BLOCK_TYPE = BLOCK_DOOR_BLUE;
+        } else if ([type isEqualToString:@"DOOR_GREEN"]){
+            blockImage = [UIImage imageNamed:@"block_blue_door.png" ];
+            self.BLOCK_TYPE = BLOCK_DOOR_GREEN;
         } else if ([type isEqualToString:@"SPIKES"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = BLOCK_SPIKES;
@@ -149,6 +152,14 @@
                 *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
             }
         }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_GREEN){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_GREEN_KEY]]){
+            self.isBroken = true;
+        } else {
+            if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+                *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+            }
+        }
     } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_TOP){
         character.level.gravityPosition = GRAVITY_TOP;
         
@@ -204,6 +215,14 @@
                 *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
             }
         }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_GREEN){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_GREEN_KEY]]){
+            self.isBroken = true;
+        } else {
+            if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
+                *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
+            }
+        }
     } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_BOTTOM){
         character.level.gravityPosition = GRAVITY_BOTTOM;
         
@@ -211,7 +230,7 @@
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
         
-    }else if (self.BLOCK_TYPE == BLOCK_FINISH){
+    } else if (self.BLOCK_TYPE == BLOCK_FINISH){
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
         }
@@ -248,6 +267,12 @@
         } else {
             *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
         }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_GREEN){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_GREEN_KEY]]){
+            self.isBroken = true;
+        } else {
+            *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+        }
     } else if (self.BLOCK_TYPE == BLOCK_FINISH){
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
@@ -280,6 +305,12 @@
         }
     } else if (self.BLOCK_TYPE == BLOCK_DOOR_RED){
         if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_RED_KEY]]){
+            self.isBroken = true;
+        } else {
+            *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_DOOR_GREEN){
+        if ([character.addons objectForKey:[NSNumber numberWithInt:ADDON_GREEN_KEY]]){
             self.isBroken = true;
         } else {
             *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;

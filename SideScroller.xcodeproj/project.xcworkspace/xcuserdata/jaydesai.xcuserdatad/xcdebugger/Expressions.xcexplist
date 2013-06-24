@@ -18,6 +18,14 @@
          contextName = "-[Sprite initWithRect:croppedTo:]:Sprite.m">
       </ContextState>
       <ContextState
+         contextName = "-[Bullet update]:Bullet.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "new_x">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "-[Block onCollideFromTop:withMovement:retX:retY:]:Block.m">
       </ContextState>
       <ContextState
@@ -37,10 +45,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[MainViewController drawGame]:MainViewController.m">
+         contextName = "-[Block onCollideFromTop:withMovement:andGravityOffset:retX:retY:]:Block.m">
       </ContextState>
       <ContextState
-         contextName = "-[Block onCollideFromTop:withMovement:andGravityOffset:retX:retY:]:Block.m">
+         contextName = "-[MainViewController drawGame]:MainViewController.m">
       </ContextState>
       <ContextState
          contextName = "-[Level initWithConfig:]:Level.m">

@@ -5,8 +5,6 @@
     <levels>
         <level>
             <id>1</id>
-            <width>1000</width>
-            <height>480</height>
             <blocks>
                 <block>
                     <type>LADDER</type>
@@ -101,7 +99,7 @@
                     <positiony>82</positiony>
                 </block>
                 <block>
-                    <type>GRAVITY_TOP</type>
+                    <type>STANDARD</type>
                     <positionx>384</positionx>
                     <positiony>50</positiony>
                 </block>
@@ -142,7 +140,17 @@
                 </block>
                 <block>
                     <type>STANDARD</type>
+                    <positionx>576</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>608</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>640</positionx>
                     <positiony>50</positiony>
                 </block>
                 <block>
@@ -152,7 +160,17 @@
                 </block>
                 <block>
                     <type>STANDARD</type>
+                    <positionx>704</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>736</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>768</positionx>
                     <positiony>50</positiony>
                 </block>
                 <block>
@@ -162,22 +180,62 @@
                 </block>
                 <block>
                     <type>STANDARD</type>
+                    <positionx>832</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>864</positionx>
                     <positiony>50</positiony>
                 </block>
                 <block>
-                    <type>SPIKES</type>
+                    <type>STANDARD</type>
+                    <positionx>896</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>928</positionx>
                     <positiony>50</positiony>
                 </block>
                 <block>
-                    <type>SPIKES</type>
+                    <type>STANDARD</type>
+                    <positionx>960</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>992</positionx>
                     <positiony>50</positiony>
                 </block>
                 <block>
-                    <type>SPIKES</type>
+                    <type>STANDARD</type>
+                    <positionx>1024</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>1056</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1088</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1120</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1152</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>GRAVITY_TOP</type>
+                    <positionx>1184</positionx>
                     <positiony>50</positiony>
                 </block>
                 
@@ -265,7 +323,17 @@
                 </block>
                 <block>
                     <type>STANDARD</type>
+                    <positionx>576</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>608</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>640</positionx>
                     <positiony>250</positiony>
                 </block>
                 <block>
@@ -275,7 +343,17 @@
                 </block>
                 <block>
                     <type>STANDARD</type>
+                    <positionx>704</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
                     <positionx>736</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>768</positionx>
                     <positiony>250</positiony>
                 </block>
                 <block>
@@ -283,10 +361,70 @@
                     <positionx>800</positionx>
                     <positiony>250</positiony>
                 </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>832</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>864</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>896</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>928</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>960</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>992</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1024</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1056</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1088</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1120</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>STANDARD</type>
+                    <positionx>1152</positionx>
+                    <positiony>250</positiony>
+                </block>
+                <block>
+                    <type>GRAVITY_BOTTOM</type>
+                    <positionx>1184</positionx>
+                    <positiony>250</positiony>
+                </block>
             </blocks>
             <addons>
                 <addon>
-                    <type>NONCOLLIDING_LINEAR_GUN</type>
+                    <type>NONCOLLIDING_QUADRATIC_GUN</type>
                     <positionx>352</positionx>
                     <positiony>146</positiony>
                 </addon>

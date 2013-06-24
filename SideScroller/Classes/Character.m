@@ -135,7 +135,7 @@
         // one second
         self.bulletFiredCounterReset = 90;
         self.bulletFiredCounter = 0;
-        self.bulletForce = 10.0;
+        self.bulletForce = 4.0;
         self.bullets = [[NSMutableArray alloc] init];
         
         self.collidedBlocks = [[NSMutableArray alloc] init];
@@ -190,7 +190,15 @@
     for (NSNumber *addon_key in self.addons){
         Addon *addon = [self.addons objectForKey:addon_key];
         [addon execute];
-        if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN)){
+        if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_QUADRATIC_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_QUADRATIC_GUN)){
+            
+            // fire a linear colliding bullet
+            Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:[addon_key intValue] == ADDON_COLLIDING_QUADRATIC_GUN ? COLLIDING_QUADRATIC_BULLET : NONCOLLIDING_QUADRATIC_BULLET ownedBy:self atX:self.position.x + (self.characterSize.width / 2) andY:self.position.y + (self.characterSize.height / 2) withDirection:self.lastDirection andForce:self.bulletForce];
+            
+            [self.bullets addObject:bullet];
+            
+            self.bulletFiredCounter = self.bulletFiredCounterReset;
+        } else if (self.bulletFiredCounter <= 0 && ([addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN || [addon_key intValue] == ADDON_NONCOLLIDING_LINEAR_GUN)){
             
             // fire a linear colliding bullet
             Bullet* bullet = [[Bullet alloc] initWithImage:[UIImage imageNamed:@"bullet_1.png"] ofType:[addon_key intValue] == ADDON_COLLIDING_LINEAR_GUN ? COLLIDING_LINEAR_BULLET : NONCOLLIDING_LINEAR_BULLET ownedBy:self atX:self.position.x + (self.characterSize.width / 2) andY:self.position.y + (self.characterSize.height / 2) withDirection:self.lastDirection andForce:self.bulletForce];

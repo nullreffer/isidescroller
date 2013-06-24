@@ -34,8 +34,7 @@ typedef enum {
     GRAVITY_NONE
 } _GRAVITY_POSITION;
 
-@property int width;
-@property int height;
+
 
 @property float horizontalOffset;
 

@@ -40,8 +40,6 @@
 @synthesize messageRect = _messageRect;
 @synthesize messageCounter = _messageCounter;
 
-@synthesize width = _width;
-@synthesize height = _height;
 @synthesize blocks = _blocks;
 @synthesize theman = _theman;
 @synthesize characters = _characters;
@@ -73,13 +71,7 @@
 }
 
 - (void)load {
-        
-    NSString *levelWidth = [TBXML textForElement:[TBXML childElementNamed:@"width" parentElement:self.config]];
-    self.width = [levelWidth intValue];
-        
-    NSString *levelHeight = [TBXML textForElement:[TBXML childElementNamed:@"height" parentElement:self.config]];
-    self.height = [levelHeight intValue];
-    
+
     TBXMLElement *playbgImageNameElement = [TBXML childElementNamed:@"playbg" parentElement:self.config];
     if (playbgImageNameElement != nil && [UIImage imageNamed:[TBXML textForElement:playbgImageNameElement]]){
         self.levelBg = [[Sprite alloc] initWithImage:[UIImage imageNamed:[TBXML textForElement:playbgImageNameElement]]];
