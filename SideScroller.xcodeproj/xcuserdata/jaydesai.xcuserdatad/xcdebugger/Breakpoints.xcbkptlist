@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Bullet.m"
-         timestampString = "393727354.042563"
+         timestampString = "393733257.536124"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "260"
-         endingLineNumber = "260"
+         startingLineNumber = "268"
+         endingLineNumber = "268"
          landmarkName = "-draw:withHorizontalOffset:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Bullet.m"
-         timestampString = "393727354.042563"
+         timestampString = "393733257.536124"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "240"
-         endingLineNumber = "240"
+         startingLineNumber = "248"
+         endingLineNumber = "248"
          landmarkName = "-update"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Bullet.m"
-         timestampString = "393726428.367842"
+         timestampString = "393733257.536124"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "117"
-         endingLineNumber = "117"
+         startingLineNumber = "132"
+         endingLineNumber = "132"
          landmarkName = "-update"
          landmarkType = "5">
       </FileBreakpoint>

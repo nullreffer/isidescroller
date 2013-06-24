@@ -21,7 +21,16 @@
          contextName = "-[Bullet update]:Bullet.m">
          <PersistentStrings>
             <PersistentString
+               value = "scale_y">
+            </PersistentString>
+            <PersistentString
                value = "new_x">
+            </PersistentString>
+            <PersistentString
+               value = "scale_x">
+            </PersistentString>
+            <PersistentString
+               value = "direction">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

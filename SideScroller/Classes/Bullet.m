@@ -27,6 +27,8 @@
 // hack (temporary maybe)
 @property bool firstUpdate;
 
+@property float directionConstant;
+
 @end
 
 @implementation Bullet
@@ -61,6 +63,8 @@
             self.force *= 3;
         }
         
+        self.directionConstant = 1;
+        
         return self;
     }
     
@@ -89,14 +93,14 @@
     float new_y = self.position.y;
     
     float scale_x = cosf(direction); // right or left movement only
-    float scale_y = sinf(direction);
+    float scale_y = sinf(direction) * self.directionConstant;
     
     float speed = SPEED_SCALE * self.force;
     
     float velocity_x = speed * scale_x;
     float velocity_y = speed * scale_y;
     
-    new_x += velocity_x + 2;
+    new_x += velocity_x * 2;
     new_y += velocity_y;
     
     if (self.bulletType == COLLIDING_QUADRATIC_BULLET || self.bulletType == NONCOLLIDING_QUADRATIC_BULLET){
@@ -120,15 +124,17 @@
                 self.force--;
             } else if (self.force <= 1 && self.force > -1){
                 self.force = -1;
+                
+                self.directionConstant = -1;
             }
             else {
                 
-                // new_y -= velocity_x * velocity_x / 4;
-                new_y -= self.force * self.force;
+                new_y -= velocity_x * velocity_x / 4;
+                // new_y -= self.force * self.force;
                 self.force--;
                 
                 if (self.force < -4){
-                    self.force = -4;
+                    // self.force = -4;
                 }
             }
         } else if (self.owner.level.gravityPosition == GRAVITY_TOP) {
@@ -145,15 +151,17 @@
                 self.force++;
                 
                 if (self.force > 4){
-                    self.force = 4;
+                    // self.force = 4;
                 }
             }
         }
         
+           // NSLog(@"Direction: %f\n", self.direction);
+        
     }
     
     self.lastDirection = actualDirection;
-    self.direction = atan2f(new_y - self.position.y, new_x - self.position.x);
+    self.direction = self.directionConstant > 0 ? atan2f((new_y - self.position.y) , (new_x - self.position.x)) : atan2f((self.position.y - new_y) , (self.position.x - new_x));
     
     CGRect charRect = [self.bulletSprite enclosingRect];
     CGRect bulletRect = CGRectMake(self.position.x < new_x ? self.position.x : new_x, self.position.y < new_y ? self.position.y : new_y, charRect.size.width + fabs(self.position.x - new_x), charRect.size.height + fabs(new_y - self.position.y));
