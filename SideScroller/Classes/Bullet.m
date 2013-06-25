@@ -27,8 +27,6 @@
 // hack (temporary maybe)
 @property bool firstUpdate;
 
-// @property float directionConstant;
-
 @end
 
 @implementation Bullet
@@ -62,8 +60,6 @@
         if (self.bulletType == COLLIDING_QUADRATIC_BULLET || self.bulletType == NONCOLLIDING_QUADRATIC_BULLET){
             self.force *= 3;
         }
-        
-        // self.directionConstant = 1;
         
         return self;
     }
@@ -101,6 +97,7 @@
     float velocity_y = speed * scale_y;
     
     new_x += velocity_x + (2 * (scale_x < 0 ? -1 : 1));
+
     new_y += velocity_y;
     
     if (self.bulletType == COLLIDING_QUADRATIC_BULLET || self.bulletType == NONCOLLIDING_QUADRATIC_BULLET){
@@ -126,8 +123,6 @@
                 self.force = -1;
                 
                 new_y -= velocity_x * velocity_x / 4;
-                
-                // self.directionConstant = -1;
             }
             else {
                 
@@ -160,7 +155,7 @@
             }
         }
         
-           NSLog(@"%f) from %f to %f, from (%f, %f) to (%f, %f) = %f\n", self.force, self.direction, atan2f((new_y - self.position.y) , (new_x - self.position.x)), self.position.x, self.position.y, new_x, new_y, atan2f((new_y - self.position.y) , (new_x - self.position.x)));
+        // NSLog(@"%f) from %f to %f, from (%f, %f) to (%f, %f) = %f\n", self.force, self.direction, atan2f((new_y - self.position.y) , (new_x - self.position.x)), self.position.x, self.position.y, new_x, new_y, atan2f((new_y - self.position.y) , (new_x - self.position.x)));
         
     }
     

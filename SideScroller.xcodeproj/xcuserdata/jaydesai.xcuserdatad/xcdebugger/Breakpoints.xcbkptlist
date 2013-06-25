@@ -26,7 +26,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "275"
          endingLineNumber = "275"
-         landmarkName = "-draw:withHorizontalOffset:"
+         landmarkName = "-update"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
