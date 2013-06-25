@@ -100,7 +100,7 @@
     float velocity_x = speed * scale_x;
     float velocity_y = speed * scale_y;
     
-    new_x += velocity_x * 2;
+    new_x += velocity_x + (2 * (scale_x < 0 ? -1 : 1));
     new_y += velocity_y;
     
     if (self.bulletType == COLLIDING_QUADRATIC_BULLET || self.bulletType == NONCOLLIDING_QUADRATIC_BULLET){
