@@ -27,7 +27,7 @@
 // hack (temporary maybe)
 @property bool firstUpdate;
 
-@property float directionConstant;
+// @property float directionConstant;
 
 @end
 
@@ -63,7 +63,7 @@
             self.force *= 3;
         }
         
-        self.directionConstant = 1;
+        // self.directionConstant = 1;
         
         return self;
     }
@@ -93,9 +93,9 @@
     float new_y = self.position.y;
     
     float scale_x = cosf(direction); // right or left movement only
-    float scale_y = sinf(direction) * self.directionConstant;
+    float scale_y = sinf(direction); // * self.directionConstant;
     
-    float speed = SPEED_SCALE * self.force;
+    float speed = SPEED_SCALE * abs(self.force);
     
     float velocity_x = speed * scale_x;
     float velocity_y = speed * scale_y;
@@ -125,7 +125,9 @@
             } else if (self.force <= 1 && self.force > -1){
                 self.force = -1;
                 
-                self.directionConstant = -1;
+                new_y -= velocity_x * velocity_x / 4;
+                
+                // self.directionConstant = -1;
             }
             else {
                 
@@ -144,6 +146,8 @@
                 self.force++;
             } else if (self.force >= -1 && self.force < 1){
                 self.force = 1;
+                
+                // self.directionConstant = -1;
             }
             else {
                 
@@ -156,12 +160,13 @@
             }
         }
         
-           // NSLog(@"Direction: %f\n", self.direction);
+           NSLog(@"%f) from %f to %f, from (%f, %f) to (%f, %f) = %f\n", self.force, self.direction, atan2f((new_y - self.position.y) , (new_x - self.position.x)), self.position.x, self.position.y, new_x, new_y, atan2f((new_y - self.position.y) , (new_x - self.position.x)));
         
     }
     
     self.lastDirection = actualDirection;
-    self.direction = self.directionConstant > 0 ? atan2f((new_y - self.position.y) , (new_x - self.position.x)) : atan2f((self.position.y - new_y) , (self.position.x - new_x));
+    // self.direction = self.directionConstant > 0 ? atan2f((new_y - self.position.y) , (new_x - self.position.x)) : atan2f((new_y - self.position.y) , (self.position.x - new_x));
+    self.direction = atan2f((new_y - self.position.y) , (new_x - self.position.x)) ;
     
     CGRect charRect = [self.bulletSprite enclosingRect];
     CGRect bulletRect = CGRectMake(self.position.x < new_x ? self.position.x : new_x, self.position.y < new_y ? self.position.y : new_y, charRect.size.width + fabs(self.position.x - new_x), charRect.size.height + fabs(new_y - self.position.y));
@@ -265,7 +270,9 @@
     
     self.bulletSprite.quad = quad;
     
-    [self.bulletSprite renderWithSize:self.bulletSprite.enclosingRect.size andRotation:self.direction atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:NO flippedVertically:NO];
+    bool flip = 0 ; //self.directionConstant <= 0;
+    
+    [self.bulletSprite renderWithSize:self.bulletSprite.enclosingRect.size andRotation:self.direction atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0 flippedHorizontally:flip flippedVertically:flip];
 }
 
 @end
