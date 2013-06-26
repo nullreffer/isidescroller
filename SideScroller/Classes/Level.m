@@ -102,7 +102,7 @@
         
     self.theman = [[Character alloc] initProtagonistWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"character_main.png"] andLevel:self];
         
-    TBXMLElement *charactersElement = [TBXML childElementNamed:@"characters" parentElement:self.config];
+    TBXMLElement *charactersElement = [TBXML childElementNamed:@"enemies" parentElement:self.config];
     TBXMLElement *characterElement = charactersElement->firstChild;
         
     self.characters = [[NSMutableArray alloc] init];

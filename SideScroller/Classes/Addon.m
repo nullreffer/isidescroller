@@ -23,27 +23,27 @@
     _ADDON_TYPE addonType = ADDON_NOTHING;
     if ([type isEqualToString:@"STAR"]){
         addonType = ADDON_STAR;
-    } else if ([type isEqualToString:@"COLLIDING_STRAIGHT_GUN"]){
+    } else if ([type isEqualToString:@"ADDON_COLLIDING_STRAIGHT_GUN"]){
         addonType = ADDON_COLLIDING_STRAIGHT_GUN;
-    } else if ([type isEqualToString:@"NONCOLLIDING_STRAIGHT_GUN"]){
+    } else if ([type isEqualToString:@"ADDON_NONCOLLIDING_STRAIGHT_GUN"]){
         addonType = ADDON_NONCOLLIDING_STRAIGHT_GUN;
-    } else if ([type isEqualToString:@"COLLIDING_LINEAR_GUN"]){
+    } else if ([type isEqualToString:@"ADDON_COLLIDING_LINEAR_GUN"]){
         addonType = ADDON_COLLIDING_LINEAR_GUN;
-    } else if ([type isEqualToString:@"COLLIDING_QUADRATIC_GUN"]){
+    } else if ([type isEqualToString:@"ADDON_COLLIDING_QUADRATIC_GUN"]){
         addonType = ADDON_COLLIDING_QUADRATIC_GUN;
-    } else if ([type isEqualToString:@"NONCOLLIDING_LINEAR_GUN"]){
+    } else if ([type isEqualToString:@"ADDON_NONCOLLIDING_LINEAR_GUN"]){
         addonType = ADDON_NONCOLLIDING_LINEAR_GUN;
-    } else if ([type isEqualToString:@"NONCOLLIDING_QUADRATIC_GUN"]){
+    } else if ([type isEqualToString:@"ADDON_NONCOLLIDING_QUADRATIC_GUN"]){
         addonType = ADDON_NONCOLLIDING_QUADRATIC_GUN;
-    } else if ([type isEqualToString:@"RED_KEY"]){
+    } else if ([type isEqualToString:@"ADDON_RED_KEY"]){
         addonType = ADDON_RED_KEY;
-    } else if ([type isEqualToString:@"BLUE_KEY"]){
+    } else if ([type isEqualToString:@"ADDON_BLUE_KEY"]){
         addonType = ADDON_BLUE_KEY;
-    } else if ([type isEqualToString:@"GREEN_KEY"]){
+    } else if ([type isEqualToString:@"ADDON_GREEN_KEY"]){
         addonType = ADDON_GREEN_KEY;
-    } else if ([type isEqualToString:@"JETPACK"]){
+    } else if ([type isEqualToString:@"ADDON_JETPACK"]){
         addonType = ADDON_JETPACK;
-    } else if ([type isEqualToString:@"JUMPING_SHOES"]){
+    } else if ([type isEqualToString:@"ADDON_JUMPING_SHOES"]){
         addonType = ADDON_JUMPING_SHOES;
     }
     

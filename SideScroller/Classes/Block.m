@@ -33,40 +33,40 @@
         
         UIImage *blockImage;
         
-        if ([type isEqualToString:@"FINISH"]){
+        if ([type isEqualToString:@"BLOCK_FINISH"]){
             blockImage = [UIImage imageNamed:@"block_finish.png" ];
             self.BLOCK_TYPE = BLOCK_FINISH;
-        } else if ([type isEqualToString:@"DOOR_RED"]){
+        } else if ([type isEqualToString:@"BLOCK_DOOR_RED"]){
             blockImage = [UIImage imageNamed:@"block_red_door.png" ];
             self.BLOCK_TYPE = BLOCK_DOOR_RED;
-        } else if ([type isEqualToString:@"DOOR_BLUE"]){
+        } else if ([type isEqualToString:@"BLOCK_DOOR_BLUE"]){
             blockImage = [UIImage imageNamed:@"block_blue_door.png" ];
             self.BLOCK_TYPE = BLOCK_DOOR_BLUE;
-        } else if ([type isEqualToString:@"DOOR_GREEN"]){
-            blockImage = [UIImage imageNamed:@"block_blue_door.png" ];
+        } else if ([type isEqualToString:@"BLOCK_DOOR_GREEN"]){
+            blockImage = [UIImage imageNamed:@"block_green_door.png" ];
             self.BLOCK_TYPE = BLOCK_DOOR_GREEN;
-        } else if ([type isEqualToString:@"SPIKES"]){
+        } else if ([type isEqualToString:@"BLOCK_SPIKES"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = BLOCK_SPIKES;
-        } else if ([type isEqualToString:@"STAIRS"]){
+        } else if ([type isEqualToString:@"BLOCK_STAIRS"]){
             blockImage = [UIImage imageNamed:@"block_stairs.png" ];
             self.BLOCK_TYPE = BLOCK_STAIRS;
-        }  else if ([type isEqualToString:@"LADDER"]){
+        }  else if ([type isEqualToString:@"BLOCK_LADDER"]){
             blockImage = [UIImage imageNamed:@"block_ladder.png" ];
             self.BLOCK_TYPE = BLOCK_LADDER;
-        } else if ([type isEqualToString:@"BREAKABLE"]){
+        } else if ([type isEqualToString:@"BLOCK_BREAKABLE"]){
             blockImage = [UIImage imageNamed:@"block_standard.png" ];
             self.BLOCK_TYPE = BLOCK_BREAKABLE;
-        } else if ([type isEqualToString:@"GRAVITY_LEFT"]){
+        } else if ([type isEqualToString:@"BLOCK_GRAVITY_LEFT"]){
             blockImage = [UIImage imageNamed:@"block_gravity_left.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_LEFT;
-        } else if ([type isEqualToString:@"GRAVITY_RIGHT"]){
+        } else if ([type isEqualToString:@"BLOCK_GRAVITY_RIGHT"]){
             blockImage = [UIImage imageNamed:@"block_gravity_right.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_RIGHT;
-        } else if ([type isEqualToString:@"GRAVITY_TOP"]){
+        } else if ([type isEqualToString:@"BLOCK_GRAVITY_TOP"]){
             blockImage = [UIImage imageNamed:@"block_gravity_up.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_TOP;
-        } else if ([type isEqualToString:@"GRAVITY_BOTTOM"]){
+        } else if ([type isEqualToString:@"BLOCK_GRAVITY_BOTTOM"]){
             blockImage = [UIImage imageNamed:@"block_gravity_down.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_BOTTOM;
         } else {
