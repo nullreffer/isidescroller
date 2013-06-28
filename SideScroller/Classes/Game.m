@@ -33,6 +33,45 @@
     if ([self init]){
         self.GAME_STATE = LOADING_APP;
         
+        // download all images if they havent been downloaded already
+        [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],[NSString stringWithFormat:@"firstLaunch-%@", code],nil]];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:[NSString stringWithFormat:@"firstLaunch-%@", code]]){
+        
+            NSFileManager *filemgr;
+            NSArray *dirPaths;
+            NSString *docsDir;
+            
+            dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                           NSUserDomainMask, YES);
+            docsDir = [dirPaths objectAtIndex:0];
+            NSString *gamePath = [docsDir stringByAppendingPathComponent:[NSString stringWithFormat:@"Game-%@", code]];
+
+            BOOL isDir;
+            if (![filemgr fileExistsAtPath:gamePath isDirectory:&isDir] || !isDir) {
+                [filemgr createDirectoryAtPath:gamePath withIntermediateDirectories:false attributes:nil error:nil];
+                
+                TBXMLElement *resourcesElement = [TBXML childElementNamed:@"resources" parentElement:config];
+                TBXMLElement *resourceElement = resourcesElement->firstChild;
+                
+                do {
+                    
+                    TBXMLElement *resourceURL = [TBXML childElementNamed:@"resource" parentElement:resourceElement];
+                    
+                    NSURL *url = [NSURL URLWithString:[TBXML textForElement:resourceURL ]];
+                    
+                    NSData *resourceData = [NSData dataWithContentsOfURL:url];
+                    if(resourceData)
+                    {
+                        NSString *resourcePath = [gamePath stringByAppendingPathComponent:[url lastPathComponent]];
+                        [resourceData writeToFile:resourcePath atomically:YES];
+                    }
+                } while ((resourceElement = resourceElement->nextSibling));
+                
+            }
+            
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:[NSString stringWithFormat:@"firstLaunch-%@", code]];
+        }
+        
         // Load levels
         self.levels = [[NSMutableDictionary alloc] init];
         
@@ -53,6 +92,7 @@
         self.view = view;
         
         self.controls = [[Controls alloc] initControlsForView:view inGame:self];
+        
         
         return self;
     }

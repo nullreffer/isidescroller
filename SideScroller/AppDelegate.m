@@ -16,6 +16,9 @@
     // Override point for customization after application launch.
     // self.window.backgroundColor = [UIColor whiteColor];
     // [self.window makeKeyAndVisible];
+    
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],@"firstLaunch",nil]];
+    
     return YES;
 }
 
@@ -44,6 +47,9 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
+
 }
 
 @end

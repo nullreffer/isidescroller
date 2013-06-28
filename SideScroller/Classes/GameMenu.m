@@ -27,6 +27,8 @@
 
 @property CGRect playTextRect;
 
+@property UITextField *codeInput;
+
 @end
 
 @implementation GameMenu
@@ -42,6 +44,8 @@
 @synthesize horizontalOffset = _horizontalOffset;
 
 @synthesize playTextRect = _playTextRect;
+
+@synthesize codeInput = _codeInput;
 
 - (id)initMenuForGame:(Game*)game {
     
@@ -61,6 +65,9 @@
         self.initialTouchLocation = CGPointMake(-1, -1);
         self.lastTouchMovedLocation = CGPointMake(-1, -1);
         
+        self.codeInput = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
+        self.codeInput.textColor = [UIColor whiteColor];
+        
         return self;
     }
     
@@ -68,10 +75,14 @@
 }
 
 - (void)draw:(long)ms {
+    
     if (self.MENU_STATE == MENU_MAIN){
         [self.mainMenuSprite renderWithSize:self.mainMenuSprite.size atX:0 andY:0];
         
-        self.playTextRect = [[FontLibrary skiaWhite] renderString:@"play play" ofSize:40 atX:40 andY:40];
+        self.playTextRect = [[FontLibrary skiaWhite] renderString:@"play play" ofSize:40 atX:40 andY:200];
+        
+        [self.codeInput becomeFirstResponder];
+        [self.game.view addSubview:self.codeInput];
         
     } else if (self.MENU_STATE == MENU_SELECT_LEVEL){
         [self.mainMenuSprite renderWithSize:self.mainMenuSprite.size atX:0 andY:0];
@@ -124,6 +135,9 @@
             self.horizontalOffset = 0;
             self.currentlyMoving = false;
             self.MENU_STATE = MENU_SELECT_LEVEL;
+            
+            // hide keyboard
+            [self.codeInput removeFromSuperview];
         } else {
             // Todo: other buttons on main_menu
         }
@@ -141,8 +155,13 @@
                 return;
             }
             [self.game.currentLevel load];
+            
             self.game.GAME_STATE = PLAYING;
             self.MENU_STATE = MENU_MAIN;
+            
+            // hide keyboard
+            [self.codeInput removeFromSuperview];
+
         } else {
             // depending on distance change screen
         }
