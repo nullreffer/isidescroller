@@ -402,6 +402,11 @@
     
     for (Block* block in self.level.blocks){
  
+        bool inner_intersect_bottom = false;
+        bool inner_intersect_top = false;
+        bool inner_intersect_left = false;
+        bool inner_intersect_right = false;
+        
         rect2 = block.blockSprite.enclosingRect;
         
         vertical_rect1 = CGRectMake(self.position.x, self.position.y < new_new_y ? self.position.y : new_new_y, charRect.size.width, charRect.size.height + fabs(new_new_y - self.position.y));
@@ -423,9 +428,11 @@
             if (new_y < self.position.y){
                 [block onCollideFromTop:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
                 intersect_bottom = true;
+                inner_intersect_bottom = true;
             } else if (new_y > self.position.y) {
                 [block onCollideFromBottom:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
                 intersect_top = true;
+                inner_intersect_top = true;
             } // ignore when they're equal
             // new_new_y = self.position.y;
         }
@@ -449,14 +456,16 @@
             if (new_x < self.position.x){
                 [block onCollideFromRight:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
                 intersect_left = true;
+                inner_intersect_left = true;
             } else if (new_x > self.position.x) {
                 [block onCollideFromLeft:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
                 intersect_right = true;
+                inner_intersect_right = true;
             } // ignore when they're equal
             // new_new_x = self.position.x;
         }
         
-        if (intersect_bottom || intersect_left || intersect_right || intersect_top){
+        if (inner_intersect_bottom || inner_intersect_left || inner_intersect_right || inner_intersect_top){
             // some side of the block collided
             [self.collidedBlocks addObject:block];
         } else {

@@ -2,6 +2,9 @@
 <game>
     <code>code</code>
     <autoScrollVelocity>0</autoScrollVelocity>
+    <resources>
+        <resource>http://thirdlabs.com/webroot/images/logo.png</resource>
+    </resources>
     <levels>
         <level>
             <id>1</id>
@@ -231,6 +234,12 @@
                     <positiony>50</positiony>
                 </block>
                 <block>
+                    <type>BLOCK_PORTAL_RED</type>
+                    <spriteImage>block_red_portal.png</spriteImage>
+                    <positionx>896</positionx>
+                    <positiony>100</positiony>
+                </block>
+                <block>
                     <type>BLOCK_STANDARD</type>
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>928</positionx>
@@ -255,6 +264,12 @@
                     <positiony>50</positiony>
                 </block>
                 <block>
+                    <type>BLOCK_PORTAL_RED</type>
+                    <spriteImage>block_red_portal.png</spriteImage>
+                    <positionx>1024</positionx>
+                    <positiony>100</positiony>
+                </block>
+                <block>
                     <type>BLOCK_STANDARD</type>
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>1056</positionx>
@@ -275,13 +290,13 @@
                 <block>
                     <type>BLOCK_STANDARD</type>
                     <spriteImage>block_standard.png</spriteImage>
-                    <positionx>1152</positionx>
+                    <positionx>1184</positionx>
                     <positiony>50</positiony>
                 </block>
                 <block>
                     <type>BLOCK_GRAVITY_TOP</type>
                     <spriteImage>block_gravity_up.png</spriteImage>
-                    <positionx>1184</positionx>
+                    <positionx>1152</positionx>
                     <positiony>50</positiony>
                 </block>
                 

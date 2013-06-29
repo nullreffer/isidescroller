@@ -95,6 +95,9 @@
 }
 
 - (void) draw:(long)ms withHorizontalOffset:(float)horizontalOffset {
+    
+    if (self.type == ADDON_NOTHING) return;
+    
     [self.addonSprite renderWithSize:self.addonSprite.enclosingRect.size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
 }
 

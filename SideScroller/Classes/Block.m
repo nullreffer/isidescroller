@@ -45,6 +45,15 @@
         } else if ([type isEqualToString:@"BLOCK_DOOR_GREEN"]){
             blockImage = [UIImage imageNamed:@"block_green_door.png" ];
             self.BLOCK_TYPE = BLOCK_DOOR_GREEN;
+        } else if ([type isEqualToString:@"BLOCK_PORTAL_RED"]){
+            blockImage = [UIImage imageNamed:@"block_red_portal.png" ];
+            self.BLOCK_TYPE = BLOCK_PORTAL_RED;
+        } else if ([type isEqualToString:@"BLOCK_PORTAL_BLUE"]){
+            blockImage = [UIImage imageNamed:@"block_blue_portal.png" ];
+            self.BLOCK_TYPE = BLOCK_PORTAL_BLUE;
+        } else if ([type isEqualToString:@"BLOCK_PORTAL_GREEN"]){
+            blockImage = [UIImage imageNamed:@"block_green_portal.png" ];
+            self.BLOCK_TYPE = BLOCK_PORTAL_GREEN;
         } else if ([type isEqualToString:@"BLOCK_SPIKES"]){
             blockImage = [UIImage imageNamed:@"block_spikes.png" ];
             self.BLOCK_TYPE = BLOCK_SPIKES;
@@ -112,7 +121,10 @@
 }
 
 - (void) onCollisionComplete:(Character*)character {
-    // nothing here yet
+    // to prevent a infinite portal swapping
+    if (self.BLOCK_TYPE == BLOCK_PORTAL_BLUE || self.BLOCK_TYPE == BLOCK_PORTAL_GREEN || self.BLOCK_TYPE == BLOCK_PORTAL_RED){
+        self.isBroken = false;
+    }
 }
 
 - (void) onCollideFromTop:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
@@ -171,6 +183,39 @@
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
         }
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_RED){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_RED){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
     } else {
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
@@ -234,6 +279,39 @@
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
         }
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_RED){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_RED){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
     } else {
         if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
@@ -277,6 +355,39 @@
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
         }
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_RED){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_RED){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
     }
@@ -319,6 +430,39 @@
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
         }
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_BLUE){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_RED){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_RED){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+        
+        for (Block *b in character.level.blocks){
+            if (b == self) continue;
+            if (b.BLOCK_TYPE == BLOCK_PORTAL_GREEN){
+                *new_new_x = b.position.x;
+                *new_new_y = b.position.y;
+                b.isBroken = true;
+            }
+        }
+        
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
     }

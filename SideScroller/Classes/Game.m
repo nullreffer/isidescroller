@@ -54,10 +54,7 @@
                 TBXMLElement *resourceElement = resourcesElement->firstChild;
                 
                 do {
-                    
-                    TBXMLElement *resourceURL = [TBXML childElementNamed:@"resource" parentElement:resourceElement];
-                    
-                    NSURL *url = [NSURL URLWithString:[TBXML textForElement:resourceURL ]];
+                    NSURL *url = [NSURL URLWithString:[TBXML textForElement:resourceElement ]];
                     
                     NSData *resourceData = [NSData dataWithContentsOfURL:url];
                     if(resourceData)

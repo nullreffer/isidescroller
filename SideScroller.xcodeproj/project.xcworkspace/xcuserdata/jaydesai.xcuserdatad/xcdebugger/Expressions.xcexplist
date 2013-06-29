@@ -24,7 +24,13 @@
                value = "scale_y">
             </PersistentString>
             <PersistentString
+               value = "new_y">
+            </PersistentString>
+            <PersistentString
                value = "new_x">
+            </PersistentString>
+            <PersistentString
+               value = "self.force">
             </PersistentString>
             <PersistentString
                value = "scale_x">
