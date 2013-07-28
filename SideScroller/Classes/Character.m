@@ -77,6 +77,7 @@
 @synthesize lifeRemovedCounter = _lifeRemovedCounter;
 
 @synthesize addons = _addons;
+@synthesize pickedBlock = _pickedBlock;
 
 @synthesize bullets = _bullets;
 @synthesize bulletForce = _bulletForce;
@@ -117,6 +118,7 @@
         self.lastPosition = CGPointMake(x, y);
         
         self.addons = [[NSMutableDictionary alloc] init];
+        self.pickedBlock = nil;
         
         self.isJumping = NO;
         self.jumpForce = 0;
@@ -185,6 +187,12 @@
         return;
     }
 
+    // do with existing block first
+    if (self.pickedBlock != nil){
+        [self.pickedBlock doAction];
+        return;
+    }
+    
     CGRect collisionRect = self.characterImage.enclosingRect;
     
     // if (gravity is up on down, then look left or right depending on player's direction)
@@ -202,20 +210,21 @@
     else {
         // nothing for now
     }
-    
+
+    bool foundProximBlock = false;
+    // check for proxim blocks that can take action such as pickable/brakeable blocks
     for (Block * block in self.level.blocks) {
         if (block.BLOCK_TYPE != BLOCK_PICKABLE && block.BLOCK_TYPE != BLOCK_BREAKABLE)
             continue;
         
         if (CGRectIntersectsRect(block.blockSprite.enclosingRect, collisionRect)){
             [block doAction];
+            self.pickedBlock = block;
+            foundProximBlock = true;
         }
     }
     
-    // check for proxim blocks that can take action such as pickable/brakeable blocks
-    for (Block* block in self.level.blocks){
-
-    }
+    if (foundProximBlock) return;
     
     // shoot!!!
     for (NSNumber *addon_key in self.addons){
@@ -346,7 +355,7 @@
     
     speed = SPEED_SCALE * speed;
     
-    float velocity_x = speed * scale_x;
+    float velocity_x = speed * scale_x * (self.isJumping ? 2 : 1); // make jumps longer horizontally
     float velocity_y = speed * scale_y;
     
     if (((fabs(velocity_x) > 0.0) && (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP)) || ((fabs(velocity_y) > 0.0) && (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT))){

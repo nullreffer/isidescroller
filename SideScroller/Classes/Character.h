@@ -10,6 +10,7 @@
 #import "AnimatedSprite.h"
 
 @class Level;
+@class Block;
 
 @interface Character : NSObject
 
@@ -33,6 +34,8 @@ typedef enum {
 @property Level* level;
 
 @property NSMutableDictionary *addons;
+
+@property Block* pickedBlock;
 
 @property _AUTO_MOVE autoMovement;
 @property int autoDirection;

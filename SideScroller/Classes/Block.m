@@ -9,7 +9,7 @@
 #import "Block.h"
 #import "Addon.h"
 
-#define PICKUP_ANIMATION 1
+#define PICKUP_ANIMATION 2
 
 @interface Block()
 
@@ -19,7 +19,7 @@
 @property bool isHidden;
 
 @property bool isBeingPicked;
-@property bool pickupCounter;
+@property int pickupCounter;
 
 @property int gravityCounter;
 
@@ -153,51 +153,47 @@
             
             // if block is not yet above the person, then move it up
             if (self.pickupCounter < self.level.theman.characterSize.height){
-                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width : self.level.theman.position.x + self.level.theman.characterSize.width;
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width - 1.01 : self.level.theman.position.x + self.level.theman.characterSize.width + 1.01;
                 
-                self.pickupCounter++;
+                self.pickupCounter += PICKUP_ANIMATION;
                 
-                newy = self.level.theman.position.y + self.pickupCounter;
+                newy = self.level.theman.position.y + self.pickupCounter + 1.01;
             } else if (self.pickupCounter > self.level.theman.characterSize.height &&
-                       self.pickupCounter < self.level.theman.characterSize.width) {
+                       self.pickupCounter < (self.level.theman.characterSize.height + self.level.theman.characterSize.width)) {
 
-                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width + (++self.pickupCounter) : self.level.theman.position.x + self.level.theman.characterSize.width - (++self.pickupCounter);
+                self.pickupCounter += PICKUP_ANIMATION;
+                float dist = self.pickupCounter - self.level.theman.characterSize.height;
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width + (dist) : self.level.theman.position.x + self.level.theman.characterSize.width - (dist);
                 
             } else if (self.pickupCounter == self.level.theman.characterSize.height ||
-                       self.pickupCounter == self.level.theman.characterSize.width) {
-                self.pickupCounter++;
+                       self.pickupCounter == (self.level.theman.characterSize.width + self.level.theman.characterSize.height)) {
+                self.pickupCounter += PICKUP_ANIMATION;
+            } else {
+                newx = self.level.theman.position.x;
+                newy = self.level.theman.position.y + self.level.theman.characterSize.height + 1.01;
             }
             
         } else if (self.level.gravityPosition == GRAVITY_TOP) {
             
-            // if block is not yet above the person, then move it up
-            if (self.position.y > self.level.theman.position.y + self.level.theman.characterSize.height){
-                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width : self.level.theman.position.x + self.level.theman.characterSize.width;
-                
-                newy--;
-            } else {
-                // no change to y
-                if (newx > self.level.theman.position.x){
-                    newx--;
-                } else if (newx < self.level.theman.position.x){
-                    newx++;
-                }
-            }
+            // TODO
             
         }
         
         self.position = CGPointMake(newx, newy);
     }
     
-    if (self.BLOCK_TYPE == BLOCK_PUSHABLE || (self.BLOCK_TYPE == BLOCK_PICKABLE && !self.isBeingPicked)){
+    if (self.BLOCK_TYPE == BLOCK_PUSHABLE || self.BLOCK_TYPE == BLOCK_PICKABLE) { // (self.BLOCK_TYPE == BLOCK_PICKABLE && !self.isBeingPicked)){
         
         float desiredx = self.position.x;
         float desiredy = self.position.y;
         
-        if (self.level.gravityPosition == GRAVITY_BOTTOM){
-            desiredy -= ++self.gravityCounter * self.gravityCounter;
-        } else if (self.level.gravityPosition == GRAVITY_TOP){
-            desiredy += ++self.gravityCounter * self.gravityCounter;
+        // ignore gravity when picked, or being picked, or being dropped
+        if (!self.isBeingPicked) {
+            if (self.level.gravityPosition == GRAVITY_BOTTOM){
+                desiredy -= ++self.gravityCounter * self.gravityCounter;
+            } else if (self.level.gravityPosition == GRAVITY_TOP){
+                desiredy += ++self.gravityCounter * self.gravityCounter;
+            }
         }
         
         CGRect rect2, vertical_rect1, horizontal_rect1;
@@ -284,8 +280,11 @@
 - (bool) doAction {
     
     if (self.BLOCK_TYPE == BLOCK_PICKABLE){
-        self.isBeingPicked = true;
-        
+        if (self.isBeingPicked) {
+            // drop it
+        } else  {
+            self.isBeingPicked = true;
+        }
         return true;
     }
     
@@ -392,9 +391,11 @@
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
-    } else if (!self.isBeingPicked && self.BLOCK_TYPE == BLOCK_PICKABLE) {
-        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
-            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+    } else if (self.BLOCK_TYPE == BLOCK_PICKABLE) {
+        if (!self.isBeingPicked) {
+            if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+                *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+            }
         }
     } else if (self.BLOCK_TYPE == BLOCK_STANDARD) {
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
@@ -497,8 +498,10 @@
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
     } else if (self.BLOCK_TYPE == BLOCK_PICKABLE) {
-        if (!self.isBeingPicked && *new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
-            *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
+        if (!self.isBeingPicked) {
+            if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
+                *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
+            }
         }
     } else if (self.BLOCK_TYPE == BLOCK_STANDARD) {
         if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
