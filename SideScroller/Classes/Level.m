@@ -14,6 +14,7 @@
 #import "Bullet.h"
 
 #define MESSAGE_VIEW_TIME 90
+#define PHONE_SIZE CGSizeMake([[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width)
 
 @interface Level()
 
@@ -91,13 +92,15 @@
         positionX = [[TBXML textForElement:[TBXML childElementNamed:@"positionx" parentElement:blockElement]] intValue];
         positionY = [[TBXML textForElement:[TBXML childElementNamed:@"positiony" parentElement:blockElement]] intValue];
             
-        Block *block = [[Block alloc] initBlockOfType:blockType andPositionX:positionX andPositionY:positionY];
+        Block *block = [[Block alloc] initBlockOfType:blockType andPositionX:positionX andPositionY:positionY withinLevel:self];
         [self.blocks addObject:block];
             
     } while ((blockElement = blockElement->nextSibling));
         
     TBXMLElement *protagonistElement = [TBXML childElementNamed:@"protagonist" parentElement:self.config];
     positionX = [[TBXML textForElement:[TBXML childElementNamed:@"positionx" parentElement:protagonistElement]] intValue];
+    
+    self.horizontalOffset = PHONE_SIZE.width / 2 - positionX;
     positionY = [[TBXML textForElement:[TBXML childElementNamed:@"positiony" parentElement:protagonistElement]] intValue];
         
     self.theman = [[Character alloc] initProtagonistWithPositionX:positionX andPositionY:positionY andImage:[UIImage imageNamed:@"character_main.png"] andLevel:self];
@@ -217,11 +220,11 @@
     
     if (self.levelState == LEVEL_COMPLETE){
         // draw the level finished dialog in the center
-        float posx = 480.0 / 2 - self.finishMessageBg.enclosingRect.size.width / 2;
-        float posy = 320.0 / 2 - self.finishMessageBg.enclosingRect.size.height / 2;
+        float posx = PHONE_SIZE.width / 2 - self.finishMessageBg.enclosingRect.size.width / 2;
+        float posy = PHONE_SIZE.height / 2 - self.finishMessageBg.enclosingRect.size.height / 2;
         [self.finishMessageBg renderWithSize:self.finishMessageBg.size atX:posx andY:posy];
         
-        self.messageRect = [[FontLibrary seguoWhite] renderString:@"You Win" ofSize:36 centeredAtX:480.0 / 2 andY:320 / 2.0];
+        self.messageRect = [[FontLibrary seguoWhite] renderString:@"You Win" ofSize:36 centeredAtX:PHONE_SIZE.width / 2 andY:PHONE_SIZE.height / 2.0];
         
         if (self.messageCounter++ > MESSAGE_VIEW_TIME){
             
@@ -230,11 +233,11 @@
         
     } else if (self.levelState == LEVEL_LOST){
         // draw the level finished dialog in the center
-        float posx = 480.0 / 2 - self.finishMessageBg.enclosingRect.size.width / 2;
-        float posy = 320.0 / 2 - self.finishMessageBg.enclosingRect.size.height / 2;
+        float posx = PHONE_SIZE.width / 2 - self.finishMessageBg.enclosingRect.size.width / 2;
+        float posy = PHONE_SIZE.height / 2 - self.finishMessageBg.enclosingRect.size.height / 2;
         [self.finishMessageBg renderWithSize:self.finishMessageBg.size atX:posx andY:posy];
         
-        self.messageRect = [[FontLibrary seguoWhite] renderString:@"You Lose" ofSize:36 centeredAtX:480.0 / 2 andY:320 / 2.0];
+        self.messageRect = [[FontLibrary seguoWhite] renderString:@"You Lose" ofSize:36 centeredAtX:PHONE_SIZE.width / 2 andY:PHONE_SIZE.height / 2.0];
         
         if (self.messageCounter++ > MESSAGE_VIEW_TIME){
             

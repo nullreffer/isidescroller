@@ -1,5 +1,7 @@
 #import "Sprite.h"
 
+#define PHONE_SIZE CGSizeMake([[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width)
+
 @interface Sprite()
 
 @property (strong) GLKBaseEffect * effect;
@@ -31,7 +33,7 @@
 
         self.effect = [[GLKBaseEffect alloc] init];
         // 568 for iphone 5
-        GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, 480, 0, 320, -1024, 1024);
+        GLKMatrix4 projectionMatrix = GLKMatrix4MakeOrtho(0, PHONE_SIZE.width, 0, PHONE_SIZE.height, -1024, 1024);
         self.effect.transform.projectionMatrix = projectionMatrix;
         
         // 2

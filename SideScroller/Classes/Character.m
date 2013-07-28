@@ -19,10 +19,9 @@
 #define INITIAL_JUMP_FACTOR 2
 #define NUMBER_OF_LIVES 90000
 
-@interface Character()
+#define PHONE_SIZE CGSizeMake([[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width)
 
-@property float direction;
-@property float lastDirection;
+@interface Character()
 
 @property CGPoint lastPosition;
 
@@ -184,6 +183,38 @@
 - (void) doBActionWithJoystickDirection:(float)direction {
     if (self.isDead || self.level.levelState != LEVEL_PLAYING) {
         return;
+    }
+
+    CGRect collisionRect = self.characterImage.enclosingRect;
+    
+    // if (gravity is up on down, then look left or right depending on player's direction)
+    if (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP){
+        // if player facing left
+        
+        if (fabs(self.lastDirection) > M_PI_2) {
+            // check collision to the left
+            collisionRect = CGRectMake(collisionRect.origin.x - collisionRect.size.width, collisionRect.origin.y, collisionRect.size.width, collisionRect.size.height);
+        } else {
+            collisionRect = CGRectMake(collisionRect.origin.x, collisionRect.origin.y, collisionRect.size.width * 2, collisionRect.size.height);
+        }
+    }
+    // otherwise
+    else {
+        // nothing for now
+    }
+    
+    for (Block * block in self.level.blocks) {
+        if (block.BLOCK_TYPE != BLOCK_PICKABLE && block.BLOCK_TYPE != BLOCK_BREAKABLE)
+            continue;
+        
+        if (CGRectIntersectsRect(block.blockSprite.enclosingRect, collisionRect)){
+            [block doAction];
+        }
+    }
+    
+    // check for proxim blocks that can take action such as pickable/brakeable blocks
+    for (Block* block in self.level.blocks){
+
     }
     
     // shoot!!!
@@ -400,6 +431,9 @@
     float new_new_y = new_y;
     float new_new_x = new_x;
     
+    // special case ladder
+    bool ladderIntersected = false;
+    
     for (Block* block in self.level.blocks){
  
         bool inner_intersect_bottom = false;
@@ -424,6 +458,7 @@
         else if (vertical_rect1.origin.x > rect2.origin.x + rect2.size.width ||
             vertical_rect1.origin.x + vertical_rect1.size.width < rect2.origin.x){
             // no x intersection
+            
         } else {
             if (new_y < self.position.y){
                 [block onCollideFromTop:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
@@ -437,8 +472,9 @@
             // new_new_y = self.position.y;
         }
         
-        if (intersect_bottom || intersect_top) {
-            // already intersected on vertical axis, cannot intersect horizontally
+        if (false && (ladderIntersected || block.BLOCK_TYPE == BLOCK_LADDER) && (intersect_bottom || intersect_top)) {
+            ladderIntersected = true;
+            // already intersected on vertical axis, cannot intersect horizontally... WHY NOT?
         }
         // horizontal rect intersection
         // if the bottom of the char is greater than block's top
@@ -599,10 +635,10 @@
     if (self.isProtagonist) {
         
         // draw lives
-        float posy = 320.0 - 10.0 - self.lifeSprite.enclosingRect.size.height;
+        float posy = PHONE_SIZE.height - 10.0 - self.lifeSprite.enclosingRect.size.height;
         int lives = self.lives > 5 ? 5 : self.lives;
         for (int x = 0; x < lives; x++){
-            float posx = 450 - x * (self.lifeSprite.enclosingRect.size.width + 10);
+            float posx = PHONE_SIZE.width - 30.0 - x * (self.lifeSprite.enclosingRect.size.width + 10);
             [self.lifeSprite renderWithSize:self.lifeSprite.enclosingRect.size atX:posx andXOffset:0 andY:posy andYOffset:0];
         }
         

@@ -11,6 +11,7 @@
 #import "MathUtil.h"
 
 #define JOYSTICK_THRESHOLD 0.4
+#define PHONE_SIZE CGSizeMake([[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width)
 
 @interface Controls()
 
@@ -88,13 +89,13 @@
     [self.joystickBg renderWithSize:self.joystickBg.size atX:30 andY:30];
     [self.joystick renderWithSize:self.joystick.size atX:self.joystickMovedLocation.x-30 andY:self.joystickMovedLocation.y-30];
     
-    [self.buttonA renderWithSize:self.buttonA.size atX:300 andY:30];
-    [self.buttonB renderWithSize:self.buttonB.size atX:380 andY:30];
+    [self.buttonA renderWithSize:self.buttonA.size atX:PHONE_SIZE.width - 180 andY:30];
+    [self.buttonB renderWithSize:self.buttonB.size atX:PHONE_SIZE.width - 100 andY:30];
     
     if (self.game.currentLevel.levelState == LEVEL_PAUSED) {
         // draw the level paused dialog in the center
-        float posx = 480.0 / 2 - self.pausedMessage.enclosingRect.size.width / 2;
-        float posy = 320.0 / 2 - self.pausedMessage.enclosingRect.size.height / 2;
+        float posx = PHONE_SIZE.width / 2 - self.pausedMessage.enclosingRect.size.width / 2;
+        float posy = PHONE_SIZE.height / 2 - self.pausedMessage.enclosingRect.size.height / 2;
         [self.pausedMessage renderWithSize:self.pausedMessage.size atX:posx andY:posy];
     } else {
         [self.buttonPause renderWithSize:self.buttonPause.size atX:10 andY:250];
@@ -145,7 +146,7 @@
     
     for (UITouch* touch in touches){
         CGPoint touchPosition = [touch locationInView:self.view];
-        touchPosition = CGPointMake(touchPosition.x, 320 - touchPosition.y);
+        touchPosition = CGPointMake(touchPosition.x, PHONE_SIZE.height - touchPosition.y);
         if (CGRectContainsPoint([self.joystick enclosingRect], touchPosition)){
             self.joystickTouch = touch;
             self.joystickPressed = true;
@@ -162,7 +163,7 @@
 - (void) handleTouchesEnded:(NSSet*)touches withEvent:(UIEvent*)event {
     for (UITouch* touch in touches){
         CGPoint touchPosition = [touch locationInView:self.view];
-        touchPosition = CGPointMake(touchPosition.x, 320 - touchPosition.y);
+        touchPosition = CGPointMake(touchPosition.x, PHONE_SIZE.height - touchPosition.y);
         if (touch == self.joystickTouch){
             self.joystickPressed = false;
             self.joystickMovedLocation = self.joystickInitialLocation;
@@ -177,7 +178,7 @@
 - (void) handleTouchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
     for (UITouch* touch in touches){
         CGPoint touchPosition = [touch locationInView:self.view];
-        touchPosition = CGPointMake(touchPosition.x, 320 - touchPosition.y);
+        touchPosition = CGPointMake(touchPosition.x, PHONE_SIZE.height - touchPosition.y);
         if (touch == self.joystickTouch){
             self.joystickMovedLocation = touchPosition;
             

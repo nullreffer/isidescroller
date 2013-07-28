@@ -11,6 +11,8 @@
 #import "FontLibrary.h"
 #import "MathUtil.h"
 
+#define PHONE_SIZE CGSizeMake([[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width)
+
 @interface GameMenu()
 
 @property Game* game;
@@ -101,7 +103,7 @@
                 if (col + row * 5 >= levelCount) break;
                 
                 int posx = 40 + col * (60 + 25) + self.horizontalOffset;
-                int posy = 320 - 40 - row * (60 + 25) - 60; // the minus 60 is because it draw upwards
+                int posy = PHONE_SIZE.height - 40 - row * (60 + 25) - 60; // the minus 60 is because it draw upwards
                 
                 [self.levelSelectSprite renderWithSize:self.levelSelectSprite.size atX:posx andY:posy];
                 
@@ -122,9 +124,9 @@
     UITouch* touch = [touches anyObject];
     
     self.initialTouchLocation = [touch locationInView:self.game.view];
-    self.initialTouchLocation = CGPointMake(self.initialTouchLocation.x, 320 - self.initialTouchLocation.y);
+    self.initialTouchLocation = CGPointMake(self.initialTouchLocation.x, PHONE_SIZE.height - self.initialTouchLocation.y);
     self.lastTouchMovedLocation = [touch locationInView:self.game.view];
-    self.lastTouchMovedLocation = CGPointMake(self.lastTouchMovedLocation.x, 320 - self.lastTouchMovedLocation.y);
+    self.lastTouchMovedLocation = CGPointMake(self.lastTouchMovedLocation.x, PHONE_SIZE.height - self.lastTouchMovedLocation.y);
     self.currentlyMoving = true;
 }
 
@@ -147,7 +149,7 @@
         if (fabs([MathUtil calculateHorizontalDistance:self.initialTouchLocation :self.lastTouchMovedLocation]) < self.SLIDE_THRESHOLD) {
             // tapped
             int tappedCol = (self.lastTouchMovedLocation.x - 40 - self.horizontalOffset) / (60 + 25);
-            int tappedRow = ((320 - self.lastTouchMovedLocation.y) - 40) / (60 + 25);
+            int tappedRow = ((PHONE_SIZE.height - self.lastTouchMovedLocation.y) - 40) / (60 + 25);
             
             int tappedLevel = tappedCol + 1 + (tappedRow * 5);
             self.game.currentLevel = [self.game.levels objectForKey:[NSString stringWithFormat:@"%d",tappedLevel]];

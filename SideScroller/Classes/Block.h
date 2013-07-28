@@ -14,7 +14,7 @@
 @interface Block : NSObject
 
 typedef enum {
-    
+    BLOCK_NOTHING,
     BLOCK_STANDARD,
     BLOCK_BREAKABLE,
     BLOCK_GRAVITY_SHIFT_LEFT,
@@ -31,8 +31,9 @@ typedef enum {
     BLOCK_PORTAL_GREEN,
     BLOCK_DOOR_RED,
     BLOCK_DOOR_BLUE,
-    BLOCK_DOOR_GREEN
-    
+    BLOCK_DOOR_GREEN,
+    BLOCK_PICKABLE,
+    BLOCK_PUSHABLE
 } _BLOCK_TYPE_ENUM;
 
 @property _BLOCK_TYPE_ENUM BLOCK_TYPE;
@@ -41,9 +42,11 @@ typedef enum {
 
 @property Sprite *blockSprite;
 
-- (id) initBlockOfType:(NSString*) type andPositionX:(int)x andPositionY:(int)y;
+- (id) initBlockOfType:(NSString*) type andPositionX:(int)x andPositionY:(int)y withinLevel:(Level*)level;
 
 - (void)draw:(long)ms withHorizontalOffset:(float)horizontalOffset;
+
+- (bool) doAction;
 
 - (void) onCollideFromTop:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y;
 

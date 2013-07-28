@@ -7,19 +7,6 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "SideScroller/Classes/Block.m"
-         timestampString = "394159904.564561"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "317"
-         endingLineNumber = "317"
-         landmarkName = "-onCollideFromBottom:withMovement:andVelocity:andGravityOffset:retX:retY:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Bullet.m"
          timestampString = "394158272.509955"
          startingColumnNumber = "9223372036854775807"
@@ -47,24 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Character.m"
-         timestampString = "388860472.746034"
+         timestampString = "396721967.386673"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "158"
-         endingLineNumber = "158"
-         landmarkName = "-initiateJumpWithForce:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "SideScroller/Classes/Character.m"
-         timestampString = "394160837.238868"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "582"
-         endingLineNumber = "582"
+         startingLineNumber = "616"
+         endingLineNumber = "616"
          landmarkName = "-draw:withHorizontalOffset:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -73,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Character.m"
-         timestampString = "393718310.315541"
+         timestampString = "396721967.386673"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "221"
-         endingLineNumber = "221"
+         startingLineNumber = "252"
+         endingLineNumber = "252"
          landmarkName = "-updateAI:againstCharacter:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "SideScroller/Classes/Character.m"
-         timestampString = "394160837.238868"
+         timestampString = "396721967.386673"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "477"
-         endingLineNumber = "477"
+         startingLineNumber = "511"
+         endingLineNumber = "511"
          landmarkName = "-update:withJoystickSpeed:andDirection:"
          landmarkType = "5">
       </FileBreakpoint>

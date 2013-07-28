@@ -14,19 +14,25 @@
                     <type>BLOCK_LADDER</type>
                     <spriteImage>block_ladder.png</spriteImage>
                     <positionx>512</positionx>
-                    <positiony>82</positiony>
+                    <positiony>118</positiony>
                 </block>
                 <block>
                     <type>BLOCK_LADDER</type>
                     <spriteImage>block_ladder.png</spriteImage>
                     <positionx>512</positionx>
-                    <positiony>114</positiony>
+                    <positiony>150</positiony>
                 </block>
                 <block>
-                    <type>BLOCK_LADDER</type>
-                    <spriteImage>block_ladder.png</spriteImage>
-                    <positionx>512</positionx>
-                    <positiony>146</positiony>
+                    <type>BLOCK_PUSHABLE</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>704</positionx>
+                    <positiony>102</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_PICKABLE</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1024</positionx>
+                    <positiony>100</positiony>
                 </block>
                 <block>
                     <type>BLOCK_STANDARD</type>
@@ -202,7 +208,7 @@
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>736</positionx>
                     <positiony>50</positiony>
-                </block>
+                </block><!--
                 <block>
                     <type>BLOCK_STANDARD</type>
                     <spriteImage>block_standard.png</spriteImage>
@@ -214,7 +220,7 @@
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>800</positionx>
                     <positiony>50</positiony>
-                </block>
+                </block>-->
                 <block>
                     <type>BLOCK_STANDARD</type>
                     <spriteImage>block_standard.png</spriteImage>
@@ -232,12 +238,6 @@
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>896</positionx>
                     <positiony>50</positiony>
-                </block>
-                <block>
-                    <type>BLOCK_PORTAL_RED</type>
-                    <spriteImage>block_red_portal.png</spriteImage>
-                    <positionx>896</positionx>
-                    <positiony>100</positiony>
                 </block>
                 <block>
                     <type>BLOCK_STANDARD</type>
@@ -262,12 +262,6 @@
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>1024</positionx>
                     <positiony>50</positiony>
-                </block>
-                <block>
-                    <type>BLOCK_PORTAL_RED</type>
-                    <spriteImage>block_red_portal.png</spriteImage>
-                    <positionx>1024</positionx>
-                    <positiony>100</positiony>
                 </block>
                 <block>
                     <type>BLOCK_STANDARD</type>
@@ -297,6 +291,66 @@
                     <type>BLOCK_GRAVITY_TOP</type>
                     <spriteImage>block_gravity_up.png</spriteImage>
                     <positionx>1152</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_PORTAL_RED</type>
+                    <spriteImage>block_red_portal.png</spriteImage>
+                    <positionx>1184</positionx>
+                    <positiony>100</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1184</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1216</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1248</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1280</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_PORTAL_RED</type>
+                    <spriteImage>block_red_portal.png</spriteImage>
+                    <positionx>1312</positionx>
+                    <positiony>100</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1312</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1088</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1344</positionx>
+                    <positiony>50</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_STANDARD</type>
+                    <spriteImage>block_standard.png</spriteImage>
+                    <positionx>1376</positionx>
                     <positiony>50</positiony>
                 </block>
                 
@@ -541,10 +595,11 @@
             </addons>
             <protagonist>
                 <spriteImage>character_main.png</spriteImage>
-                <positionx>250</positionx>
+                <positionx>650</positionx>
                 <positiony>180</positiony>
             </protagonist>
             <enemies>
+                <!--
                 <enemy>
                     <type>STRAIGHT_MOVEMENT</type>
                     <spriteImage>enemy_1.png</spriteImage>
@@ -552,6 +607,7 @@
                     <positiony>84</positiony>
                     <addon>ADDON_NONCOLLIDING_LINEAR_GUN</addon>
                 </enemy>
+                -->
                 <enemy>
                     <type>PURSUE_CHARACTER</type>
                     <spriteImage>enemy_1.png</spriteImage>

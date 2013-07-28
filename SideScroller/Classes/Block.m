@@ -9,12 +9,21 @@
 #import "Block.h"
 #import "Addon.h"
 
+#define PICKUP_ANIMATION 1
+
 @interface Block()
 
 @property CGPoint position;
 @property CGSize originalSize;
 
 @property bool isHidden;
+
+@property bool isBeingPicked;
+@property bool pickupCounter;
+
+@property int gravityCounter;
+
+@property Level* level;
 
 @end
 
@@ -25,10 +34,13 @@
 @synthesize position = _position;
 @synthesize originalSize = _originalSize;
 @synthesize blockSprite = _blockSprite;
+@synthesize isBeingPicked = _isBeingPicked;
+@synthesize level = _level;
+@synthesize gravityCounter = _gravityCounter;
 
 @synthesize isBroken;
 
-- (id) initBlockOfType:(NSString*) type andPositionX:(int)x andPositionY:(int)y {
+- (id) initBlockOfType:(NSString*) type andPositionX:(int)x andPositionY:(int)y withinLevel:(Level *)level {
     if ([self init]){
         
         UIImage *blockImage;
@@ -78,9 +90,18 @@
         } else if ([type isEqualToString:@"BLOCK_GRAVITY_BOTTOM"]){
             blockImage = [UIImage imageNamed:@"block_gravity_down.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_BOTTOM;
-        } else {
+        } else if ([type isEqualToString:@"BLOCK_PICKABLE"]){
+            blockImage = [UIImage imageNamed:@"block_standard.png" ];
+            self.BLOCK_TYPE = BLOCK_PICKABLE;
+        } else if ([type isEqualToString:@"BLOCK_PUSHABLE"]){
+            blockImage = [UIImage imageNamed:@"block_standard.png" ];
+            self.BLOCK_TYPE = BLOCK_PUSHABLE;
+        } else if ([type isEqualToString:@"BLOCK_STANDARD"]) {
             blockImage = [UIImage imageNamed:@"block_standard.png"];
             self.BLOCK_TYPE = BLOCK_STANDARD;
+        } else {
+            blockImage = [UIImage imageNamed:@"block_ladder.png"];
+            self.BLOCK_TYPE = BLOCK_NOTHING;
         }
         
         self.blockSprite = [[Sprite alloc] initWithImage:blockImage andManualFlip:YES];
@@ -90,6 +111,13 @@
         
         self.isBroken = false;
         self.isHidden = false;
+        
+        self.isBeingPicked = false;
+        self.pickupCounter = 0;
+        
+        self.gravityCounter = 0;
+        
+        self.level = level;
         
         return self;
     }
@@ -117,7 +145,151 @@
     
     CGSize size = CGSizeMake(self.originalSize.width / 2, self.originalSize.height);
     
+    if (self.isBeingPicked){
+        float newx = self.position.x;
+        float newy = self.position.y;
+        
+        if (self.level.gravityPosition == GRAVITY_BOTTOM){
+            
+            // if block is not yet above the person, then move it up
+            if (self.pickupCounter < self.level.theman.characterSize.height){
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width : self.level.theman.position.x + self.level.theman.characterSize.width;
+                
+                self.pickupCounter++;
+                
+                newy = self.level.theman.position.y + self.pickupCounter;
+            } else if (self.pickupCounter > self.level.theman.characterSize.height &&
+                       self.pickupCounter < self.level.theman.characterSize.width) {
+
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width + (++self.pickupCounter) : self.level.theman.position.x + self.level.theman.characterSize.width - (++self.pickupCounter);
+                
+            } else if (self.pickupCounter == self.level.theman.characterSize.height ||
+                       self.pickupCounter == self.level.theman.characterSize.width) {
+                self.pickupCounter++;
+            }
+            
+        } else if (self.level.gravityPosition == GRAVITY_TOP) {
+            
+            // if block is not yet above the person, then move it up
+            if (self.position.y > self.level.theman.position.y + self.level.theman.characterSize.height){
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width : self.level.theman.position.x + self.level.theman.characterSize.width;
+                
+                newy--;
+            } else {
+                // no change to y
+                if (newx > self.level.theman.position.x){
+                    newx--;
+                } else if (newx < self.level.theman.position.x){
+                    newx++;
+                }
+            }
+            
+        }
+        
+        self.position = CGPointMake(newx, newy);
+    }
+    
+    if (self.BLOCK_TYPE == BLOCK_PUSHABLE || (self.BLOCK_TYPE == BLOCK_PICKABLE && !self.isBeingPicked)){
+        
+        float desiredx = self.position.x;
+        float desiredy = self.position.y;
+        
+        if (self.level.gravityPosition == GRAVITY_BOTTOM){
+            desiredy -= ++self.gravityCounter * self.gravityCounter;
+        } else if (self.level.gravityPosition == GRAVITY_TOP){
+            desiredy += ++self.gravityCounter * self.gravityCounter;
+        }
+        
+        CGRect rect2, vertical_rect1, horizontal_rect1;
+        CGRect charRect = self.blockSprite.enclosingRect;
+        float new_new_x = desiredx;
+        float new_new_y = desiredy;
+        
+        bool intersected = false;
+        for (Block *block in self.level.blocks){
+            
+            // this breaks gravity, block falls upside down
+            if (block == self) continue;
+            
+            rect2 = block.blockSprite.enclosingRect;
+            
+            vertical_rect1 = CGRectMake(self.position.x, self.position.y < new_new_y ? self.position.y : new_new_y, charRect.size.width, charRect.size.height + fabs(new_new_y - self.position.y));
+            horizontal_rect1 = CGRectMake(self.position.x < new_new_x ? self.position.x : new_new_x, self.position.y, charRect.size.width + fabs(self.position.x - new_new_x), charRect.size.height);
+            
+            // vertical rect intersection
+            // if the bottom of the char is greater than block's top
+            // or the top of the char is less than the block's bottom
+            if (vertical_rect1.origin.y > rect2.origin.y + rect2.size.height ||
+                vertical_rect1.origin.y + vertical_rect1.size.height < rect2.origin.y){
+                // no y intersection
+            }
+            // if the left of the char is greater than the block's right
+            // or the right of the char is less than the block's left
+            else if (vertical_rect1.origin.x > rect2.origin.x + rect2.size.width ||
+                     vertical_rect1.origin.x + vertical_rect1.size.width < rect2.origin.x){
+                // no x intersection
+                
+            } else {
+                if (desiredy < self.position.y){
+                    if (desiredy < block.blockSprite.enclosingRect.origin.y + block.blockSprite.enclosingRect.size.height + 0.01) {
+                        desiredy = block.blockSprite.enclosingRect.origin.y + block.blockSprite.enclosingRect.size.height + 0.01;
+                        intersected = true;
+                    }
+                } else if (desiredy > self.position.y) {
+                    if (desiredy + self.blockSprite.size.height > block.blockSprite.enclosingRect.origin.y - 0.01){
+                        desiredy = block.blockSprite.enclosingRect.origin.y - self.blockSprite.size.height - 0.01;
+                        intersected = true;
+                    }
+                } // ignore when they're equal
+                // new_new_y = self.position.y;
+            }
+            
+            // horizontal rect intersection
+            // if the bottom of the char is greater than block's top
+            // or the top of the char is less than the block's bottom
+            if (horizontal_rect1.origin.y > rect2.origin.y + rect2.size.height ||
+                     horizontal_rect1.origin.y + horizontal_rect1.size.height < rect2.origin.y){
+                // no y intersection
+            }
+            // if the left of the char is greater than the block's right
+            // or the right of the char is less than the block's left
+            else if (horizontal_rect1.origin.x > rect2.origin.x + rect2.size.width ||
+                     horizontal_rect1.origin.x + horizontal_rect1.size.width < rect2.origin.x){
+                // no x intersection
+            } else {
+                if (desiredx < self.position.x){
+                    desiredx = block.blockSprite.enclosingRect.origin.x + block.blockSprite.enclosingRect.size.width + 0.01;
+                    intersected = true;
+                } else if (desiredx > self.position.x) {
+                    desiredx = block.blockSprite.enclosingRect.origin.x - self.blockSprite.size.width - 0.01;
+                    intersected = true;
+                } // ignore when they're equal
+                // new_new_x = self.position.x;
+            }
+            
+            new_new_x = desiredx;
+            new_new_y = desiredy;
+        } // end blocks loop
+        
+        if (intersected) {
+            self.gravityCounter = 0;
+        }
+        
+        self.position = CGPointMake(new_new_x, new_new_y);
+    }
+    
     [self.blockSprite renderWithSize:size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
+}
+
+- (bool) doAction {
+    
+    if (self.BLOCK_TYPE == BLOCK_PICKABLE){
+        self.isBeingPicked = true;
+        
+        return true;
+    }
+    
+    return false;
 }
 
 - (void) onCollisionComplete:(Character*)character {
@@ -216,7 +388,15 @@
             }
         }
         
-    } else {
+    } else if (self.BLOCK_TYPE == BLOCK_PUSHABLE) {
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+    } else if (!self.isBeingPicked && self.BLOCK_TYPE == BLOCK_PICKABLE) {
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_STANDARD) {
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
@@ -312,7 +492,15 @@
             }
         }
         
-    } else {
+    } else if (self.BLOCK_TYPE == BLOCK_PUSHABLE ){
+        if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_PICKABLE) {
+        if (!self.isBeingPicked && *new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
+        }
+    } else if (self.BLOCK_TYPE == BLOCK_STANDARD) {
         if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
@@ -388,6 +576,13 @@
             }
         }
         
+    } else if (self.BLOCK_TYPE == BLOCK_PUSHABLE){
+        self.position = CGPointMake(self.position.x + abs(velocity.x), self.position.y);
+        *new_new_x = self.position.x - character.characterImage.enclosingRect.size.width - 0.01;
+    } else if (self.BLOCK_TYPE == BLOCK_PICKABLE) {
+        if (!self.isBeingPicked){
+            *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+        }
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
     }
@@ -463,6 +658,13 @@
             }
         }
         
+    } else if (self.BLOCK_TYPE == BLOCK_PUSHABLE){
+        self.position = CGPointMake(self.position.x - abs(velocity.x), self.position.y);
+        *new_new_x = self.position.x + self.blockSprite.enclosingRect.size.width + 0.01;
+    } else if (self.BLOCK_TYPE == BLOCK_PICKABLE) {
+        if (!self.isBeingPicked){
+            *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+        }
     } else {
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
     }

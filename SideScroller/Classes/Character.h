@@ -24,6 +24,8 @@ typedef enum {
 @property bool isDead;
 
 @property CGPoint position;
+@property float direction;
+@property float lastDirection;
 
 @property AnimatedSprite* characterImage;
 @property CGSize characterSize;
