@@ -9,7 +9,8 @@
 #import "Block.h"
 #import "Addon.h"
 
-#define PICKUP_ANIMATION 2
+#define PICKUP_ANIMATION 4
+#define BACTION_INTERVAL 20;
 
 @interface Block()
 
@@ -18,10 +19,12 @@
 
 @property bool isHidden;
 
-@property bool isBeingPicked;
+@property int isBeingPicked;
 @property int pickupCounter;
 
 @property int gravityCounter;
+
+@property int lastActionTimer;
 
 @property Level* level;
 
@@ -37,6 +40,7 @@
 @synthesize isBeingPicked = _isBeingPicked;
 @synthesize level = _level;
 @synthesize gravityCounter = _gravityCounter;
+@synthesize lastActionTimer = _lastActionTimer;
 
 @synthesize isBroken;
 
@@ -112,10 +116,11 @@
         self.isBroken = false;
         self.isHidden = false;
         
-        self.isBeingPicked = false;
+        self.isBeingPicked = 0;
         self.pickupCounter = 0;
         
         self.gravityCounter = 0;
+        self.lastActionTimer = 0;
         
         self.level = level;
         
@@ -144,10 +149,12 @@
     self.blockSprite.quad = quad;
     
     CGSize size = CGSizeMake(self.originalSize.width / 2, self.originalSize.height);
+
+    float newx = self.position.x;
+    float newy = self.position.y;
     
-    if (self.isBeingPicked){
-        float newx = self.position.x;
-        float newy = self.position.y;
+    if (self.isBeingPicked > 0){
+
         
         if (self.level.gravityPosition == GRAVITY_BOTTOM){
             
@@ -179,16 +186,37 @@
             
         }
         
-        self.position = CGPointMake(newx, newy);
+        // self.position = CGPointMake(newx, newy);
+    } else if (self.isBeingPicked < 0) {
+        // being dropped
+        
+        if (self.level.gravityPosition == GRAVITY_BOTTOM){
+
+            if (self.pickupCounter > (self.level.theman.characterSize.height)) {
+                self.pickupCounter -= PICKUP_ANIMATION;
+            
+                float dist = self.pickupCounter - self.level.theman.characterSize.height - 1.01;
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width + (dist) : self.level.theman.position.x + self.level.theman.characterSize.width - (dist);
+            } else if (self.pickupCounter == self.level.theman.characterSize.height) {
+                self.pickupCounter -= PICKUP_ANIMATION;
+            } else {
+                NSLog(@"Being Picked: 0");
+                self.isBeingPicked = 0;
+            }
+        } else if (self.level.gravityPosition == GRAVITY_TOP) {
+            
+            // TODO
+            
+        }
     }
     
     if (self.BLOCK_TYPE == BLOCK_PUSHABLE || self.BLOCK_TYPE == BLOCK_PICKABLE) { // (self.BLOCK_TYPE == BLOCK_PICKABLE && !self.isBeingPicked)){
         
-        float desiredx = self.position.x;
-        float desiredy = self.position.y;
+        float desiredx = newx; // self.position.x;
+        float desiredy = newy; // self.position.y;
         
         // ignore gravity when picked, or being picked, or being dropped
-        if (!self.isBeingPicked) {
+        if (self.isBeingPicked == 0) {
             if (self.level.gravityPosition == GRAVITY_BOTTOM){
                 desiredy -= ++self.gravityCounter * self.gravityCounter;
             } else if (self.level.gravityPosition == GRAVITY_TOP){
@@ -275,16 +303,20 @@
     }
     
     [self.blockSprite renderWithSize:size atX:self.position.x andXOffset:horizontalOffset andY:self.position.y andYOffset:0];
+    
+    self.lastActionTimer = self.lastActionTimer > 0 ? self.lastActionTimer - 1 : 0;
 }
 
 - (bool) doAction {
     
-    if (self.BLOCK_TYPE == BLOCK_PICKABLE){
-        if (self.isBeingPicked) {
-            // drop it
+    if (self.BLOCK_TYPE == BLOCK_PICKABLE && self.lastActionTimer == 0){
+        if (self.isBeingPicked == 1) {
+            self.isBeingPicked = -1;
         } else  {
-            self.isBeingPicked = true;
+            self.isBeingPicked = 1;
         }
+        self.lastActionTimer = BACTION_INTERVAL;
+        NSLog(@"Being Picked: %d", self.isBeingPicked);
         return true;
     }
     
