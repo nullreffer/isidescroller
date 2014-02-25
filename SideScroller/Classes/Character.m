@@ -29,6 +29,7 @@
 @property float jumpForce;
 @property int jumpCounter;
 @property bool linearJump;
+@property bool isDoubleJumping;
 
 @property bool isWalking;
 @property int frameCounter;
@@ -64,6 +65,7 @@
 @synthesize jumpForce = _jumpForce;
 @synthesize jumpCounter = _jumpCounter;
 @synthesize linearJump = _linearJump;
+@synthesize isDoubleJumping = _isDoubleJumping;
 
 @synthesize isWalking = _isWalking;
 @synthesize frameCounter = _frameCounter;
@@ -121,6 +123,7 @@
         self.pickedBlock = nil;
         
         self.isJumping = NO;
+        self.isDoubleJumping = NO;
         self.jumpForce = 0;
         self.jumpCounter = 0;
         self.linearJump = false;
@@ -160,8 +163,17 @@
         
         self.jumpForce = force * 2;
     } else {
-        if (self.isJumping)
-            return;
+        if (self.isJumping) {
+            // if double jump is enabled, then do something
+            if (!self.isDoubleJumping && [self.addons objectForKey:[NSNumber numberWithInt:ADDON_DOUBLE_JUMP]]){
+                // continue adding force
+                self.isDoubleJumping = true;
+            } else if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_INFINITE_JUMP]]) {
+                
+            } else {
+                return;
+            }
+        }
         
         // JETPACK takes precedece against jumping shoes
         if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_JUMPING_SHOES]]){
@@ -534,15 +546,19 @@
     
     if (intersect_bottom && self.level.gravityPosition == GRAVITY_BOTTOM){
         self.isJumping = false;
+        self.isDoubleJumping = false;
         self.jumpForce = 0;
     } else if (intersect_top && self.level.gravityPosition == GRAVITY_TOP){
         self.isJumping = false;
+        self.isDoubleJumping = false;
         self.jumpForce = 0;
     } else if (intersect_right && self.level.gravityPosition == GRAVITY_RIGHT){
         self.isJumping = false;
+        self.isDoubleJumping = false;
         self.jumpForce = 0;
     } else if (intersect_left && self.level.gravityPosition == GRAVITY_LEFT){
         self.isJumping = false;
+        self.isDoubleJumping = false;
         self.jumpForce = 0;
     }
     

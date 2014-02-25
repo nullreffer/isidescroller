@@ -80,6 +80,10 @@
             self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_jetpack.png"]];
         } else if (type == ADDON_JUMPING_SHOES){
             self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_jumping_shoes.png"]];
+        } else if (type == ADDON_DOUBLE_JUMP) {
+            self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_jumping_shoes.png"]];
+        } else if (type == ADDON_INFINITE_JUMP) {
+            self.addonSprite = [[Sprite alloc] initWithImage:[UIImage imageNamed:@"addon_jumping_shoes.png"]];
         }
         
         self.position = CGPointMake(x, y);
