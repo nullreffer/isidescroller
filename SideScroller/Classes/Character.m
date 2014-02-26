@@ -13,7 +13,8 @@
 #import "Addon.h"
 #import "Bullet.h"
 
-#define SPEED_SCALE 2.0
+#define SPEED_SCALE_X 4.0
+#define SPEED_SCALE_Y 0.5
 #define JUMP_SCALE 50.0
 #define SHOOT_DISTANCE 280.0
 #define INITIAL_JUMP_FACTOR 2
@@ -164,12 +165,19 @@
         self.jumpForce = force * 2;
     } else {
         if (self.isJumping) {
-            // if double jump is enabled, then do something
+            
+            bool againtGravity = false;
+            if (sinf(self.direction)*sinf(self.lastDirection) < 0){
+                // direction changed
+                againtGravity = true;
+            }
+            
+            // if double jump is enabled and if previous direction was against gravity, then do something
             if (!self.isDoubleJumping && [self.addons objectForKey:[NSNumber numberWithInt:ADDON_DOUBLE_JUMP]]){
                 // continue adding force
                 self.isDoubleJumping = true;
             } else if ([self.addons objectForKey:[NSNumber numberWithInt:ADDON_INFINITE_JUMP]]) {
-                
+                // continue with a jump
             } else {
                 return;
             }
@@ -365,10 +373,11 @@
     float scale_x = cosf(direction); // right or left movement only
     float scale_y = sinf(direction);
     
-    speed = SPEED_SCALE * speed;
+    // speed = SPEED_SCALE * speed;
     
-    float velocity_x = speed * scale_x * (self.isJumping ? 2 : 1); // make jumps longer horizontally
-    float velocity_y = speed * scale_y;
+    // changed velicoty x to 1 after slowing down jump up and down
+    float velocity_x = SPEED_SCALE_X * speed * scale_x * (self.isJumping ? 1 : 1); // make jumps longer horizontally
+    float velocity_y = SPEED_SCALE_Y * speed * scale_y;
     
     if (((fabs(velocity_x) > 0.0) && (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP)) || ((fabs(velocity_y) > 0.0) && (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT))){
         self.isWalking = true;
@@ -388,10 +397,10 @@
     if (self.level.gravityPosition == GRAVITY_BOTTOM){
         if (self.jumpForce > 1) {
             // new_y += self.jumpForce;
-            new_y += self.jumpForce * self.jumpForce;
+            new_y += self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
             if (!self.linearJump) {
                 // self.jumpForce = self.jumpForce / 2.0;
-                self.jumpForce--;
+                self.jumpForce -= SPEED_SCALE_Y;
                 // following was already commented out
                 // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
             }
@@ -403,11 +412,11 @@
             // jump Force is negative here
             gravityOffset = CGPointMake(0, -self.jumpForce);
             
-            new_y -= self.jumpForce * self.jumpForce;
+            new_y -= self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
             // new_y += self.jumpForce;
             // self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
             
-            self.jumpForce--;
+            self.jumpForce -= SPEED_SCALE_Y;
             
             // following was already commented out
             // self.jumpCounter -= self.jumpCounter * self.jumpCounter;
@@ -415,10 +424,10 @@
     } else if (self.level.gravityPosition == GRAVITY_TOP) {
         if (self.jumpForce < -1) {
             // new_y += self.jumpForce;
-            new_y -= self.jumpForce * self.jumpForce;
+            new_y -= self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
             if (!self.linearJump) {
                 // self.jumpForce = self.jumpForce / 2.0;
-                self.jumpForce++;
+                self.jumpForce += SPEED_SCALE_Y;
                 // following was already commented out
                 // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
             }
@@ -429,14 +438,14 @@
         else {
             gravityOffset = CGPointMake(0, -self.jumpForce);
             
-            new_y += self.jumpForce * self.jumpForce;
+            new_y += self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
             // new_y += self.jumpForce;
             // self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
             
             // following was already commented out
             // self.jumpCounter += self.jumpCounter * self.jumpCounter;
             
-            self.jumpForce++;
+            self.jumpForce += SPEED_SCALE_Y;
         }
     }
     
@@ -493,6 +502,7 @@
             // new_new_y = self.position.y;
         }
         
+        // the following implies you can only intersect vertically on ladders
         if (false && (ladderIntersected || block.BLOCK_TYPE == BLOCK_LADDER) && (intersect_bottom || intersect_top)) {
             ladderIntersected = true;
             // already intersected on vertical axis, cannot intersect horizontally... WHY NOT?

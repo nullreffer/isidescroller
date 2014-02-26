@@ -45,6 +45,10 @@
         addonType = ADDON_JETPACK;
     } else if ([type isEqualToString:@"ADDON_JUMPING_SHOES"]){
         addonType = ADDON_JUMPING_SHOES;
+    } else if ([type isEqualToString:@"ADDON_DOUBLE_JUMP"]){
+        addonType = ADDON_DOUBLE_JUMP;
+    } else if ([type isEqualToString:@"ADDON_INFINITE_JUMP"]){
+        addonType = ADDON_INFINITE_JUMP;
     }
     
     return [self initAddon:addonType andPositionX:x andPositionY:y];

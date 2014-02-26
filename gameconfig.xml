@@ -11,18 +11,6 @@
             <backgroundImage>repeating_bg.png</backgroundImage>
             <blocks>
                 <block>
-                    <type>BLOCK_LADDER</type>
-                    <spriteImage>block_ladder.png</spriteImage>
-                    <positionx>512</positionx>
-                    <positiony>118</positiony>
-                </block>
-                <block>
-                    <type>BLOCK_LADDER</type>
-                    <spriteImage>block_ladder.png</spriteImage>
-                    <positionx>512</positionx>
-                    <positiony>150</positiony>
-                </block>
-                <block>
                     <type>BLOCK_PUSHABLE</type>
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>704</positionx>
@@ -572,6 +560,18 @@
                     <positionx>1184</positionx>
                     <positiony>250</positiony>
                 </block>
+                <block>
+                    <type>BLOCK_LADDER</type>
+                    <spriteImage>block_ladder.png</spriteImage>
+                    <positionx>512</positionx>
+                    <positiony>118</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_LADDER</type>
+                    <spriteImage>block_ladder.png</spriteImage>
+                    <positionx>512</positionx>
+                    <positiony>150</positiony>
+                </block>
             </blocks>
             <addons>
                 <addon>
@@ -581,17 +581,17 @@
                     <positiony>146</positiony>
                 </addon>
                 <addon>
-                    <type>ADDON_JETPACK</type>
+                    <type>ADDON_DOUBLE_JUMP</type>
                     <spriteImage>addon_jetpack.png</spriteImage>
                     <positionx>480</positionx>
                     <positiony>82</positiony>
-                </addon>
+                </addon> <!--
                 <addon>
-                    <type>ADDON_JUMPING_SHOES</type>
+                    <type>ADDON_INFINITE_JUMP</type>
                     <spriteImage>addon_jumping_shoes.png</spriteImage>
                     <positionx>448</positionx>
                     <positiony>82</positiony>
-                </addon>
+                </addon> -->
             </addons>
             <protagonist>
                 <spriteImage>character_main.png</spriteImage>
