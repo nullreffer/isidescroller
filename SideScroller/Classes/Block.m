@@ -78,17 +78,17 @@
             self.BLOCK_TYPE = BLOCK_STAIRS;
         }  else if ([type isEqualToString:@"BLOCK_LADDER"]){
             blockImage = [UIImage imageNamed:@"block_ladder.png" ];
-            self.BLOCK_TYPE = BLOCK_LADDER;
+            self.BLOCK_TYPE = BLOCK_LADDDER;
         } else if ([type isEqualToString:@"BLOCK_BREAKABLE"]){
             blockImage = [UIImage imageNamed:@"block_standard.png" ];
             self.BLOCK_TYPE = BLOCK_BREAKABLE;
-        } else if ([type isEqualToString:@"BLOCK_GRAVITY_LEFT"]){
+        } /*else if ([type isEqualToString:@"BLOCK_GRAVITY_LEFT"]){
             blockImage = [UIImage imageNamed:@"block_gravity_left.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_LEFT;
         } else if ([type isEqualToString:@"BLOCK_GRAVITY_RIGHT"]){
             blockImage = [UIImage imageNamed:@"block_gravity_right.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_RIGHT;
-        } else if ([type isEqualToString:@"BLOCK_GRAVITY_TOP"]){
+        } */else if ([type isEqualToString:@"BLOCK_GRAVITY_TOP"]){
             blockImage = [UIImage imageNamed:@"block_gravity_up.png" ];
             self.BLOCK_TYPE = BLOCK_GRAVITY_SHIFT_TOP;
         } else if ([type isEqualToString:@"BLOCK_GRAVITY_BOTTOM"]){
@@ -104,7 +104,7 @@
             blockImage = [UIImage imageNamed:@"block_standard.png"];
             self.BLOCK_TYPE = BLOCK_STANDARD;
         } else {
-            blockImage = [UIImage imageNamed:@"block_ladder.png"];
+            blockImage = [UIImage imageNamed:@"block_standard.png"];
             self.BLOCK_TYPE = BLOCK_NOTHING;
         }
         
@@ -182,7 +182,27 @@
             
         } else if (self.level.gravityPosition == GRAVITY_TOP) {
             
-            // TODO
+            // if block is not yet below the person, then move it up
+            if (self.pickupCounter < self.level.theman.characterSize.height){
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width - 1.01 : self.level.theman.position.x + self.level.theman.characterSize.width + 1.01;
+                
+                self.pickupCounter += PICKUP_ANIMATION;
+                
+                newy = self.level.theman.position.y - self.pickupCounter - 1.01;
+            } else if (self.pickupCounter > self.level.theman.characterSize.height &&
+                       self.pickupCounter < (self.level.theman.characterSize.height + self.level.theman.characterSize.width)) {
+                
+                self.pickupCounter += PICKUP_ANIMATION;
+                float dist = self.pickupCounter - self.level.theman.characterSize.height;
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width + (dist) : self.level.theman.position.x + self.level.theman.characterSize.width - (dist);
+                
+            } else if (self.pickupCounter == self.level.theman.characterSize.height ||
+                       self.pickupCounter == (self.level.theman.characterSize.width + self.level.theman.characterSize.height)) {
+                self.pickupCounter += PICKUP_ANIMATION;
+            } else {
+                newx = self.level.theman.position.x;
+                newy = self.level.theman.position.y - self.level.theman.characterSize.height - 1.01;
+            }
             
         }
         
@@ -202,10 +222,22 @@
             } else {
                 NSLog(@"Being Picked: 0");
                 self.isBeingPicked = 0;
+                self.level.theman.pickedBlock = nil;
             }
         } else if (self.level.gravityPosition == GRAVITY_TOP) {
             
-            // TODO
+            if (self.pickupCounter > (self.level.theman.characterSize.height)) {
+                self.pickupCounter -= PICKUP_ANIMATION;
+                
+                float dist = self.pickupCounter - self.level.theman.characterSize.height - 1.01;
+                newx = fabs(self.level.theman.lastDirection) > M_PI_2 ? self.level.theman.position.x - self.blockSprite.size.width + (dist) : self.level.theman.position.x + self.level.theman.characterSize.width - (dist);
+            } else if (self.pickupCounter == self.level.theman.characterSize.height) {
+                self.pickupCounter -= PICKUP_ANIMATION;
+            } else {
+                NSLog(@"Being Picked: 0");
+                self.isBeingPicked = 0;
+                self.level.theman.pickedBlock = nil;
+            }
             
         }
     }
@@ -339,13 +371,15 @@
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
-    } else if (self.BLOCK_TYPE == BLOCK_LADDER){
-        *new_new_x = movement.x + gravityOffset.x; //  + velocity.x;
-        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == BLOCK_LADDDER){
+        /*
+         *new_new_x = movement.x; // + gravityOffset.x; //  + velocity.x;
+        *new_new_y = movement.y; // + gravityOffset.y + velocity.y;
         
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height){
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
+         */
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
@@ -378,6 +412,12 @@
     } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_TOP){
         character.level.gravityPosition = GRAVITY_TOP;
         
+        if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
+            *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_BOTTOM){
+        // same as standard block
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
@@ -445,13 +485,15 @@
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - 0.01;
         }
-    } else if (self.BLOCK_TYPE == BLOCK_LADDER){
-        *new_new_x = movement.x + gravityOffset.x; //  + velocity.x;
-        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == BLOCK_LADDDER){
+        /*
+        *new_new_x = movement.x; // + gravityOffset.x; //  + velocity.x;
+        *new_new_y = movement.y; // + gravityOffset.y + velocity.y;
         
         if (*new_new_y + character.characterSize.height < self.blockSprite.enclosingRect.origin.y ){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
+         */
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
@@ -484,6 +526,12 @@
     } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_BOTTOM){
         character.level.gravityPosition = GRAVITY_BOTTOM;
         
+        if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
+            *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
+        }
+        
+    } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_TOP){
+        // same as standard
         if (*new_new_y + character.characterSize.height > self.blockSprite.enclosingRect.origin.y - 0.01){
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
@@ -550,9 +598,11 @@
     
     if (self.BLOCK_TYPE == BLOCK_STAIRS){
         *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
-    } else if (self.BLOCK_TYPE == BLOCK_LADDER) {
-        *new_new_x = movement.x + gravityOffset.x; // + velocity.x;
-        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == BLOCK_LADDDER) {
+        /*
+        *new_new_x = movement.x; // + gravityOffset.x; // + velocity.x;
+        *new_new_y = movement.y; // + gravityOffset.y + velocity.y;
+         */
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
@@ -574,6 +624,10 @@
         } else {
             *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
         }
+    } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_BOTTOM || self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_TOP){
+        // same as standard
+        *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
+
     } else if (self.BLOCK_TYPE == BLOCK_FINISH){
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;
@@ -632,9 +686,11 @@
     if (self.BLOCK_TYPE == BLOCK_STAIRS){
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
         // *new_new_y = self.blockSprite.enclosingRect.origin.y + character.characterImage.enclosingRect.size.height + 0.01;
-    } else if (self.BLOCK_TYPE == BLOCK_LADDER) {
-        *new_new_x = movement.x + gravityOffset.x; // + velocity.x;
-        *new_new_y = movement.y + gravityOffset.y + velocity.y;
+    } else if (self.BLOCK_TYPE == BLOCK_LADDDER) {
+        /*
+        *new_new_x = movement.x; // + gravityOffset.x; // + velocity.x;
+        *new_new_y = movement.y; // + gravityOffset.y + velocity.y;
+         */
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
@@ -656,6 +712,10 @@
         } else {
             *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
         }
+    } else if (self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_BOTTOM || self.BLOCK_TYPE == BLOCK_GRAVITY_SHIFT_TOP){
+        // same as standard
+        *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;
+        
     } else if (self.BLOCK_TYPE == BLOCK_FINISH){
         if (character.isProtagonist) {
             character.level.levelState = LEVEL_COMPLETE;

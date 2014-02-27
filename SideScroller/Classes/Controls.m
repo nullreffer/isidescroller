@@ -97,7 +97,7 @@
         float posx = PHONE_SIZE.width / 2 - self.pausedMessage.enclosingRect.size.width / 2;
         float posy = PHONE_SIZE.height / 2 - self.pausedMessage.enclosingRect.size.height / 2;
         [self.pausedMessage renderWithSize:self.pausedMessage.size atX:posx andY:posy];
-    } else {
+    } else if (self.game.currentLevel.levelState == LEVEL_PLAYING) {
         [self.buttonPause renderWithSize:self.buttonPause.size atX:10 andY:250];
     }
 }

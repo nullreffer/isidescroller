@@ -3,19 +3,76 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[GameMenu draw:]:GameMenu.m">
+         contextName = "-[Sprite initWithRect:croppedTo:]:Sprite.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Level draw:]:Level.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Character initiateJumpWithForce:]:Character.m">
       </ContextState>
       <ContextState
          contextName = "-[Block onCollideFromLeft:withMovement:retX:retY:]:Block.m">
       </ContextState>
       <ContextState
-         contextName = "-[AnimatedSprite render:frame:withSize:atX:andXOffset:andY:andYOffset:flippedHorizontally:flippedVertically:]:AnimatedSprite.m">
+         contextName = "-[Character update:withJoystickSpeed:andDirection:]:Character.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.isProtagonist">
+            </PersistentString>
+            <PersistentString
+               value = "self.characterImage.enclosingRect">
+            </PersistentString>
+            <PersistentString
+               value = "self.position">
+            </PersistentString>
+            <PersistentString
+               value = "vertical_rect1">
+            </PersistentString>
+            <PersistentString
+               value = "rect2">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[GameMenu draw:]:GameMenu.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Level initWithConfig:]:Level.m">
       </ContextState>
       <ContextState
          contextName = "-[Game initWithCode:andConfig:forView:]:Game.m">
       </ContextState>
       <ContextState
-         contextName = "-[Sprite initWithRect:croppedTo:]:Sprite.m">
+         contextName = "-[MainViewController drawGame]:MainViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "+[TBXML(StaticFunctions) childElementNamed:parentElement:]:TBXML.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Controls handleTouchesEnded:withEvent:]:Controls.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.buttonA.enclosingRect">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[Block onCollideFromTop:withMovement:andGravityOffset:retX:retY:]:Block.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[AnimatedSprite render:frame:withSize:atX:andXOffset:andY:andYOffset:flippedHorizontally:flippedVertically:]:AnimatedSprite.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Level load]:Level.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[Sprite initWithImage:]:Sprite.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "image.imageOrientation">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "-[Bullet update]:Bullet.m">
@@ -41,64 +98,13 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[Block onCollideFromTop:withMovement:retX:retY:]:Block.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Sprite initWithImage:]:Sprite.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "image.imageOrientation">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "-[Controls handleTouchesEnded:withEvent:]:Controls.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.buttonA.enclosingRect">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "-[Block onCollideFromTop:withMovement:andGravityOffset:retX:retY:]:Block.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[MainViewController drawGame]:MainViewController.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Level initWithConfig:]:Level.m">
-      </ContextState>
-      <ContextState
-         contextName = "+[TBXML(StaticFunctions) childElementNamed:parentElement:]:TBXML.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Character initiateJumpWithForce:]:Character.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Level load]:Level.m">
-      </ContextState>
-      <ContextState
          contextName = "-[Sprite renderWithSize:atX:andY:]:Sprite.m">
       </ContextState>
       <ContextState
+         contextName = "-[Block onCollideFromTop:withMovement:retX:retY:]:Block.m">
+      </ContextState>
+      <ContextState
          contextName = "-[Sprite renderWithSize:atX:andXOffset:andY:andYOffset:flippedHorizontally:flippedVertically:]:Sprite.m">
-      </ContextState>
-      <ContextState
-         contextName = "-[Character update:withJoystickSpeed:andDirection:]:Character.m">
-         <PersistentStrings>
-            <PersistentString
-               value = "rect2">
-            </PersistentString>
-            <PersistentString
-               value = "vertical_rect1.origin.y - vertical_rect1.size.height">
-            </PersistentString>
-            <PersistentString
-               value = "self.characterImage.enclosingRect">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "-[Level draw:]:Level.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

@@ -176,7 +176,7 @@
         // check collision in level with all blocks
         
         for (Block *block in self.owner.level.blocks){
-            if (block.BLOCK_TYPE == BLOCK_LADDER || block.isBroken){
+            if (block.BLOCK_TYPE == BLOCK_LADDDER || block.isBroken){
                 continue;
             }
             
