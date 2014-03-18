@@ -10,7 +10,8 @@
 #import "Addon.h"
 
 #define PICKUP_ANIMATION 4
-#define BACTION_INTERVAL 20;
+#define BACTION_INTERVAL 20
+#define LADDER_SPEED_FACTOR 3
 
 @interface Block()
 
@@ -362,7 +363,7 @@
     }
 }
 
-- (void) onCollideFromTop:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
+- (void) onCollideFromTop:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity retX:(float*)new_new_x retY:(float*)new_new_y {
     if (self.isBroken){
         return;
     }
@@ -380,6 +381,10 @@
             *new_new_y = self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01;
         }
          */
+        if (character.isProtagonist){
+            *new_new_x = *new_new_x;
+            *new_new_y = *new_new_y + (velocity.y > 0 ? LADDER_SPEED_FACTOR : ( velocity.y < 0 ? -LADDER_SPEED_FACTOR : 0 ) );
+        }
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         if (*new_new_y < self.blockSprite.enclosingRect.origin.y + self.blockSprite.enclosingRect.size.height + 0.01) {
@@ -476,7 +481,7 @@
     }
 }
 
-- (void) onCollideFromBottom:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
+- (void) onCollideFromBottom:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity retX:(float*)new_new_x retY:(float*)new_new_y {
     if (self.isBroken){
         return;
     }
@@ -494,6 +499,10 @@
             *new_new_y = self.blockSprite.enclosingRect.origin.y - character.characterSize.height - 0.01;
         }
          */
+        if (character.isProtagonist){
+            *new_new_x = *new_new_x;
+            *new_new_y = *new_new_y + (velocity.y > 0 ? LADDER_SPEED_FACTOR : ( velocity.y < 0 ? -LADDER_SPEED_FACTOR : 0 ) );
+        }
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         if (*new_new_y > self.blockSprite.enclosingRect.origin.y - 0.01){
@@ -591,7 +600,7 @@
     
 }
 
-- (void) onCollideFromLeft:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
+- (void) onCollideFromLeft:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity retX:(float*)new_new_x retY:(float*)new_new_y {
     if (self.isBroken){
         return;
     }
@@ -603,6 +612,10 @@
         *new_new_x = movement.x; // + gravityOffset.x; // + velocity.x;
         *new_new_y = movement.y; // + gravityOffset.y + velocity.y;
          */
+        if (character.isProtagonist){
+            *new_new_x = *new_new_x;
+            *new_new_y = *new_new_y + (velocity.y > 0 ? LADDER_SPEED_FACTOR : ( velocity.y < 0 ? -LADDER_SPEED_FACTOR : 0 ) );
+        }
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         *new_new_x = self.blockSprite.enclosingRect.origin.x - character.characterImage.enclosingRect.size.width - 0.01;
@@ -678,7 +691,7 @@
     
 }
 
-- (void) onCollideFromRight:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity andGravityOffset:(CGPoint)gravityOffset retX:(float*)new_new_x retY:(float*)new_new_y {
+- (void) onCollideFromRight:(Character*)character withMovement:(CGPoint)movement andVelocity:(CGPoint)velocity retX:(float*)new_new_x retY:(float*)new_new_y {
     if (self.isBroken){
         return;
     }
@@ -691,6 +704,10 @@
         *new_new_x = movement.x; // + gravityOffset.x; // + velocity.x;
         *new_new_y = movement.y; // + gravityOffset.y + velocity.y;
          */
+        if (character.isProtagonist){
+            *new_new_x = *new_new_x;
+            *new_new_y = *new_new_y + (velocity.y > 0 ? LADDER_SPEED_FACTOR : ( velocity.y < 0 ? -LADDER_SPEED_FACTOR : 0 ) );
+        }
     } else if (self.BLOCK_TYPE == BLOCK_SPIKES){
         [character removeLife];
         *new_new_x = self.blockSprite.enclosingRect.origin.x + self.blockSprite.enclosingRect.size.width + 0.01;

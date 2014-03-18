@@ -199,9 +199,9 @@
     self.jumpCounter = 0;
     self.isJumping = true;
     
-    if (self.level.gravityPosition == GRAVITY_TOP){
+    // if (self.level.gravityPosition == GRAVITY_TOP){
         self.jumpForce = -self.jumpForce;
-    }
+    // }
 }
 
 - (void) doBActionWithJoystickDirection:(float)direction {
@@ -378,7 +378,7 @@
     // speed = SPEED_SCALE * speed;
     
     // changed velicoty x to 1 after slowing down jump up and down
-    float velocity_x = SPEED_SCALE_X * speed * scale_x; // make jumps longer horizontally
+    float velocity_x = SPEED_SCALE_X * speed * scale_x;
     float velocity_y = SPEED_SCALE_Y * speed * scale_y;
     
     if (((fabs(velocity_x) > 0.0) && (self.level.gravityPosition == GRAVITY_BOTTOM || self.level.gravityPosition == GRAVITY_TOP)) || ((fabs(velocity_y) > 0.0) && (self.level.gravityPosition == GRAVITY_RIGHT || self.level.gravityPosition == GRAVITY_LEFT))){
@@ -397,62 +397,28 @@
         self.jumpCounter++;
     }
     if (self.level.gravityPosition == GRAVITY_BOTTOM){
-        if (self.jumpForce > 1) {
-            // new_y += self.jumpForce;
+        if (self.jumpForce < -1) {
             new_y += self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
             if (!self.linearJump) {
-                // self.jumpForce = self.jumpForce / 2.0;
-                self.jumpForce -= SPEED_SCALE_Y;
-                // following was already commented out
-                // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
+                self.jumpForce += SPEED_SCALE_Y;
             }
-#ifdef DEBUG
-            if (self.isProtagonist) {
-                if (new_y != self.position.y) {
-                    NSLog(@"A %f Protagonist moved from pos %f to %f", self.jumpForce, self.position.y, new_y);
-                }
-            }
-#endif
-        } else if (self.jumpForce <= 1 && self.jumpForce > -1){
-            self.jumpForce = -1;
+        } else if (self.jumpForce >= -1 && self.jumpForce < 1){
+            self.jumpForce = 1;
             self.jumpCounter = 0;
         }
         else {
-            // jump Force is negative here... I can see that but why?
             gravityOffset = CGPointMake(0, -self.jumpForce);
             
             new_y -= self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
-            // new_y += self.jumpForce;
-            // self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
             
-            self.jumpForce -= SPEED_SCALE_Y;
-#ifdef DEBUG
-            if (self.isProtagonist) {
-                if (new_y != self.position.y) {
-                    NSLog(@"B %f Protagonist moved from pos %f to %f", self.jumpForce, self.position.y, new_y);
-                }
-            }
-#endif
-            // following was already commented out
-            // self.jumpCounter -= self.jumpCounter * self.jumpCounter;
+            self.jumpForce += SPEED_SCALE_Y;
         }
     } else if (self.level.gravityPosition == GRAVITY_TOP) {
         if (self.jumpForce < -1) {
-            // new_y += self.jumpForce;
             new_y -= self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
             if (!self.linearJump) {
-                // self.jumpForce = self.jumpForce / 2.0;
                 self.jumpForce += SPEED_SCALE_Y;
-                // following was already commented out
-                // self.jumpCounter = (8 - self.jumpCounter) * (8 - self.jumpCounter);
             }
-#ifdef DEBUG
-            if (self.isProtagonist) {
-                if (new_y != self.position.y) {
-                    NSLog(@"C %f Protagonist moved from pos %f to %f", self.jumpForce, self.position.y, new_y);
-                }
-            }
-#endif
         } else if (self.jumpForce >= -1 && self.jumpForce < 1){
             self.jumpForce = 1;
             self.jumpCounter = 0;
@@ -461,18 +427,6 @@
             gravityOffset = CGPointMake(0, -self.jumpForce);
             
             new_y += self.jumpForce * self.jumpForce * SPEED_SCALE_Y;
-#ifdef DEBUG
-            if (self.isProtagonist) {
-                if (new_y != self.position.y) {
-                    NSLog(@"D %f Protagonist moved from pos %f to %f", self.jumpForce, self.position.y, new_y);
-                }
-            }
-#endif
-            // new_y += self.jumpForce;
-            // self.jumpForce = self.jumpForce * (self.linearJump ? 1.3 : 2.0);
-            
-            // following was already commented out
-            // self.jumpCounter += self.jumpCounter * self.jumpCounter;
             
             self.jumpForce += SPEED_SCALE_Y;
         }
@@ -493,10 +447,6 @@
     float new_new_x = new_x;
     
     for (Block* block in self.level.blocks){
-        if (block.BLOCK_TYPE == BLOCK_LADDDER){
-            // continue;
-            // eventually do ladder at the end by taking on the non colliding portion of the vector
-        }
  
         bool inner_intersect_bottom = false;
         bool inner_intersect_top = false;
@@ -522,12 +472,12 @@
             // no x intersection
             
         } else {
-            if (new_y < self.position.y){
-                [block onCollideFromTop:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
+            if (new_new_y < self.position.y){
+                [block onCollideFromTop:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) retX:&new_new_x retY:&new_new_y];
                 intersect_bottom = true;
                 inner_intersect_bottom = true;
-            } else if (new_y > self.position.y) {
-                [block onCollideFromBottom:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
+            } else if (new_new_y > self.position.y) {
+                [block onCollideFromBottom:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y)  retX:&new_new_x retY:&new_new_y];
                 intersect_top = true;
                 inner_intersect_top = true;
             } // ignore when they're equal
@@ -535,6 +485,8 @@
             else {
                 intersect_top = true;
                 inner_intersect_top = true;
+                intersect_bottom = true;
+                inner_intersect_bottom = true;
             }
         }
         
@@ -549,12 +501,12 @@
             // no x intersection
         } else {
             
-            if (new_x < self.position.x){
-                [block onCollideFromRight:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
+            if (new_new_x < self.position.x){
+                [block onCollideFromRight:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y)  retX:&new_new_x retY:&new_new_y];
                 intersect_left = true;
                 inner_intersect_left = true;
-            } else if (new_x > self.position.x) {
-                [block onCollideFromLeft:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) andGravityOffset:gravityOffset retX:&new_new_x retY:&new_new_y];
+            } else if (new_new_x > self.position.x) {
+                [block onCollideFromLeft:self withMovement:CGPointMake(new_x, new_y) andVelocity:CGPointMake(velocity_x, velocity_y) retX:&new_new_x retY:&new_new_y];
                 intersect_right = true;
                 inner_intersect_right = true;
             } // ignore when they're equal
@@ -562,6 +514,8 @@
             else {
                 intersect_left = true;
                 inner_intersect_left = true;
+                intersect_right = true;
+                inner_intersect_right = true;
             }
         }
         

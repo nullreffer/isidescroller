@@ -11,6 +11,18 @@
             <backgroundImage>repeating_bg.png</backgroundImage>
             <blocks>
                 <block>
+                    <type>BLOCK_LADDER</type>
+                    <spriteImage>block_ladder.png</spriteImage>
+                    <positionx>512</positionx>
+                    <positiony>118</positiony>
+                </block>
+                <block>
+                    <type>BLOCK_LADDER</type>
+                    <spriteImage>block_ladder.png</spriteImage>
+                    <positionx>512</positionx>
+                    <positiony>150</positiony>
+                </block>
+                <block>
                     <type>BLOCK_PUSHABLE</type>
                     <spriteImage>block_standard.png</spriteImage>
                     <positionx>704</positionx>
@@ -559,18 +571,6 @@
                     <spriteImage>block_gravity_down.png</spriteImage>
                     <positionx>1184</positionx>
                     <positiony>250</positiony>
-                </block>
-                <block>
-                    <type>BLOCK_LADDER</type>
-                    <spriteImage>block_ladder.png</spriteImage>
-                    <positionx>512</positionx>
-                    <positiony>118</positiony>
-                </block>
-                <block>
-                    <type>BLOCK_LADDER</type>
-                    <spriteImage>block_ladder.png</spriteImage>
-                    <positionx>512</positionx>
-                    <positiony>150</positiony>
                 </block>
             </blocks>
             <addons>
