@@ -5,6 +5,7 @@ Full blown side-scroller for iOS written without any 2D engine directly using Op
 Uses an XML to determine the map.
 
 Currently supports tiles:
+
     BLOCK_NOTHING,
     BLOCK_STANDARD,
     BLOCK_BREAKABLE,
